@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="edu.junit5.quickstart.MessageUtilTest" time="0.018" tests="1" errors="0" skipped="0" failures="1">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="edu.junit5.quickstart.MessageUtilTest" time="0.016" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="17"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -12,7 +12,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="US"/>
     <property name="sun.boot.library.path" value="/usr/lib/jvm/java-17-openjdk-amd64/lib"/>
-    <property name="sun.java.command" value="/home/robin/IdeaProjects/SimpleJunit5/SimpleJunit5/target/surefire/surefirebooter14560089690266031838.jar /home/robin/IdeaProjects/SimpleJunit5/SimpleJunit5/target/surefire 2022-04-08T15-54-20_932-jvmRun1 surefire15234865210568718805tmp surefire_02384012271523057195tmp"/>
+    <property name="sun.java.command" value="/home/robin/IdeaProjects/SimpleJunit5/SimpleJunit5/target/surefire/surefirebooter16376855850751460076.jar /home/robin/IdeaProjects/SimpleJunit5/SimpleJunit5/target/surefire 2022-04-10T23-02-15_916-jvmRun1 surefire212414281517026926tmp surefire_02538958671289688355tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/home/robin/IdeaProjects/SimpleJunit5/SimpleJunit5/target/test-classes:/home/robin/IdeaProjects/SimpleJunit5/SimpleJunit5/target/classes:/home/robin/.m2/repository/org/junit/vintage/junit-vintage-engine/5.7.0-M1/junit-vintage-engine-5.7.0-M1.jar:/home/robin/.m2/repository/org/apiguardian/apiguardian-api/1.1.0/apiguardian-api-1.1.0.jar:/home/robin/.m2/repository/org/junit/platform/junit-platform-engine/1.7.0-M1/junit-platform-engine-1.7.0-M1.jar:/home/robin/.m2/repository/junit/junit/4.13/junit-4.13.jar:/home/robin/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/home/robin/.m2/repository/org/openjfx/javafx-controls/15-ea+7/javafx-controls-15-ea+7.jar:/home/robin/.m2/repository/org/openjfx/javafx-controls/15-ea+7/javafx-controls-15-ea+7-linux.jar:/home/robin/.m2/repository/org/openjfx/javafx-graphics/15-ea+7/javafx-graphics-15-ea+7.jar:/home/robin/.m2/repository/org/openjfx/javafx-graphics/15-ea+7/javafx-graphics-15-ea+7-linux.jar:/home/robin/.m2/repository/org/openjfx/javafx-base/15-ea+7/javafx-base-15-ea+7.jar:/home/robin/.m2/repository/org/openjfx/javafx-base/15-ea+7/javafx-base-15-ea+7-linux.jar:/home/robin/.m2/repository/org/openjfx/javafx-fxml/15-ea+7/javafx-fxml-15-ea+7.jar:/home/robin/.m2/repository/org/openjfx/javafx-fxml/15-ea+7/javafx-fxml-15-ea+7-linux.jar:/home/robin/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.7.0-M1/junit-jupiter-engine-5.7.0-M1.jar:/home/robin/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.7.0-M1/junit-jupiter-api-5.7.0-M1.jar:/home/robin/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/home/robin/.m2/repository/org/junit/platform/junit-platform-commons/1.7.0-M1/junit-platform-commons-1.7.0-M1.jar:/home/robin/.m2/repository/org/junit/platform/junit-platform-launcher/1.7.0-M1/junit-platform-launcher-1.7.0-M1.jar:/home/robin/.m2/repository/org/bouncycastle/bcprov-jdk15on/1.66/bcprov-jdk15on-1.66.jar:"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -27,7 +27,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="/home/robin/IdeaProjects/SimpleJunit5/SimpleJunit5/target/surefire/surefirebooter14560089690266031838.jar"/>
+    <property name="surefire.real.class.path" value="/home/robin/IdeaProjects/SimpleJunit5/SimpleJunit5/target/surefire/surefirebooter16376855850751460076.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="17.0.2+8-Ubuntu-120.04"/>
     <property name="user.name" value="robin"/>
@@ -52,20 +52,5 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="61.0"/>
   </properties>
-  <testcase name="testPrintMessage" classname="edu.junit5.quickstart.MessageUtilTest" time="0.013">
-    <failure message="expected: &lt;New World&gt; but was: &lt;Hello World&gt;" type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: expected: <New World> but was: <Hello World>
-	at edu.junit5.quickstart.MessageUtilTest.testPrintMessage(MessageUtilTest.java:14)
-]]></failure>
-    <system-out><![CDATA[
- +-------------------------------------------------------------------------------+
- | WARNING:                                                                      |
- | The junit-platform-surefire-provider has been deprecated and is scheduled to  |
- | be removed in JUnit Platform 1.4. Please use the built-in support in Maven    |
- | Surefire >= 2.22.0 instead.                                                   |
- | » https://junit.org/junit5/docs/current/user-guide/#running-tests-build-maven |
- +-------------------------------------------------------------------------------+
-
-Hello World
-]]></system-out>
-  </testcase>
+  <testcase name="testPrintMessage" classname="edu.junit5.quickstart.MessageUtilTest" time="0.009"/>
 </testsuite>
