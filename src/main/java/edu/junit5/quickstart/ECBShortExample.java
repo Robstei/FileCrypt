@@ -17,11 +17,11 @@ public class ECBShortExample
     static String[] DESWeakKeys = {"0101010101010101",
             "0000000000000000",
             "FEFEFEFEFEFEFEFE",
-            "EEEEEEEEEEEEEEEE",
+            "FFFFFFFFFFFFFFFF",
             "E0E0E0E0F1F1F1F1",
             "E1E1E1E1F0F0F0F0",
             "1F1F1F1F0E0E0E0E",
-            "0F0F0F0F1E1E1E1E"
+            "1E1E1E1E0F0F0F0F"
     };
 
     public static void encryptDecryptDESWithWeakKey(String[] array) throws Exception{
