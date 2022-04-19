@@ -1,6 +1,6 @@
 # Default ignored files
 /shelf/
-/workspace.xml
+/.idea/workspace.xml
 
 # Source: https://stackoverflow.com/questions/51792830/what-files-in-a-maven-project-should-be-committed-to-git
 target/
