@@ -14,96 +14,44 @@ import java.util.Arrays;
  */
 public class ECBShortExample
 {
-    public static void printByteArray(byte[] array) {
-        for (byte mybyte : array
-             ) {
-            System.out.println(String.format("%8s", Integer.toBinaryString((mybyte + 256) % 256))
-                    .replace(' ', '0'));    }
+    static String[] DESWeakKeys = {"0101010101010101",
+            "0000000000000000",
+            "FEFEFEFEFEFEFEFE",
+            "EEEEEEEEEEEEEEEE",
+            "E0E0E0E0F1F1F1F1",
+            "E1E1E1E1F0F0F0F0",
+            "1F1F1F1F0E0E0E0E",
+            "0F0F0F0F1E1E1E1E"
+    };
 
+    public static void encryptDecryptDESWithWeakKey(String[] array) throws Exception{
+        byte[] input = Hex.decode("a0a1a2a3a4a5a6a7a0a1a2a3a4a5a6a7");
+        System.out.println("input    : " + Hex.toHexString(input));
+
+        for (String keyAsString: array) {
+        byte[] key = Hex.decode(keyAsString);
+        SecretKeySpec keySpec = new SecretKeySpec(key,"DES");
+        Cipher cipher = Cipher.getInstance("DES/ECB/NoPadding", new BouncyCastleProvider());
+
+
+
+        cipher.init(Cipher.ENCRYPT_MODE, keySpec);
+        byte[] output = cipher.doFinal(input);
+
+        System.out.println(keyAsString + " first encryption: " + Hex.toHexString(output));
+
+        cipher.init(Cipher.ENCRYPT_MODE, keySpec);
+        byte[] sencondOutput = cipher.doFinal(output);
+
+        System.out.println(keyAsString + " second encryption: " + Hex.toHexString(sencondOutput));
+
+
+        }
     }
 
     public static void main(String[] args)
         throws Exception
     {
-        /*String b = "1111111111111111111111111111111111111111111111111111111111111111";
-        long a = Long.parseLong(b, 2);
-        ByteBuffer bytes = ByteBuffer.allocate(8).putLong(a);
-
-        byte[] array = bytes.array();
-*/
-
-
-        byte[] AESKeyBytes = Hex.decode("000102030405060708090a0b0c0d0e0f");
-        byte[] DESKeyBytes = Hex.decode("0001020304050607");
-        byte[] DESWeakKeyBytes1 = Hex.decode("E1E1E1E1F0F0F0F0");
-        byte[] DESWeakKeyBytes2 = Hex.decode("1F1F1F1F0E0E0E0E");
-        byte[] DESWeakKeyBytes3 = Hex.decode("0101010101010101");
-        byte[] DESWeakKeyBytes4 = Hex.decode("FEFEFEFEFEFEFEFE");
-        printByteArray(DESWeakKeyBytes4);
-
-        System.out.println(Arrays.toString(Hex.decode("E0E0E0E0F1F1F1F1")));
-        SecretKeySpec AESKey = new SecretKeySpec(AESKeyBytes, "AES");
-        SecretKeySpec DESKey = new SecretKeySpec(DESKeyBytes, "DES");
-        SecretKeySpec DESWeakKey1 = new SecretKeySpec(DESWeakKeyBytes1, "DES");
-        SecretKeySpec DESWeakKey2 = new SecretKeySpec(DESWeakKeyBytes2, "DES");
-        SecretKeySpec DESWeakKey3 = new SecretKeySpec(DESWeakKeyBytes3, "DES");
-        SecretKeySpec DESWeakKey4 = new SecretKeySpec(DESWeakKeyBytes4, "DES");
-
-
-
-        Cipher AESCipher = Cipher.getInstance("AES/ECB/NoPadding", new BouncyCastleProvider());
-        Cipher DESCipher = Cipher.getInstance("DES/ECB/NoPadding", new BouncyCastleProvider());
-        Cipher DESWeakCipher1 = Cipher.getInstance("DES/ECB/NoPadding", new BouncyCastleProvider());
-        Cipher DESWeakCipher2 = Cipher.getInstance("DES/ECB/NoPadding", new BouncyCastleProvider());
-        Cipher DESWeakCipher3 = Cipher.getInstance("DES/ECB/NoPadding", new BouncyCastleProvider());
-        Cipher DESWeakCipher4 = Cipher.getInstance("DES/ECB/NoPadding", new BouncyCastleProvider());
-
-
-        byte[] input = Hex.decode("a0a1a2a3a4a5a6a7a0a1a2a3a4a5a6a7");
-
-        System.out.println("input    : " + Hex.toHexString(input));
-
-        AESCipher.init(Cipher.ENCRYPT_MODE, AESKey);
-        DESCipher.init(Cipher.ENCRYPT_MODE, DESKey);
-        DESWeakCipher1.init(Cipher.ENCRYPT_MODE, DESWeakKey1);
-        DESWeakCipher2.init(Cipher.ENCRYPT_MODE, DESWeakKey2);
-        DESWeakCipher3.init(Cipher.ENCRYPT_MODE, DESWeakKey3);
-        DESWeakCipher4.init(Cipher.ENCRYPT_MODE, DESWeakKey4);
-
-        byte[] AESOutput = AESCipher.doFinal(input);
-        byte[] DESOutput = DESCipher.doFinal(input);
-        byte[] DESWeakOutput1 = DESWeakCipher1.doFinal(input);
-        byte[] DESWeakOutput2 = DESWeakCipher2.doFinal(input);
-        byte[] DESWeakOutput3 = DESWeakCipher3.doFinal(input);
-        byte[] DESWeakOutput4 = DESWeakCipher4.doFinal(input);
-
-        System.out.println("encrypted AES: " + Hex.toHexString(AESOutput));
-        System.out.println("encrypted DES: " + Hex.toHexString(DESOutput));
-        System.out.println("encrypted DES Weak1: " + Hex.toHexString(DESWeakOutput1));
-        System.out.println("encrypted DES Weak2: " + Hex.toHexString(DESWeakOutput2));
-        System.out.println("encrypted DES Weak3: " + Hex.toHexString(DESWeakOutput3));
-        System.out.println("encrypted DES Weak4: " + Hex.toHexString(DESWeakOutput4));
-
-        AESCipher.init(Cipher.DECRYPT_MODE, AESKey);
-        DESCipher.init(Cipher.DECRYPT_MODE, DESKey);
-        DESWeakCipher1.init(Cipher.ENCRYPT_MODE, DESWeakKey1);
-        DESWeakCipher2.init(Cipher.ENCRYPT_MODE, DESWeakKey2);
-        DESWeakCipher3.init(Cipher.ENCRYPT_MODE, DESWeakKey3);
-        DESWeakCipher4.init(Cipher.ENCRYPT_MODE, DESWeakKey4);
-
-
-        System.out.println("decrypted AES: "
-                + Hex.toHexString(AESCipher.doFinal(AESOutput)));
-        System.out.println("decrypted DES: "
-                + Hex.toHexString(DESCipher.doFinal(DESOutput)));
-        System.out.println("Following values are generated by encrypting the output with the same key again");
-        System.out.println("decrypted DES Weak1: "
-                + Hex.toHexString(DESWeakCipher1.doFinal(DESWeakOutput1)));
-        System.out.println("decrypted DES Weak2: "
-                + Hex.toHexString(DESWeakCipher2.doFinal(DESWeakOutput2)));
-        System.out.println("decrypted DES Weak3: "
-                + Hex.toHexString(DESWeakCipher3.doFinal(DESWeakOutput3)));
-        System.out.println("decrypted DES Weak4: "
-                + Hex.toHexString(DESWeakCipher4.doFinal(DESWeakOutput4)));
+        encryptDecryptDESWithWeakKey(DESWeakKeys);
     }
 }
