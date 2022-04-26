@@ -1,4 +1,4 @@
-package edu.junit5.quickstart;
+package edu.junit5.quickstart.learning;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;

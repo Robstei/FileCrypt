@@ -1,6 +1,8 @@
 package edu.junit5.quickstart;
 
+import edu.junit5.quickstart.learning.MessageUtil;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MessageUtilTest {
@@ -11,6 +13,6 @@ public class MessageUtilTest {
     @Test
     public void testPrintMessage() {
         message = "Hello World";
-        assertEquals(message,messageUtil.printMessage());
+        assertEquals(message, messageUtil.printMessage());
     }
 }

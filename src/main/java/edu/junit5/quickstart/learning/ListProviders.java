@@ -1,4 +1,4 @@
-package edu.junit5.quickstart;
+package edu.junit5.quickstart.learning;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
@@ -11,10 +11,8 @@ import java.security.Security;
 /**
  * Simple application to list installed providers and their available info.
  */
-public class ListProviders
-{
-    public static void main(String[] args)
-    {
+public class ListProviders {
+    public static void main(String[] args) {
         try {
             Cipher c = Cipher.getInstance("Blowfish/CBC/PKCS5Padding");
         } catch (NoSuchAlgorithmException e) {
@@ -26,8 +24,7 @@ public class ListProviders
         Security.addProvider(new BouncyCastleProvider());
         Provider[] installedProvs = Security.getProviders();
 
-        for (int i = 0; i != installedProvs.length; i++)
-        {
+        for (int i = 0; i != installedProvs.length; i++) {
             System.out.print(installedProvs[i].getName());
             System.out.print(": ");
             System.out.print(installedProvs[i].getInfo());

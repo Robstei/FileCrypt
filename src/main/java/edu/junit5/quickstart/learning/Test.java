@@ -1,4 +1,4 @@
-package edu.junit5.quickstart;
+package edu.junit5.quickstart.learning;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.encoders.Hex;
@@ -15,7 +15,8 @@ public class Test {
         System.out.println(Arrays.toString(keyBytes));
         System.out.println(Arrays.toString(key.getEncoded()));
 
-        SecureRandom random = SecureRandom.getInstance("DEFAULT", new BouncyCastleProvider());
+        SecureRandom random = SecureRandom.getInstance("DEFAULT",
+                new BouncyCastleProvider());
         byte[] bytes = new byte[5];
         random.nextBytes(bytes);
         System.out.println(Arrays.toString(bytes));
