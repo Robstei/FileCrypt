@@ -1,0 +1,56 @@
+package edu.junit5.quickstart;
+
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
+import javax.crypto.*;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+
+public class Model {
+
+
+    protected SecretKey createKey(String algorithm) {
+        KeyGenerator keyGenerator = null;
+        try {
+            keyGenerator = KeyGenerator.getInstance(algorithm,
+                    new BouncyCastleProvider());
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        SecretKey key = keyGenerator.generateKey();
+        return key;
+    }
+
+    protected byte[] encryptAES(byte[] input, String mode, String padding,
+                                SecretKey key) {
+        try {
+            Cipher cipher = Cipher.getInstance("AES/" + mode + "/" + padding,
+                    new BouncyCastleProvider());
+            cipher.init(Cipher.ENCRYPT_MODE, key);
+
+            byte[] output = cipher.doFinal(input);
+            return output;
+
+        } catch (NoSuchAlgorithmException | InvalidKeyException
+                | NoSuchPaddingException | IllegalBlockSizeException
+                | BadPaddingException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    protected byte[] decryptAES(byte[] encrpytedFileAsBytes, String mode,
+                                String padding, SecretKey key) {
+        byte[] output = null;
+        try {
+            Cipher cipher = Cipher.getInstance("AES/" + mode + "/" + padding,
+                    new BouncyCastleProvider());
+            cipher.init(Cipher.DECRYPT_MODE, key);
+            output = cipher.doFinal(encrpytedFileAsBytes);
+
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
+            e.printStackTrace();
+        }
+        return output;
+    }
+}
