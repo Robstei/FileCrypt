@@ -40,3 +40,4 @@ buildNumber.properties
 hs_err_pid*
 
 /src/main/resources/
+/documentation
