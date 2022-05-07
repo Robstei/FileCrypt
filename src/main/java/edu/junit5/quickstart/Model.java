@@ -8,7 +8,10 @@ import java.security.NoSuchAlgorithmException;
 
 public class Model {
 
-
+    /**
+     * @param algorithm the algorithm with which the file will be encrypted
+     * @return A SecretKey to use during the encryption
+     */
     protected SecretKey createKey(String algorithm) {
         KeyGenerator keyGenerator = null;
         try {
@@ -32,8 +35,8 @@ public class Model {
             return output;
 
         } catch (NoSuchAlgorithmException | InvalidKeyException
-                | NoSuchPaddingException | IllegalBlockSizeException
-                | BadPaddingException e) {
+                 | NoSuchPaddingException | IllegalBlockSizeException
+                 | BadPaddingException e) {
             e.printStackTrace();
         }
         return null;
@@ -48,7 +51,9 @@ public class Model {
             cipher.init(Cipher.DECRYPT_MODE, key);
             output = cipher.doFinal(encrpytedFileAsBytes);
 
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException |
+                 InvalidKeyException | BadPaddingException |
+                 IllegalBlockSizeException e) {
             e.printStackTrace();
         }
         return output;
