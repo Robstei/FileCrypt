@@ -24,11 +24,13 @@ public class Model {
         return key;
     }
 
-    protected byte[] encryptAES(byte[] input, String mode, String padding,
-                                SecretKey key) {
+    protected byte[] encryptSymmetric(byte[] input, String algorithm,
+                                      String mode, String padding,
+                                      SecretKey key) {
         try {
-            Cipher cipher = Cipher.getInstance("AES/" + mode + "/" + padding,
-                    new BouncyCastleProvider());
+            Cipher cipher =
+                    Cipher.getInstance(algorithm + "/" + mode + "/" + padding,
+                            new BouncyCastleProvider());
             cipher.init(Cipher.ENCRYPT_MODE, key);
 
             byte[] output = cipher.doFinal(input);
@@ -42,14 +44,16 @@ public class Model {
         return null;
     }
 
-    protected byte[] decryptAES(byte[] encrpytedFileAsBytes, String mode,
-                                String padding, SecretKey key) {
+    protected byte[] decryptSymmetric(byte[] encryptedFileAsBytes,
+                                      String algorithm, String mode,
+                                      String padding, SecretKey key) {
         byte[] output = null;
         try {
-            Cipher cipher = Cipher.getInstance("AES/" + mode + "/" + padding,
-                    new BouncyCastleProvider());
+            Cipher cipher =
+                    Cipher.getInstance(algorithm + "/" + mode + "/" + padding,
+                            new BouncyCastleProvider());
             cipher.init(Cipher.DECRYPT_MODE, key);
-            output = cipher.doFinal(encrpytedFileAsBytes);
+            output = cipher.doFinal(encryptedFileAsBytes);
 
         } catch (NoSuchAlgorithmException | NoSuchPaddingException |
                  InvalidKeyException | BadPaddingException |
