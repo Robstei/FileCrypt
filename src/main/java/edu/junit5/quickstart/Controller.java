@@ -1,13 +1,8 @@
 package edu.junit5.quickstart;
 
-import org.bouncycastle.util.encoders.Hex;
-
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
-import java.util.Arrays;
-
-import static edu.junit5.quickstart.Util.printByteArrayAsTextToConsole;
 
 public class Controller {
     private final Model model;
@@ -44,7 +39,8 @@ public class Controller {
         SecretKey key = model.createKey(algorithm);
         byte[] input = fileAsByteArray(filepath);
 
-        byte[] output = model.encryptAES(input, mode, padding, key);
+        byte[] output = model.encryptSymmetric(input, algorithm, mode,
+                padding, key);
         saveByteArrayAsFile(output, filepath + "_alt");
         saveByteArrayAsFile(key.getEncoded(), filepath + "_key");
     }
@@ -62,7 +58,8 @@ public class Controller {
             byte[] encryptedFileAsBytes = new byte[fileInputStream.available()];
             fileInputStream.read(encryptedFileAsBytes);
 
-            byte[] output = model.decryptAES(encryptedFileAsBytes, mode,
+            byte[] output = model.decryptSymmetric(encryptedFileAsBytes,
+                    algorithm, mode,
                     padding, key);
             saveByteArrayAsFile(output, filepath + "_decrypted");
 
