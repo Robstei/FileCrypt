@@ -1,8 +1,11 @@
 package edu.junit5.quickstart;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.util.encoders.Hex;
 
 import javax.crypto.*;
+import javax.crypto.spec.IvParameterSpec;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
@@ -26,19 +29,25 @@ public class Model {
 
     protected byte[] encryptSymmetric(byte[] input, String algorithm,
                                       String mode, String padding,
-                                      SecretKey key) {
+                                      SecretKey key, String ivString) {
         try {
             Cipher cipher =
                     Cipher.getInstance(algorithm + "/" + mode + "/" + padding,
                             new BouncyCastleProvider());
-            cipher.init(Cipher.ENCRYPT_MODE, key);
+            if (ivString != null) {
+                byte[] ivBytes = Hex.decode(ivString);
+                cipher.init(Cipher.ENCRYPT_MODE, key,
+                        new IvParameterSpec(ivBytes));
+            } else {
+                cipher.init(Cipher.ENCRYPT_MODE, key);
+            }
 
             byte[] output = cipher.doFinal(input);
             return output;
 
         } catch (NoSuchAlgorithmException | InvalidKeyException
                  | NoSuchPaddingException | IllegalBlockSizeException
-                 | BadPaddingException e) {
+                 | BadPaddingException | InvalidAlgorithmParameterException e) {
             e.printStackTrace();
         }
         return null;

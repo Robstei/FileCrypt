@@ -40,7 +40,7 @@ public class Controller {
         byte[] input = fileAsByteArray(filepath);
 
         byte[] output = model.encryptSymmetric(input, algorithm, mode,
-                padding, key);
+                padding, key, null);
         saveByteArrayAsFile(output, filepath + "_alt");
         saveByteArrayAsFile(key.getEncoded(), filepath + "_key");
     }

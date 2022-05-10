@@ -74,11 +74,4 @@ public class ConfigNode {
             child.addValidConfigCombination(newValidConfigCombination);
         }
     }
-
-
-    public static void main(String[] args) {
-
-        ConfigNode config = Config.getConfig();
-        System.out.println(Util.getConfig(config, 0));
-    }
 }
