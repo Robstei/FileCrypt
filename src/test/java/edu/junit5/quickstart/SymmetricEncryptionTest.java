@@ -28,4 +28,14 @@ public class SymmetricEncryptionTest {
         byte[] supposedResult = Hex.decode("0336763e966d92595a567cc9ce537f5e");
         assertArrayEquals(encrpytedData, supposedResult);
     }
+
+    @Test
+    void knownAnswersAES() {
+        AESTestFile aesFile = new AESTestFile("src/test/resources" +
+                "/CBCGFSbox128.rsp");
+        AESSingleTest[] aesSingleTests = aesFile.getAESSingleTests();
+
+        String mode = aesFile.getMode();
+        String padding = aesFile.getPadding();
+    }
 }
