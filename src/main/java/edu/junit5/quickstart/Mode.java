@@ -1,14 +1,33 @@
 package edu.junit5.quickstart;
 
-public enum Mode implements ConfigEnum {
+public class Mode {
 
-    CBC("ECB", "(ECB) Electronic Code Book");
+    private String bouncyCastleName;
+    private String UIName;
+    private boolean needsIV;
+    private boolean needsPadding;
 
-    String name;
-    String UIName;
-
-    Mode(String name, String UIName) {
-        this.name = name;
+    Mode(String bouncyCastleName, String UIName, boolean needsIV,
+         boolean needsPadding) {
+        this.bouncyCastleName = bouncyCastleName;
         this.UIName = UIName;
+        this.needsIV = needsIV;
+        this.needsPadding = needsPadding;
+    }
+
+    public String getBouncyCastleName() {
+        return bouncyCastleName;
+    }
+
+    public String getUIName() {
+        return UIName;
+    }
+
+    public boolean isNeedsIV() {
+        return needsIV;
+    }
+
+    public boolean isNeedsPadding() {
+        return needsPadding;
     }
 }

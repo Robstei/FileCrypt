@@ -34,8 +34,15 @@ public class Controller {
         }
     }
 
+    public boolean validateArgumentCombination() {
+        return true;
+    }
+
     protected void encryptFile(String algorithm, String mode, String padding,
                                String filepath) {
+
+        validateArgumentCombination();
+
         SecretKey key = model.createKey(algorithm);
         byte[] input = fileAsByteArray(filepath);
 
@@ -60,7 +67,7 @@ public class Controller {
 
             byte[] output = model.decryptSymmetric(encryptedFileAsBytes,
                     algorithm, mode,
-                    padding, key);
+                    padding, key, null);
             saveByteArrayAsFile(output, filepath + "_decrypted");
 
 

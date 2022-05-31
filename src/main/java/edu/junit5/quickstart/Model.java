@@ -11,10 +11,25 @@ import java.security.NoSuchAlgorithmException;
 
 public class Model {
 
+    private static Model model;
+    private BouncyCastleProvider bouncyCastleProvider =
+            new BouncyCastleProvider();
+
     /**
      * @param algorithm the algorithm with which the file will be encrypted
      * @return A SecretKey to use during the encryption
      */
+
+    private Model() {
+    }
+
+    public static Model getInstance() {
+        if (model == null) {
+            model = new Model();
+        }
+        return model;
+    }
+
     protected SecretKey createKey(String algorithm) {
         KeyGenerator keyGenerator = null;
         try {
@@ -30,11 +45,13 @@ public class Model {
     protected byte[] encryptSymmetric(byte[] input, String algorithm,
                                       String mode, String padding,
                                       SecretKey key, String ivString) {
+
+
         try {
             Cipher cipher =
                     Cipher.getInstance(algorithm + "/" + mode + "/" + padding,
-                            new BouncyCastleProvider());
-            if (ivString != null) {
+                            bouncyCastleProvider);
+            if (ivString != null && !mode.equals("ECB")) {
                 byte[] ivBytes = Hex.decode(ivString);
                 cipher.init(Cipher.ENCRYPT_MODE, key,
                         new IvParameterSpec(ivBytes));
@@ -55,18 +72,26 @@ public class Model {
 
     protected byte[] decryptSymmetric(byte[] encryptedFileAsBytes,
                                       String algorithm, String mode,
-                                      String padding, SecretKey key) {
+                                      String padding, SecretKey key,
+                                      String ivString) {
         byte[] output = null;
         try {
             Cipher cipher =
                     Cipher.getInstance(algorithm + "/" + mode + "/" + padding,
-                            new BouncyCastleProvider());
-            cipher.init(Cipher.DECRYPT_MODE, key);
+                            bouncyCastleProvider);
+
+            if (ivString != null && !mode.equals("ECB")) {
+                cipher.init(Cipher.DECRYPT_MODE, key,
+                        new IvParameterSpec(Hex.decode(ivString)));
+            } else {
+                cipher.init(Cipher.DECRYPT_MODE, key);
+            }
             output = cipher.doFinal(encryptedFileAsBytes);
 
         } catch (NoSuchAlgorithmException | NoSuchPaddingException |
                  InvalidKeyException | BadPaddingException |
-                 IllegalBlockSizeException e) {
+                 IllegalBlockSizeException |
+                 InvalidAlgorithmParameterException e) {
             e.printStackTrace();
         }
         return output;

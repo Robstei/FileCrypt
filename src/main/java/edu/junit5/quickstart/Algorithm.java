@@ -1,13 +1,30 @@
 package edu.junit5.quickstart;
 
-public enum Algorithm implements ConfigEnum {
-    AES("AES", "AES (Advanced Encryption Standard)");
+public class Algorithm {
 
-    String name;
-    String UIName;
+    private String bouncyCastleName;
+    private String UIName;
+    private Mode[] possibleModes;
 
-    Algorithm(String name, String UIName) {
-        this.name = name;
+    public Algorithm(String bouncyCastleName, String UIName,
+                     Mode[] possibleModes) {
+        this.bouncyCastleName = bouncyCastleName;
         this.UIName = UIName;
+        this.possibleModes = possibleModes;
+    }
+
+    public String getBouncyCastleName() {
+        return bouncyCastleName;
+    }
+
+    public String getUIName() {
+        return UIName;
+    }
+
+    public Mode[] getPossibleModes() {
+        return possibleModes;
     }
 }
+
+
+

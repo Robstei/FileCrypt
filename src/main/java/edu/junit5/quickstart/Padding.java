@@ -1,14 +1,20 @@
 package edu.junit5.quickstart;
 
-public enum Padding implements ConfigEnum {
+public class Padding {
 
-    ISO7816_4Padding("ISO7816-4Padding", "ISO7816-4Padding");
-    String name;
-    String UIName;
+    private String bouncyCastleName;
+    private String UIName;
 
-
-    Padding(String name, String UIName) {
-        this.name = name;
+    public Padding(String bouncyCastleName, String UIName) {
+        this.bouncyCastleName = bouncyCastleName;
         this.UIName = UIName;
+    }
+
+    public String getBouncyCastleName() {
+        return bouncyCastleName;
+    }
+
+    public String getUIName() {
+        return UIName;
     }
 }
