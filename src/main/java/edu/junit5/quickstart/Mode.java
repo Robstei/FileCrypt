@@ -1,6 +1,6 @@
 package edu.junit5.quickstart;
 
-public class Mode {
+public abstract class Mode {
 
     private String bouncyCastleName;
     private String UIName;

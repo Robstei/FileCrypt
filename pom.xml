@@ -129,7 +129,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>edu.junit5.quickstart.learning.HelloFX</mainClass>
+                    <mainClass>edu.junit5.quickstart.App</mainClass>
                 </configuration>
             </plugin>
             <!-- Not specifying the Version of the maven-site-plugin leads to an error, probably because

@@ -1,11 +1,13 @@
 package edu.junit5.quickstart;
 
-import org.bouncycastle.util.encoders.Hex;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 public class App {
+
     public static void main(String[] args) {
-        System.out.println("000".getBytes());
-        Model model = Model.getInstance();
-        Controller controller = new Controller(model);
+
+        Application.launch(JavaFXEntry.class);
     }
 }

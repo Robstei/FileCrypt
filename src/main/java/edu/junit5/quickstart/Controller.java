@@ -11,6 +11,10 @@ public class Controller {
         this.model = model;
     }
 
+    public void test() {
+        System.out.println("test");
+    }
+
     public byte[] fileAsByteArray(String path) {
         byte[] fileAsBytes = null;
         try (FileInputStream fileInputStream = new FileInputStream(path)) {
