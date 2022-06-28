@@ -1,4 +1,4 @@
-package edu.junit5.quickstart;
+package edu.junit5.quickstart.Padding;
 
 import java.util.ArrayList;
 
@@ -24,8 +24,6 @@ public abstract class Padding {
     public static ArrayList<Padding> getActivePaddings() {
         return activePaddings;
     }
-
-    public abstract boolean validate(Mode mode);
 
     public String getBouncyCastleName() {
         return bouncyCastleName;

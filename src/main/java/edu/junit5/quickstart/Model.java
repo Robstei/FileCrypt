@@ -5,6 +5,9 @@ import org.bouncycastle.util.encoders.Hex;
 
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.Key;
@@ -41,6 +44,66 @@ public class Model {
         }
         SecretKey key = keyGenerator.generateKey();
         return key;
+    }
+
+
+    public byte[] fileAsByteArray(String path) {
+        byte[] fileAsBytes = null;
+        try (FileInputStream fileInputStream = new FileInputStream(path)) {
+            fileAsBytes = fileInputStream.readAllBytes();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return fileAsBytes;
+    }
+
+    public void saveByteArrayAsFile(byte[] array, String filePath) {
+        FileOutputStream fileOutputStream;
+        try {
+            fileOutputStream = new FileOutputStream(filePath);
+
+            fileOutputStream.write(array);
+            fileOutputStream.flush();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void manageEncryptWithState(){
+        Key key;
+        State state = State.getState();
+        byte input[] = fileAsByteArray(State.getState().getPath());
+        try {
+            key = KeyGenerator.getInstance("AES").generateKey();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+
+        byte[] encryptedText = encryptWithState(input ,key);
+        saveByteArrayAsFile(encryptedText, State.getState().getPath() + "_encrypted");
+    }
+
+    public byte[] encryptWithState(byte[] input, Key key) {
+        State state = State.getState();
+        String algorithm = state.getAlgorithm().getBouncyCastleName();
+        String mode = state.getMode().getBouncyCastleName();
+        String padding = state.getPadding().getBouncyCastleName();
+        try {
+            Cipher cipher = Cipher.getInstance(algorithm + "/" + mode + "/" + padding, bouncyCastleProvider);
+            cipher.init(Cipher.ENCRYPT_MODE, key);
+            return cipher.doFinal(input);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchPaddingException e) {
+            throw new RuntimeException(e);
+        } catch (InvalidKeyException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalBlockSizeException e) {
+            throw new RuntimeException(e);
+        } catch (BadPaddingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     protected void encryptEverything() {
@@ -180,23 +243,23 @@ public class Model {
         return output;
     }
 
-    void newEncrypt(String algorithm, String mode, String padding) {
-        Executor executor = getExecutor(algorithm, mode, padding);
-        //executor.init();
-        executor.encrypt();
-        executor.createCipherTextAsFile();
-        executor.createEncryptionMetaDataFile();
-    }
+//    void newEncrypt(String algorithm, String mode, String padding) {
+//        Executor executor = getExecutor(algorithm, mode, padding);
+//        //executor.init();
+//        executor.encrypt();
+//        executor.createCipherTextAsFile();
+//        executor.createEncryptionMetaDataFile();
+//    }
 
-    Executor getExecutor(String algorithm, String mode, String padding) {
-        if (algorithm.equals("AES") && mode.equals("ECB") && padding.equals(
-                "PKCS7Executor")) {
-            return new AESWithECBWithPKCS7Executor();
-        } else if (algorithm.equals("AES") && mode.equals("ECB") && padding.equals("ZeroBytePadding")) {
-            return new AESWithECBWithZeroBytePaddingExecutor();
-        } else if (algorithm.equals("AES") && mode.equals("OFB") && padding.equals("NoPadding")) {
-            return new AESWithOFBWithNoPaddingExecutor();
-        }
-        return null;
-    }
+//    Executor getExecutor(String algorithm, String mode, String padding) {
+//        if (algorithm.equals("AES") && mode.equals("ECB") && padding.equals(
+//                "PKCS7Executor")) {
+//            return new AESWithECBWithPKCS7Executor();
+//        } else if (algorithm.equals("AES") && mode.equals("ECB") && padding.equals("ZeroBytePadding")) {
+//            return new AESWithECBWithZeroBytePaddingExecutor();
+//        } else if (algorithm.equals("AES") && mode.equals("OFB") && padding.equals("NoPadding")) {
+//            return new AESWithOFBWithNoPaddingExecutor();
+//        }
+//        return null;
+//    }
 }

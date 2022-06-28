@@ -1,18 +1,22 @@
-package edu.junit5.quickstart;
+package edu.junit5.quickstart.Mode;
+
+import edu.junit5.quickstart.Padding.NoPadding;
+import edu.junit5.quickstart.Padding.Padding;
 
 public abstract class Mode {
 
     private String bouncyCastleName;
     private String UIName;
     private boolean needsIV;
-    private boolean needsPadding;
+
+    final private Padding[] possiblePaddings;
 
     Mode(String bouncyCastleName, String UIName, boolean needsIV,
-         boolean needsPadding) {
+         Padding[] possiblePaddings) {
         this.bouncyCastleName = bouncyCastleName;
         this.UIName = UIName;
         this.needsIV = needsIV;
-        this.needsPadding = needsPadding;
+        this.possiblePaddings = new Padding[]{new NoPadding()};
     }
 
     public String getBouncyCastleName() {
@@ -27,7 +31,4 @@ public abstract class Mode {
         return needsIV;
     }
 
-    public boolean isNeedsPadding() {
-        return needsPadding;
-    }
 }
