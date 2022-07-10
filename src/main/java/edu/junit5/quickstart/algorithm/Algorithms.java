@@ -1,4 +1,4 @@
-package edu.junit5.quickstart.Algorithm;
+package edu.junit5.quickstart.algorithm;
 
 public class Algorithms {
 

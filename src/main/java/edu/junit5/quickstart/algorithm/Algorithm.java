@@ -1,6 +1,6 @@
-package edu.junit5.quickstart.Algorithm;
+package edu.junit5.quickstart.algorithm;
 
-import edu.junit5.quickstart.Mode.Mode;
+import edu.junit5.quickstart.mode.Mode;
 
 public class Algorithm {
 

@@ -1,32 +1,113 @@
 package edu.junit5.quickstart.controller;
 
-import edu.junit5.quickstart.Model;
-import javafx.event.Event;
-import javafx.event.EventTarget;
+import edu.junit5.quickstart.mode.Mode;
+import edu.junit5.quickstart.model.Model;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleGroup;
 import javafx.stage.FileChooser;
-import edu.junit5.quickstart.State;
 
-import java.awt.event.MouseEvent;
 import java.io.File;
+import java.util.ArrayList;
 
 public class SymmetricEncryptionEncryptController {
-    public Label pathLabel;
 
     @FXML
-    public void chooseFile(Event e){
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Choose File to Encrypt");
-        System.out.println();
-        File file = fileChooser.showOpenDialog(null);
-        State.getState().setPath(file.getPath());
-        pathLabel.setText(file.getPath());
+    private Label encryptFilePathLabel;
+    @FXML
+    private ToggleGroup encryption_algorithm;
+
+    @FXML
+    private ToggleGroup encryption_mode;
+
+    @FXML
+    private ToggleGroup encryption_padding;
+
+    @FXML
+    private ToggleGroup encryption_keysize;
+    @FXML
+    private ToggleGroup encryption_mac;
+
+    @FXML
+    private void initialize() {
+
+        ControllerUtil.bindToggleGroupToProperty(encryption_algorithm, Model.getInstance().getProperties().symmetricEncryptionAlgorithmProperty());
+        Model.getInstance().getProperties().symmetricEncryptionModeProperty().addListener((observableValue, oldValue, newValue) -> {
+
+            Mode mode = Model.getInstance().getModeByKey(newValue);
+
+            for (Toggle toggle : encryption_padding.getToggles()) {
+                if (mode.isValidPadding((String) toggle.getUserData())) {
+                    ((RadioButton) toggle).setDisable(false);
+                } else {
+                    ((RadioButton) toggle).setDisable(true);
+                    toggle.setSelected(false);
+                }
+            }
+        });
+        ControllerUtil.bindToggleGroupToProperty(encryption_mode, Model.getInstance().getProperties().symmetricEncryptionModeProperty());
+        ControllerUtil.bindToggleGroupToProperty(encryption_keysize, Model.getInstance().getProperties().symmetricEncryptionKeySizeProperty());
+        ControllerUtil.bindToggleGroupToProperty(encryption_padding, Model.getInstance().getProperties().symmetricEncryptionPaddingProperty());
+        //ControllerUtil.bindToggleGroupToProperty(encryption_mac, Model.getInstance().getProperties().symmetricEncryptionMACProperty());
+        encryptFilePathLabel.textProperty().bind(Model.getInstance().getProperties().filePathProperty());
+        encryption_mode.selectedToggleProperty().addListener((observableValue, oldValue, newValue) -> {
+            updateValidPaddings((String) newValue.getUserData());
+        });
     }
 
     @FXML
-    public void encrypt() {
-        Model.getInstance().manageEncryptWithState();
+    private void selectFileToEncrypt() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select File to Encrypt");
+        File file = fileChooser.showOpenDialog(null);
+
+        if (file != null) {
+            Model.getInstance().getProperties().setSymmetricEncryptionEncryptFilePath(file.getPath());
+        }
+    }
+
+    private void updateValidPaddings(String mode) {
+        Model model = Model.getInstance();
+        ArrayList<String> validPaddingNames = model.getModeByKey(mode).getValidPaddingNames();
+        for (Toggle toggle : encryption_padding.getToggles()) {
+            if (validPaddingNames.contains(toggle.getUserData())) {
+                ((RadioButton) toggle).setDisable(false);
+                if (validPaddingNames.size() == 1) {
+                    toggle.setSelected(true);
+                }
+            } else {
+                ((RadioButton) toggle).setDisable(true);
+                toggle.setSelected(false);
+            }
+        }
+    }
+
+    private boolean isFormFilledOut() {
+        boolean formFilledOut = true;
+
+        if (encryption_algorithm.selectedToggleProperty() == null) {
+            formFilledOut = false;
+        }
+        if (encryption_mode.selectedToggleProperty() == null) {
+            formFilledOut = false;
+        }
+
+        if (encryption_padding.selectedToggleProperty() == null) {
+            formFilledOut = false;
+        }
+
+        if (encryptFilePathLabel.getText() == null) {
+            formFilledOut = false;
+        }
+        return formFilledOut;
+    }
+
+    @FXML
+    private void encrypt() {
+        if (isFormFilledOut()) {
+            Model.getInstance().manageSymmetricEncryption();
+        }
     }
 }

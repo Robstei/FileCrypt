@@ -1,7 +1,7 @@
-package edu.junit5.quickstart.Algorithm;
+package edu.junit5.quickstart.algorithm;
 
-import edu.junit5.quickstart.Mode.Mode;
-import edu.junit5.quickstart.Mode.OFB;
+import edu.junit5.quickstart.mode.Mode;
+import edu.junit5.quickstart.mode.OFB;
 
 public class AES extends Algorithm{
 

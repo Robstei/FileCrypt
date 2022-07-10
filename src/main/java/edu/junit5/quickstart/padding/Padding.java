@@ -1,4 +1,4 @@
-package edu.junit5.quickstart.Padding;
+package edu.junit5.quickstart.padding;
 
 import java.util.ArrayList;
 
