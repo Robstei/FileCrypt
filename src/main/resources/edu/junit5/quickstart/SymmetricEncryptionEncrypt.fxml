@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+      minWidth="-Infinity"
+      prefHeight="480.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18"
+      fx:controller="edu.junit5.quickstart.controller.SymmetricEncryptionEncryptController">
+    <children>
+        <GridPane>
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            </rowConstraints>
+            <children>
+                <Label text="Algorithm"/>
+                <RadioButton mnemonicParsing="false" text="AES" userData="AES" GridPane.rowIndex="1">
+                    <toggleGroup>
+                        <ToggleGroup fx:id="encryption_algorithm"/>
+                    </toggleGroup>
+                </RadioButton>
+            </children>
+        </GridPane>
+        <GridPane>
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            </rowConstraints>
+            <children>
+                <Label text="Mode"/>
+                <RadioButton mnemonicParsing="false" text="ECB" userData="ECB" GridPane.rowIndex="1">
+                    <toggleGroup>
+                        <ToggleGroup fx:id="encryption_mode"/>
+                    </toggleGroup>
+                </RadioButton>
+                <RadioButton mnemonicParsing="false" text="CBC" toggleGroup="$encryption_mode" userData="CBC"
+                             GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                <RadioButton mnemonicParsing="false" text="OFB" toggleGroup="$encryption_mode" userData="OFB"
+                             GridPane.rowIndex="2"/>
+                <RadioButton mnemonicParsing="false" text="GCM" toggleGroup="$encryption_mode" userData="GCM"
+                             GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+            </children>
+        </GridPane>
+        <GridPane>
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            </rowConstraints>
+            <children>
+                <Label text="Padding"/>
+                <RadioButton mnemonicParsing="false" text="NoPadding" userData="NoPadding" GridPane.rowIndex="1">
+                    <toggleGroup>
+                        <ToggleGroup fx:id="encryption_padding"/>
+                    </toggleGroup>
+                </RadioButton>
+                <RadioButton mnemonicParsing="false" text="PKCS7Padding" toggleGroup="$encryption_padding"
+                             userData="PKCS7Padding" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                <RadioButton mnemonicParsing="false" text="ZeroBytePadding" toggleGroup="$encryption_padding"
+                             userData="ZeroBytePadding" GridPane.rowIndex="2"/>
+                <RadioButton mnemonicParsing="false" text="CTS" toggleGroup="$encryption_padding" userData="CTSPadding"
+                             GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+            </children>
+        </GridPane>
+        <GridPane>
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            </rowConstraints>
+            <children>
+                <Label text="Keysize"/>
+                <RadioButton mnemonicParsing="false" text="128 Bit" userData="128" GridPane.rowIndex="1">
+                    <toggleGroup>
+                        <ToggleGroup fx:id="encryption_keysize"/>
+                    </toggleGroup>
+                </RadioButton>
+                <RadioButton mnemonicParsing="false" text="192 Bit" toggleGroup="$encryption_keysize" userData="192"
+                             GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                <RadioButton mnemonicParsing="false" text="256 Bit" toggleGroup="$encryption_keysize" userData="256"
+                             GridPane.rowIndex="2"/>
+            </children>
+        </GridPane>
+        <GridPane>
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            </rowConstraints>
+            <children>
+                <Label text="Validation"/>
+                <RadioButton mnemonicParsing="false" text="SHA-256" userData="SHA-256" GridPane.rowIndex="1">
+                    <toggleGroup>
+                        <ToggleGroup fx:id="encryption_validation"/>
+                    </toggleGroup>
+                </RadioButton>
+                <RadioButton mnemonicParsing="false" text="AESCMAC" userData="AESCMAC"
+                             toggleGroup="$encryption_validation"
+                             GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                <RadioButton mnemonicParsing="false" text="HMACSHA256" userData="HMACSHA256"
+                             toggleGroup="$encryption_validation"
+                             GridPane.rowIndex="2"/>
+            </children>
+        </GridPane>
+        <GridPane>
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            </rowConstraints>
+            <children>
+                <Button mnemonicParsing="false" onAction="#selectFileToEncrypt" text="Select File"/>
+                <Button mnemonicParsing="false" onAction="#encrypt" text="Encrypt" GridPane.rowIndex="2"/>
+                <Label fx:id="encryptFilePathLabel" GridPane.rowIndex="1"/>
+            </children>
+        </GridPane>
+    </children>
+</VBox>

@@ -17,7 +17,6 @@ public class Model {
             new BouncyCastleProvider();
 
     private Model() {
-
     }
 
     public static Model getInstance() {
@@ -52,8 +51,8 @@ public class Model {
         symmetricEncryptionModel.manageSymmetricEncryption(properties);
     }
 
-    public void manageSymmetricDecryption() {
+    public OperationResult manageSymmetricDecryption() {
         SymmetricEncryptionModel symmetricEncryptionModel = new SymmetricEncryptionModel();
-        symmetricEncryptionModel.manageSymmetricDecryption(properties);
+        return symmetricEncryptionModel.manageSymmetricDecryption(properties);
     }
 }
