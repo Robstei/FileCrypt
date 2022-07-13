@@ -1,9 +1,9 @@
 package edu.junit5.quickstart.model;
 
 public class Defaults {
-    public static final String symmetricEncryptionAlgorithm = "AES";
-    public static final String symmetricEncryptionMode ="CBC";
-    public static final String symmetricEncryptionPadding = "NoPadding";
-    public static final String symmetricEncryptionKeySize = "256";
-    public static final String symmetricEncryptionMAC = "None";
+    protected static final String symmetricEncryptionAlgorithm = "AES";
+    protected static final String symmetricEncryptionMode = "CBC";
+    protected static final String symmetricEncryptionPadding = "NoPadding";
+    protected static final String symmetricEncryptionKeySize = "256";
+    protected static final String symmetricEncryptionValidation = "HMACSHA256";
 }

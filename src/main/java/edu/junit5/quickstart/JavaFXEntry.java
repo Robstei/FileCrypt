@@ -1,6 +1,5 @@
 package edu.junit5.quickstart;
 
-import edu.junit5.quickstart.model.Model;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

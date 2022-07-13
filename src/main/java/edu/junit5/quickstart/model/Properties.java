@@ -9,17 +9,18 @@ public class Properties {
     private final StringProperty symmetricEncryptionMode;
     private final StringProperty symmetricEncryptionPadding;
     private final StringProperty symmetricEncryptionKeySize;
-    private final StringProperty symmetricEncryptionMAC;
     private final StringProperty symmetricEncryptionEncryptFilePath;
     private final StringProperty symmetricEncryptionDecryptFilePath;
     private final StringProperty SymmetricEncryptionKeyFilePath;
+
+    private final StringProperty SymmetricEncryptionValidation;
 
     public Properties() {
         symmetricEncryptionAlgorithm = new SimpleStringProperty(Defaults.symmetricEncryptionAlgorithm);
         symmetricEncryptionMode = new SimpleStringProperty(Defaults.symmetricEncryptionMode);
         symmetricEncryptionPadding = new SimpleStringProperty(Defaults.symmetricEncryptionPadding);
         symmetricEncryptionKeySize = new SimpleStringProperty(Defaults.symmetricEncryptionKeySize);
-        symmetricEncryptionMAC = new SimpleStringProperty(Defaults.symmetricEncryptionMAC);
+        SymmetricEncryptionValidation = new SimpleStringProperty(Defaults.symmetricEncryptionValidation);
 
         symmetricEncryptionEncryptFilePath = new SimpleStringProperty();
         symmetricEncryptionDecryptFilePath = new SimpleStringProperty();
@@ -58,14 +59,6 @@ public class Properties {
         return symmetricEncryptionKeySize;
     }
 
-    public String getSymmetricEncryptionMAC() {
-        return symmetricEncryptionMAC.get();
-    }
-
-    public StringProperty symmetricEncryptionMACProperty() {
-        return symmetricEncryptionMAC;
-    }
-
     public String getSymmetricEncryptionEncryptFilePath() {
         return symmetricEncryptionEncryptFilePath.get();
     }
@@ -100,5 +93,17 @@ public class Properties {
 
     public StringProperty symmetricEncryptionKeyFilePathProperty() {
         return SymmetricEncryptionKeyFilePath;
+    }
+
+    public String getSymmetricEncryptionValidation() {
+        return SymmetricEncryptionValidation.get();
+    }
+
+    public void setSymmetricEncryptionValidation(String symmetricEncryptionValidation) {
+        this.SymmetricEncryptionValidation.set(symmetricEncryptionValidation);
+    }
+
+    public StringProperty symmetricEncryptionValidationProperty() {
+        return SymmetricEncryptionValidation;
     }
 }
