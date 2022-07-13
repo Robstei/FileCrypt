@@ -3,10 +3,11 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" fx:id="encryption_function_container" maxHeight="-Infinity" maxWidth="-Infinity"
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:id="signature_function_container" maxHeight="-Infinity"
+      maxWidth="-Infinity"
       minHeight="-Infinity" minWidth="-Infinity" prefHeight="555.0" prefWidth="600.0"
       xmlns="http://javafx.com/javafx/18"
-      fx:controller="edu.junit5.quickstart.controller.SymmetricEncryptionController">
+      fx:controller="edu.junit5.quickstart.controller.SignatureController">
     <children>
         <Label text="Signature"/>
         <GridPane>
@@ -20,13 +21,13 @@
             </rowConstraints>
             <children>
                 <Label text="Signature Mode"/>
-                <RadioButton mnemonicParsing="false" text="Create" userData="encrypt" GridPane.rowIndex="1">
+                <RadioButton mnemonicParsing="false" text="Create" userData="sign" GridPane.rowIndex="1">
                     <toggleGroup>
                         <ToggleGroup fx:id="signature_direction"/>
                     </toggleGroup>
                 </RadioButton>
                 <RadioButton mnemonicParsing="false" text="Validate" toggleGroup="$signature_direction"
-                             userData="decrypt" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                             userData="validate" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
             </children>
         </GridPane>
         <fx:include source="SignatureCreate.fxml"/>

@@ -1,11 +1,17 @@
 package edu.junit5.quickstart.controller;
 
 import javafx.beans.property.StringProperty;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.Pane;
+import javafx.util.Pair;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author Robin STeil
@@ -29,15 +35,35 @@ public class ControllerUtil {
         toggleGroup.selectToggle(toggleMap.get(property.getValue()));
 
         toggleGroup.selectedToggleProperty().addListener((observableValue, oldValue, newValue) -> {
-            if(newValue == null) {
+            if (newValue == null) {
                 property.setValue(null);
             } else {
                 property.setValue((String) newValue.getUserData());
             }
         });
 
-        property.addListener((observableValue, oldValue, newValue) -> {
-            toggleGroup.selectToggle(toggleMap.get(newValue));
-        });
+        property.addListener((observableValue, oldValue, newValue) ->
+                toggleGroup.selectToggle(toggleMap.get(newValue))
+        );
+    }
+
+    public static void bindViewsToToggleOptions(Toggle toggle, Pane pane, int indexToChange, Pair<String, String>[] pairArray) {
+        Node newChild = null;
+        String newChildKey = (String) toggle.getUserData();
+        for (Pair<String, String> pair : pairArray) {
+            if (pair.getKey().equals(newChildKey)) {
+                try {
+                    newChild = FXMLLoader.load(Objects.requireNonNull(ControllerUtil.class.getResource(pair.getValue())));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        if (newChild != null) {
+            pane.getChildren().set(indexToChange, newChild);
+        } else {
+            pane.getChildren().remove(indexToChange);
+        }
     }
 }

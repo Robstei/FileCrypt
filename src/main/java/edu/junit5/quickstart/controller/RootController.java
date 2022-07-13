@@ -23,6 +23,9 @@ public class RootController {
                 case "symmetric_encryption":
                     node = FXMLLoader.load(getClass().getResource("../SymmetricEncryption.fxml"));
                     break;
+                case "password":
+                    node = FXMLLoader.load(getClass().getResource("../Password.fxml"));
+                    break;
                 case "signature":
                     node = FXMLLoader.load(getClass().getResource("../Signature.fxml"));
                     break;

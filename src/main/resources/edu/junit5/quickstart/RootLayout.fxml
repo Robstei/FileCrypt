@@ -83,6 +83,9 @@
                         <Button onAction="#changeMainWindow" userData="symmetric_encryption" mnemonicParsing="false"
                                 prefHeight="100.0"
                                 prefWidth="215.0" text="Symmetric Encryption" textAlignment="CENTER"/>
+                        <Button onAction="#changeMainWindow" userData="password" mnemonicParsing="false"
+                                prefHeight="100.0"
+                                prefWidth="215.0" text="Password" textAlignment="CENTER"/>
                         <Button onAction="#changeMainWindow" userData="signature" mnemonicParsing="false"
                                 prefHeight="100.0"
                                 prefWidth="215.0" text="Signatures" textAlignment="CENTER"/>
