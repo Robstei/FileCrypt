@@ -1,5 +1,6 @@
 package edu.junit5.quickstart.model;
 
+import edu.junit5.quickstart.validation.ValidationParams;
 import org.bouncycastle.util.encoders.Hex;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -33,9 +34,7 @@ public class FileHandler {
     }
 
     public void saveByteArrayAsFile(byte[] array, String filePath) {
-        FileOutputStream fileOutputStream;
-        try {
-            fileOutputStream = new FileOutputStream(filePath);
+        try (FileOutputStream fileOutputStream = new FileOutputStream(filePath)) {
 
             fileOutputStream.write(array);
             fileOutputStream.flush();
@@ -70,6 +69,32 @@ public class FileHandler {
             padding.appendChild(document.createTextNode(symmetricEncryptionKey.getPadding()));
             encryptionData.appendChild(padding);
 
+            Element iv = document.createElement("iv");
+            // iv might be null because the algorithm / mode combination does not need one
+            if (symmetricEncryptionKey.getIv() != null) {
+                iv.appendChild(document.createTextNode(Hex.toHexString(symmetricEncryptionKey.getIv())));
+            }
+            encryptionData.appendChild(iv);
+
+
+            Element validation = document.createElement("validation");
+            encryptionData.appendChild(validation);
+
+            Element validationName = document.createElement("validationName");
+            validation.appendChild(validationName);
+            validationName.appendChild(document.createTextNode(symmetricEncryptionKey.getValidationParams().getName()));
+
+            Element validationComputedBytes = document.createElement("validationComputedBytes");
+            validation.appendChild(validationComputedBytes);
+            validationComputedBytes.appendChild(document.createTextNode(Hex.toHexString(symmetricEncryptionKey.getValidationParams().getComputedBytes())));
+
+
+            Element validationKey = document.createElement("validationKey");
+            validation.appendChild(validationKey);
+            if (symmetricEncryptionKey.getValidationParams().getKey() != null) {
+                validationKey.appendChild(document.createTextNode(Hex.toHexString(symmetricEncryptionKey.getValidationParams().getKey().getEncoded())));
+            }
+
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             File file = new File(encryptedFilePath + ".fek");
@@ -91,8 +116,16 @@ public class FileHandler {
             String algorithm = document.getElementsByTagName("algorithm").item(0).getTextContent();
             String mode = document.getElementsByTagName("mode").item(0).getTextContent();
             String padding = document.getElementsByTagName("padding").item(0).getTextContent();
+            byte[] iv = Hex.decode(document.getElementsByTagName("iv").item(0).getTextContent());
             SecretKey key = new SecretKeySpec(Hex.decode(keyAsString), algorithm);
-            return new SymmetricEncryptionKey(key, algorithm, mode, padding);
+
+            String validationName = document.getElementsByTagName("validationName").item(0).getTextContent();
+            String computedBytes = document.getElementsByTagName("validationComputedBytes").item(0).getTextContent();
+            String validationKey = document.getElementsByTagName("validationKey").item(0).getTextContent();
+            ValidationParams validationParams = new ValidationParams(validationName, Hex.decode(computedBytes),
+                    new SecretKeySpec(Hex.decode(validationKey), validationName));
+
+            return new SymmetricEncryptionKey(key, algorithm, mode, padding, validationParams, iv);
         } catch (ParserConfigurationException | SAXException | IOException e) {
             throw new RuntimeException(e);
         }

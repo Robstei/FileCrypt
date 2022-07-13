@@ -1,5 +1,7 @@
 package edu.junit5.quickstart.model;
 
+import edu.junit5.quickstart.validation.ValidationParams;
+
 import java.security.Key;
 
 public class SymmetricEncryptionKey {
@@ -7,18 +9,21 @@ public class SymmetricEncryptionKey {
     private final String algorithm;
     private final String mode;
     private final String padding;
+    private final ValidationParams validationParams;
     private final byte[] iv;
 
-    public SymmetricEncryptionKey(Key key, String algorithm, String mode, String padding, byte[] iv) {
+
+    public SymmetricEncryptionKey(Key key, String algorithm, String mode, String padding, ValidationParams validationParams, byte[] iv) {
         this.key = key;
         this.algorithm = algorithm;
         this.mode = mode;
         this.padding = padding;
+        this.validationParams = validationParams;
         this.iv = iv;
     }
 
-    public SymmetricEncryptionKey(Key key, String algorithm, String mode, String padding) {
-        this(key, algorithm, mode, padding, null);
+    public SymmetricEncryptionKey(Key key, String algorithm, String mode, String padding, ValidationParams validationParams) {
+        this(key, algorithm, mode, padding, validationParams, null);
     }
 
     public Key getKey() {
@@ -40,5 +45,9 @@ public class SymmetricEncryptionKey {
 
     public String getPadding() {
         return padding;
+    }
+
+    public ValidationParams getValidationParams() {
+        return validationParams;
     }
 }
