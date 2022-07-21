@@ -1,76 +1,94 @@
 package edu.junit5.quickstart.model;
 
-import edu.junit5.quickstart.validation.ValidationParams;
-import edu.junit5.quickstart.validation.Validator;
+import edu.junit5.quickstart.state.Transformation;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-import javax.crypto.*;
-import javax.crypto.spec.IvParameterSpec;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.Key;
-import java.security.NoSuchAlgorithmException;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.security.*;
 
 public class SymmetricEncryptionModel {
-    protected void manageSymmetricEncryption(Properties properties) {
-        FileHandler fileHandler = new FileHandler();
-        byte[] fileAsByteArray = fileHandler.getFileAsByteArray(properties.getSymmetricEncryptionEncryptFilePath());
-        String algorithm = properties.getSymmetricEncryptionAlgorithm();
-        String mode = properties.getSymmetricEncryptionMode();
-        String padding = properties.getSymmetricEncryptionPadding();
-        try {
-            Cipher cipher = Cipher.getInstance(algorithm + "/" + mode + "/" + padding,
-                    new BouncyCastleProvider());
-            KeyGenerator keyGenerator = KeyGenerator.getInstance(algorithm, new BouncyCastleProvider());
-            keyGenerator.init(Integer.parseInt(properties.getSymmetricEncryptionKeySize()));
-            Key key = keyGenerator.generateKey();
-            cipher.init(Cipher.ENCRYPT_MODE, key);
-            byte[] encryptedFileAsByteArray = cipher.doFinal(fileAsByteArray);
+  private OperationResult operationResult;
+  private byte[] result;
 
-            Validator validator = new Validator();
-            ValidationParams validationParams = validator.generateValidation(encryptedFileAsByteArray, properties.getSymmetricEncryptionValidation());
-
-            fileHandler.saveByteArrayAsFile(encryptedFileAsByteArray, properties.getSymmetricEncryptionEncryptFilePath() + ".fee");
+  private PublicEncryptionData publicEncryptionData;
+  private SecretEncryptionData secretEncryptionData;
 
 
-            byte[] iv = cipher.getIV();
-            SymmetricEncryptionKey encryptionKey = new SymmetricEncryptionKey(key, algorithm, mode, padding, validationParams, iv);
-            fileHandler.saveEncryptionKeyAsFile(encryptionKey, properties.getSymmetricEncryptionEncryptFilePath());
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException |
-                 BadPaddingException e) {
-            throw new RuntimeException(e);
-        }
+  public OperationResult getOperationResult() {
+    return operationResult;
+  }
+
+  public byte[] getResult() {
+    return result;
+  }
+
+  public PublicEncryptionData getPublicEncryptionData() {
+    return publicEncryptionData;
+  }
+
+  public SecretEncryptionData getSecretEncryptionData() {
+    return secretEncryptionData;
+  }
+
+  public void manageSymmetricEncryption(byte[] bytesToEncrypt,
+                                        Transformation transformation,
+                                        Key key,
+                                        AlgorithmParameters algorithmParameters,
+                                        String algorithmForParameters) {
+    result = encryptSymmetric(bytesToEncrypt, transformation,
+                              key, algorithmParameters);
+
+    this.publicEncryptionData = new PublicEncryptionData(result, transformation,
+                                                         algorithmParameters,
+                                                         algorithmForParameters);
+    this.secretEncryptionData = new SecretEncryptionData(key);
+  }
+
+  public OperationResult manageSymmetricDecryption(
+          PublicEncryptionData publicEncryptionData,
+          SecretEncryptionData secretEncryptionData) {
+
+    AlgorithmParameters algorithmParameters =
+            publicEncryptionData.getAlgorithmParameters();
+    result = decryptSymmetric(publicEncryptionData.getEncryptedBytes(),
+                              publicEncryptionData.getTransformation(),
+                              secretEncryptionData.getKey(),
+                              algorithmParameters);
+    return new OperationResult(true);
+  }
+
+
+  public byte[] encryptSymmetric(byte[] input, Transformation transformation,
+                                 Key key,
+                                 AlgorithmParameters algorithmParameters) {
+    try {
+      Cipher cipher = Cipher.getInstance(transformation.toString(),
+                                         new BouncyCastleProvider());
+      cipher.init(Cipher.ENCRYPT_MODE, key, algorithmParameters);
+      return cipher.doFinal(input);
+    } catch (NoSuchAlgorithmException | NoSuchPaddingException |
+             IllegalBlockSizeException | BadPaddingException |
+             InvalidKeyException | InvalidAlgorithmParameterException e) {
+      throw new RuntimeException(e);
     }
+  }
 
-    protected OperationResult manageSymmetricDecryption(Properties properties) {
-        try {
-            FileHandler fileHandler = new FileHandler();
-            byte[] bytesToDecrypt = fileHandler.getFileAsByteArray(properties.getSymmetricEncryptionDecryptFilePath());
-            SymmetricEncryptionKey symmetricEncryptionKey = fileHandler.getSymmetricEncryptionKey(properties.getSymmetricEncryptionKeyFilePath());
-
-            Validator validator = new Validator();
-            boolean valid = validator.validate(bytesToDecrypt, symmetricEncryptionKey.getValidationParams());
-            if (!valid) {
-                return new OperationResult(false, "Did not decrpyt file. File validation failed. The file was changed.");
-            }
-
-            String algorithm = symmetricEncryptionKey.getAlgorithm();
-            String mode = symmetricEncryptionKey.getMode();
-            String padding = symmetricEncryptionKey.getPadding();
-            byte[] iv = symmetricEncryptionKey.getIv();
-
-            Cipher cipher = Cipher.getInstance(algorithm + "/" + mode + "/" + padding, new BouncyCastleProvider());
-            if (iv.length > 0) {
-                cipher.init(Cipher.DECRYPT_MODE, symmetricEncryptionKey.getKey(), new IvParameterSpec(iv));
-            } else {
-                cipher.init(Cipher.DECRYPT_MODE, symmetricEncryptionKey.getKey());
-            }
-            byte[] decryptedHexData = cipher.doFinal(bytesToDecrypt);
-            fileHandler.saveByteArrayAsFile(decryptedHexData, properties.getSymmetricEncryptionDecryptFilePath() + ".decrypted");
-            return new OperationResult(true);
-        } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException | NoSuchAlgorithmException |
-                 NoSuchPaddingException | InvalidAlgorithmParameterException e) {
-            throw new RuntimeException(e);
-        }
+  public byte[] decryptSymmetric(byte[] encryptedBytes,
+                                 Transformation transformation, Key key,
+                                 AlgorithmParameters algorithmParameters) {
+    try {
+      Cipher cipher = Cipher.getInstance(transformation.toString(),
+                                         new BouncyCastleProvider());
+      cipher.init(Cipher.DECRYPT_MODE, key, algorithmParameters);
+      return cipher.doFinal(encryptedBytes);
+    } catch (NoSuchAlgorithmException | NoSuchPaddingException |
+             InvalidKeyException |
+             InvalidAlgorithmParameterException |
+             IllegalBlockSizeException | BadPaddingException e) {
+      throw new RuntimeException(e);
     }
+  }
 }

@@ -1,24 +1,36 @@
 package edu.junit5.quickstart.learning;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.util.encoders.Hex;
 
-import javax.crypto.Cipher;
+import java.security.AlgorithmParameterGenerator;
+import java.security.AlgorithmParameters;
+import java.security.Provider;
+import java.security.Security;
 
 public class Test {
-    public static void main(String[] args) throws Exception {
+  public static void main(String[] args) throws Exception {
 
-        byte[] array = {1};
-        //byte[] decoded = Hex.decode(array);
-        byte[] encoded = Hex.encode(array);
-        String string = Hex.toHexString(array);
-//        EventListener eventListener = new EventListener();
-//        EventHandler eventHandler = new EventHandler();
-//        EventHandler<> eventHandler = new EventHandler();
-        Cipher cipher = Cipher.getInstance("AES/OFB/ZeroBytePadding", new BouncyCastleProvider());
-        int a = 1;
-        System.out.println(a);
-        System.out.println(~a);
-        System.out.println(~a + 1);
+    Security.addProvider(new BouncyCastleProvider());
+
+    for (Provider provider : Security.getProviders()) {
+      if (provider.getName().equals("BC")) {
+        for (Provider.Service service : provider.getServices()) {
+          if (service.getType().contains(
+                  "AlgorithmParameters"))
+            System.out.println(service.getAlgorithm());
+        }
+      }
     }
+
+    AlgorithmParameterGenerator gen = AlgorithmParameterGenerator.getInstance(
+            "AES");
+    AlgorithmParameters params = gen.generateParameters();
+    byte[] paramAsBytes = params.getEncoded();
+
+    AlgorithmParameters params2 = AlgorithmParameters.getInstance("AES",
+                                                                  new BouncyCastleProvider());
+    params2.init(paramAsBytes);
+    System.out.println("jallo");
+
+  }
 }

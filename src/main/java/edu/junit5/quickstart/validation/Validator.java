@@ -12,79 +12,111 @@ import java.security.NoSuchAlgorithmException;
 
 public class Validator {
 
-    private ValidationParams generateValidationWithDigest(byte[] bytesToGenerateValidationFor, String validationName) {
-        ValidationParams validationParams;
-        MessageDigest digest;
-        byte[] result;
-        try {
-            digest = MessageDigest.getInstance(validationName, new BouncyCastleProvider());
-            digest.update(bytesToGenerateValidationFor);
-            result = digest.digest();
-            validationParams = new ValidationParams(validationName, result, null);
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-        return validationParams;
-    }
+  private PublicValidationData publicValidationData;
 
-    private ValidationParams generateValidationWithMac(byte[] bytesToGenerateValidationFor, String validationName) {
-        ValidationParams validationParams;
-        Mac mac;
-        byte[] result;
-        try {
-            mac = Mac.getInstance(validationName, new BouncyCastleProvider());
-            KeyGenerator keyGenerator = KeyGenerator.getInstance(validationName);
-            Key key = keyGenerator.generateKey();
-            mac.init(key);
-            result = mac.doFinal(bytesToGenerateValidationFor);
-            validationParams = new ValidationParams(validationName, result, key);
-        } catch (NoSuchAlgorithmException | InvalidKeyException e) {
-            throw new RuntimeException(e);
-        }
-        return validationParams;
-    }
+  private SecretValidationData secretValidationData;
 
-    public ValidationParams generateValidation(byte[] bytesToGenerateValidationFor, String validationName) {
-        ValidationParams validationParams = null;
-        Validations validations = new Validations();
-        if (validations.getValidationType(validationName) == ValidationType.DIGGEST) {
-            validationParams = generateValidationWithDigest(bytesToGenerateValidationFor, validationName);
-        } else if (validations.getValidationType(validationName) == ValidationType.MAC) {
-            validationParams = generateValidationWithMac(bytesToGenerateValidationFor, validationName);
-        }
-        return validationParams;
+  private void generateValidationWithDigest(
+          byte[] bytesToGenerateValidationFor, String validationName) {
+    MessageDigest digest;
+    byte[] result;
+    try {
+      digest = MessageDigest.getInstance(validationName,
+                                         new BouncyCastleProvider());
+      digest.update(bytesToGenerateValidationFor);
+      result = digest.digest();
+      publicValidationData = new PublicValidationData(
+              validationName, result);
+      secretValidationData = null;
+    } catch (NoSuchAlgorithmException e) {
+      throw new RuntimeException(e);
     }
+  }
 
-    private boolean validateWithDigest(byte[] bytesToValidate, ValidationParams validationParams) {
-        byte[] bytesToValidateAfterComputation;
-        try {
-            MessageDigest messageDigest = MessageDigest.getInstance(validationParams.getName());
-            bytesToValidateAfterComputation = messageDigest.digest(bytesToValidate);
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-        return Arrays.constantTimeAreEqual(bytesToValidateAfterComputation, validationParams.getComputedBytes());
+  private void generateValidationWithMac(byte[] bytesToGenerateValidationFor,
+                                         String validationName) {
+    Mac mac;
+    byte[] result;
+    try {
+      mac = Mac.getInstance(validationName, new BouncyCastleProvider());
+      Validations validations = new Validations();
+      KeyGenerator keyGenerator = KeyGenerator.getInstance(
+              validations.getKeyInitializer(validationName));
+      Key key = keyGenerator.generateKey();
+      mac.init(key);
+      result = mac.doFinal(bytesToGenerateValidationFor);
+      publicValidationData = new PublicValidationData(
+              validationName, result);
+      secretValidationData = new SecretValidationData(key);
+    } catch (NoSuchAlgorithmException | InvalidKeyException e) {
+      throw new RuntimeException(e);
     }
+  }
 
-    private boolean validateWithMac(byte[] bytesToValidate, ValidationParams validationParams) {
-        try {
-            Mac mac = Mac.getInstance(validationParams.getName());
-            mac.init(validationParams.getKey());
-            byte[] result = mac.doFinal(bytesToValidate);
-            return Arrays.constantTimeAreEqual(result, validationParams.getComputedBytes());
-        } catch (NoSuchAlgorithmException | InvalidKeyException e) {
-            throw new RuntimeException(e);
-        }
+  public void generateValidation(
+          byte[] bytesToGenerateValidationFor, String validationName) {
+    Validations validations = new Validations();
+    if (validations.getValidationType(
+            validationName) == ValidationType.DIGGEST) {
+      generateValidationWithDigest(
+              bytesToGenerateValidationFor, validationName);
+    } else if (validations.getValidationType(
+            validationName) == ValidationType.MAC) {
+      generateValidationWithMac(
+              bytesToGenerateValidationFor, validationName);
     }
+  }
 
-    public boolean validate(byte[] bytesToValidate, ValidationParams validationParams) {
-        boolean valid = false;
-        Validations validations = new Validations();
-        if (validations.getValidationType(validationParams.getName()) == ValidationType.DIGGEST) {
-            valid = validateWithDigest(bytesToValidate, validationParams);
-        } else if (validations.getValidationType(validationParams.getName()) == ValidationType.MAC) {
-            valid = validateWithMac(bytesToValidate, validationParams);
-        }
-        return valid;
+  private boolean validateWithDigest(byte[] bytesToValidate,
+                                     PublicValidationData publicValidationData) {
+    byte[] bytesToValidateAfterComputation;
+    try {
+      MessageDigest messageDigest = MessageDigest.getInstance(
+              publicValidationData.getName());
+      bytesToValidateAfterComputation = messageDigest.digest(bytesToValidate);
+    } catch (NoSuchAlgorithmException e) {
+      throw new RuntimeException(e);
     }
+    return Arrays.constantTimeAreEqual(bytesToValidateAfterComputation,
+                                       publicValidationData.getComputedBytes());
+  }
+
+  private boolean validateWithMac(byte[] bytesToValidate,
+                                  PublicValidationData publicValidationData,
+                                  SecretValidationData secretValidationData) {
+    try {
+      Mac mac = Mac.getInstance(publicValidationData.getName());
+      mac.init(secretValidationData.getKey());
+      byte[] result = mac.doFinal(bytesToValidate);
+      return Arrays.constantTimeAreEqual(result,
+                                         publicValidationData.getComputedBytes());
+    } catch (NoSuchAlgorithmException | InvalidKeyException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  public boolean validate(byte[] bytesToValidate,
+                          PublicValidationData publicValidationData,
+                          SecretValidationData secretValidationData) {
+    boolean valid = false;
+    Validations validations = new Validations();
+    if (validations.getValidationType(
+            publicValidationData.getName()) == ValidationType.DIGGEST) {
+      valid = validateWithDigest(bytesToValidate,
+                                 publicValidationData);
+    } else if (validations.getValidationType(
+            publicValidationData.getName()) == ValidationType.MAC) {
+      valid = validateWithMac(bytesToValidate, publicValidationData,
+                              secretValidationData);
+    }
+    return valid;
+  }
+
+  public PublicValidationData getPublicValidationData() {
+    return publicValidationData;
+  }
+
+  public SecretValidationData getSecretValidationData() {
+    return secretValidationData;
+  }
 }
