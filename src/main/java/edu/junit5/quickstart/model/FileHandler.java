@@ -1,5 +1,6 @@
 package edu.junit5.quickstart.model;
 
+import edu.junit5.quickstart.algorithm.Algorithms;
 import edu.junit5.quickstart.password.PublicPasswordData;
 import edu.junit5.quickstart.state.Transformation;
 import edu.junit5.quickstart.validation.PublicValidationData;
@@ -120,21 +121,13 @@ public class FileHandler {
               document.createTextNode(Hex.toHexString(
                       publicValidationData.getComputedBytes())));
 
-
       //write public password data
       Element passwordSalt = document.createElement("passwordSalt");
       publicData.appendChild(passwordSalt);
-      Element passwordAlgorithmForParameter = document.createElement(
-              "passwordAlgorithmForParameter");
-      publicData.appendChild(passwordAlgorithmForParameter);
-
 
       if (publicPasswordData != null) {
         passwordSalt.appendChild(document.createTextNode(
                 Hex.toHexString(publicPasswordData.getSalt())));
-        passwordSalt.appendChild(document.createTextNode(
-                publicPasswordData.getPasswordAlgorithmForParameter()));
-
       }
 
       TransformerFactory transformerFactory =
@@ -216,20 +209,21 @@ public class FileHandler {
       String padding = document.getElementsByTagName("padding").item(
               0).getTextContent();
 
-
+      Algorithms algorithms = new Algorithms();
+      String algorithmForParameterGeneration =
+              algorithms.getNameForParameterGeneration(algorithm);
       byte[] algorithmParametersAsBytes = Hex.decode(
               document.getElementsByTagName(
                       "algorithmParameters").item(0).getTextContent());
       AlgorithmParameters algorithmParameters = AlgorithmParameters.getInstance(
-              algorithm, new BouncyCastleProvider());
+              algorithmForParameterGeneration, new BouncyCastleProvider());
       algorithmParameters.init(algorithmParametersAsBytes);
 
       Transformation transformation = new Transformation(algorithm, mode,
                                                          padding);
 
       return new PublicEncryptionData(encryptedBytes, transformation,
-                                      algorithmParameters
-      );
+                                      algorithmParameters);
     } catch (ParserConfigurationException | NoSuchAlgorithmException |
              IOException | SAXException e) {
       throw new RuntimeException(e);
@@ -269,12 +263,8 @@ public class FileHandler {
       byte[] salt = Hex.decode(
               document.getElementsByTagName("passwordSalt").item(
                       0).getTextContent());
-      String passwordAlgorithmForParameter = document.getElementsByTagName(
-              "passwordAlgorithmForParameter").item(
-              0).getTextContent();
 
-      PublicPasswordData publicPasswordData = new PublicPasswordData(salt,
-                                                                     passwordAlgorithmForParameter);
+      PublicPasswordData publicPasswordData = new PublicPasswordData(salt);
       return publicPasswordData;
     } catch (ParserConfigurationException | SAXException | IOException e) {
       throw new RuntimeException(e);

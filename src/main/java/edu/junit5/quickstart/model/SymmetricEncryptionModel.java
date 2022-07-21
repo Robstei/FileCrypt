@@ -36,14 +36,12 @@ public class SymmetricEncryptionModel {
   public void manageSymmetricEncryption(byte[] bytesToEncrypt,
                                         Transformation transformation,
                                         Key key,
-                                        AlgorithmParameters algorithmParameters,
-                                        String algorithmForParameters) {
+                                        AlgorithmParameters algorithmParameters) {
     result = encryptSymmetric(bytesToEncrypt, transformation,
                               key, algorithmParameters);
 
     this.publicEncryptionData = new PublicEncryptionData(result, transformation,
-                                                         algorithmParameters,
-                                                         algorithmForParameters);
+                                                         algorithmParameters);
     this.secretEncryptionData = new SecretEncryptionData(key);
   }
 

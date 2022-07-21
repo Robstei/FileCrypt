@@ -12,18 +12,14 @@ public class PublicEncryptionData {
   private final String padding;
   private final AlgorithmParameters algorithmParameters;
 
-  private final String algorithmForParameters;
-
 
   PublicEncryptionData(byte[] encryptedBytes, Transformation transformation,
-                       AlgorithmParameters algorithmParameters,
-                       String algorithmForParameters) {
+                       AlgorithmParameters algorithmParameters) {
     this.encryptedBytes = encryptedBytes;
     this.algorithm = transformation.getAlgorithm();
     this.mode = transformation.getMode();
     this.padding = transformation.getPadding();
     this.algorithmParameters = algorithmParameters;
-    this.algorithmForParameters = algorithmForParameters;
   }
 
   public byte[] getEncryptedBytes() {
@@ -48,9 +44,5 @@ public class PublicEncryptionData {
 
   public AlgorithmParameters getAlgorithmParameters() {
     return algorithmParameters;
-  }
-
-  public String getAlgorithmForParameters() {
-    return algorithmForParameters;
   }
 }

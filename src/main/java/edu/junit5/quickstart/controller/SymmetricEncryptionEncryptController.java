@@ -1,5 +1,6 @@
 package edu.junit5.quickstart.controller;
 
+import edu.junit5.quickstart.algorithm.Algorithms;
 import edu.junit5.quickstart.mode.Mode;
 import edu.junit5.quickstart.model.*;
 import edu.junit5.quickstart.state.State;
@@ -158,12 +159,18 @@ public class SymmetricEncryptionEncryptController {
               state.getSymmetricEncryptionKeySize()));
       Key key = keyGenerator.generateKey();
 
+      Algorithms algorithms = new Algorithms();
+      String algorithmForParameterGeneration =
+              algorithms.getNameForParameterGeneration(
+                      transformation.getAlgorithm());
+
       AlgorithmParameterGenerator algorithmParameterGenerator =
               AlgorithmParameterGenerator.getInstance(
-                      transformation.getAlgorithm(),
+                      algorithmForParameterGeneration,
                       new BouncyCastleProvider());
       AlgorithmParameters algorithmParameters =
               algorithmParameterGenerator.generateParameters();
+
 
       String symmetricEncryptionValidation =
               state.getSymmetricEncryptionValidation();

@@ -60,5 +60,9 @@ public class PasswordDecryptController {
     symmetricEncryptionModel.manageSymmetricDecryption(
             publicEncryptionData,
             secretEncryptionData);
+    FileHandler.saveByteArrayAsFile(symmetricEncryptionModel.getResult(),
+                                    state.getPasswordDecryptionPath() +
+                                            ".decrypted");
+
   }
 }
