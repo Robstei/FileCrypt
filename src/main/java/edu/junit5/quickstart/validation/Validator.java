@@ -34,15 +34,21 @@ public class Validator {
   }
 
   private void generateValidationWithMac(byte[] bytesToGenerateValidationFor,
-                                         String validationName) {
+                                         String validationName,
+                                         Key providedKey) {
     Mac mac;
     byte[] result;
+    Key key = providedKey;
     try {
+
+      if (key == null) {
+        Validations validations = new Validations();
+        KeyGenerator keyGenerator = KeyGenerator.getInstance(
+                validations.getKeyInitializer(validationName));
+        key = keyGenerator.generateKey();
+      }
+
       mac = Mac.getInstance(validationName, new BouncyCastleProvider());
-      Validations validations = new Validations();
-      KeyGenerator keyGenerator = KeyGenerator.getInstance(
-              validations.getKeyInitializer(validationName));
-      Key key = keyGenerator.generateKey();
       mac.init(key);
       result = mac.doFinal(bytesToGenerateValidationFor);
       publicValidationData = new PublicValidationData(
@@ -55,6 +61,11 @@ public class Validator {
 
   public void generateValidation(
           byte[] bytesToGenerateValidationFor, String validationName) {
+    generateValidation(bytesToGenerateValidationFor, validationName, null);
+  }
+
+  public void generateValidation(
+          byte[] bytesToGenerateValidationFor, String validationName, Key key) {
     Validations validations = new Validations();
     if (validations.getValidationType(
             validationName) == ValidationType.DIGGEST) {
@@ -63,7 +74,7 @@ public class Validator {
     } else if (validations.getValidationType(
             validationName) == ValidationType.MAC) {
       generateValidationWithMac(
-              bytesToGenerateValidationFor, validationName);
+              bytesToGenerateValidationFor, validationName, key);
     }
   }
 
@@ -85,7 +96,8 @@ public class Validator {
                                   PublicValidationData publicValidationData,
                                   SecretValidationData secretValidationData) {
     try {
-      Mac mac = Mac.getInstance(publicValidationData.getName());
+      Mac mac = Mac.getInstance(publicValidationData.getName(),
+                                new BouncyCastleProvider());
       mac.init(secretValidationData.getKey());
       byte[] result = mac.doFinal(bytesToValidate);
       return Arrays.constantTimeAreEqual(result,

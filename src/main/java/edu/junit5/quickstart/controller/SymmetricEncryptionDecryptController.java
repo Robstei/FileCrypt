@@ -1,7 +1,7 @@
 package edu.junit5.quickstart.controller;
 
 import edu.junit5.quickstart.model.FileHandler;
-import edu.junit5.quickstart.model.PublicEncryptionData;
+import edu.junit5.quickstart.model.PublicPostEncryptionData;
 import edu.junit5.quickstart.model.SecretEncryptionData;
 import edu.junit5.quickstart.model.SymmetricEncryptionModel;
 import edu.junit5.quickstart.state.State;
@@ -73,7 +73,7 @@ public class SymmetricEncryptionDecryptController {
     if (!isFormFilledOut()) {
       return;
     }
-    PublicEncryptionData publicEncryptionData =
+    PublicPostEncryptionData publicPostEncryptionData =
             FileHandler.getPublicEncryptionDataFromFile(
                     state.getSymmetricEncryptionDecryptFilePath());
     PublicValidationData publicValidationData =
@@ -89,13 +89,14 @@ public class SymmetricEncryptionDecryptController {
     SymmetricEncryptionModel symmetricEncryptionModel =
             new SymmetricEncryptionModel();
     Validator validator = new Validator();
-    boolean valid = validator.validate(publicEncryptionData.getEncryptedBytes(),
-                                       publicValidationData,
-                                       secretValidationData);
+    boolean valid = validator.validate(
+            publicPostEncryptionData.getEncryptedBytes(),
+            publicValidationData,
+            secretValidationData);
     if (!valid) {
       //TODO: STOP and show modal with message instead.
     }
-    symmetricEncryptionModel.manageSymmetricDecryption(publicEncryptionData,
+    symmetricEncryptionModel.manageSymmetricDecryption(publicPostEncryptionData,
                                                        secretEncryptionData);
     FileHandler.saveByteArrayAsFile(symmetricEncryptionModel.getResult(),
                                     state.getSymmetricEncryptionDecryptFilePath() + ".decrypted");

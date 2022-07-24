@@ -9,19 +9,21 @@ public class State {
   private final StringProperty symmetricEncryptionAlgorithm;
   private final StringProperty symmetricEncryptionMode;
   private final StringProperty symmetricEncryptionPadding;
-  private final StringProperty symmetricEncryptionKeySize;
+  private final StringProperty symmetricEncryptionKeyLength;
   private final StringProperty symmetricEncryptionEncryptFilePath;
   private final StringProperty symmetricEncryptionDecryptFilePath;
   private final StringProperty symmetricEncryptionKeyFilePath;
   private final StringProperty symmetricEncryptionValidation;
   private final StringProperty passwordForEncryption;
-  private final StringProperty passwordEncryptionAlgorithmName;
+  private final StringProperty passwordGenerationAlgorithm;
+  private final StringProperty passwordEncryptionAlgorithm;
   private final StringProperty passwordEncryptionMode;
   private final StringProperty passwordEncryptionPadding;
+  private final StringProperty passwordEncryptionKeyLength;
+  private final StringProperty passwordEncryptionValidation;
   private final StringProperty passwordEncryptionPath;
   private final StringProperty passwordForDecryption;
   private final StringProperty passwordDecryptionPath;
-
   private State() {
     symmetricEncryptionAlgorithm = new SimpleStringProperty(
             Defaults.symmetricEncryptionAlgorithm);
@@ -29,12 +31,19 @@ public class State {
             Defaults.symmetricEncryptionMode);
     symmetricEncryptionPadding = new SimpleStringProperty(
             Defaults.symmetricEncryptionPadding);
-    symmetricEncryptionKeySize = new SimpleStringProperty(
-            Defaults.symmetricEncryptionKeySize);
+    symmetricEncryptionKeyLength = new SimpleStringProperty(
+            Defaults.symmetricEncryptionKeyLength);
     symmetricEncryptionValidation = new SimpleStringProperty(
             Defaults.symmetricEncryptionValidation);
-    passwordEncryptionAlgorithmName = new SimpleStringProperty(
-            Defaults.passwordEncryptionAlgorithmName);
+    passwordGenerationAlgorithm = new SimpleStringProperty(
+            Defaults.passwordGenerationAlgorithm);
+    passwordEncryptionAlgorithm = new SimpleStringProperty(
+            Defaults.passwordEncryptionAlgorithm);
+    passwordEncryptionKeyLength = new SimpleStringProperty(
+            Defaults.passwordEncryptionKeyLength);
+    passwordEncryptionValidation = new SimpleStringProperty(
+            Defaults.passwordEncryptionValidation);
+
 
     symmetricEncryptionEncryptFilePath = new SimpleStringProperty();
     symmetricEncryptionDecryptFilePath = new SimpleStringProperty();
@@ -49,6 +58,19 @@ public class State {
 
   public static State getInstance() {
     return state;
+  }
+
+  public String getPasswordGenerationAlgorithm() {
+    return passwordGenerationAlgorithm.get();
+  }
+
+  public void setPasswordGenerationAlgorithm(
+          String passwordGenerationAlgorithm) {
+    this.passwordGenerationAlgorithm.set(passwordGenerationAlgorithm);
+  }
+
+  public StringProperty passwordGenerationAlgorithmProperty() {
+    return passwordGenerationAlgorithm;
   }
 
   public String getSymmetricEncryptionAlgorithm() {
@@ -89,17 +111,17 @@ public class State {
     return symmetricEncryptionPadding;
   }
 
-  public String getSymmetricEncryptionKeySize() {
-    return symmetricEncryptionKeySize.get();
+  public String getSymmetricEncryptionKeyLength() {
+    return symmetricEncryptionKeyLength.get();
   }
 
-  public void setSymmetricEncryptionKeySize(
-          String symmetricEncryptionKeySize) {
-    this.symmetricEncryptionKeySize.set(symmetricEncryptionKeySize);
+  public void setSymmetricEncryptionKeyLength(
+          String symmetricEncryptionKeyLength) {
+    this.symmetricEncryptionKeyLength.set(symmetricEncryptionKeyLength);
   }
 
-  public StringProperty symmetricEncryptionKeySizeProperty() {
-    return symmetricEncryptionKeySize;
+  public StringProperty symmetricEncryptionKeyLengthProperty() {
+    return symmetricEncryptionKeyLength;
   }
 
   public String getSymmetricEncryptionEncryptFilePath() {
@@ -154,18 +176,18 @@ public class State {
     return symmetricEncryptionValidation;
   }
 
-  public String getPasswordEncryptionAlgorithmName() {
-    return passwordEncryptionAlgorithmName.get();
+  public String getPasswordEncryptionAlgorithm() {
+    return passwordEncryptionAlgorithm.get();
   }
 
-  public void setPasswordEncryptionAlgorithmName(
-          String passwordEncryptionAlgorithmName) {
-    this.passwordEncryptionAlgorithmName.set(
-            passwordEncryptionAlgorithmName);
+  public void setPasswordEncryptionAlgorithm(
+          String passwordEncryptionAlgorithm) {
+    this.passwordEncryptionAlgorithm.set(
+            passwordEncryptionAlgorithm);
   }
 
-  public StringProperty passwordEncryptionAlgorithmNameProperty() {
-    return passwordEncryptionAlgorithmName;
+  public StringProperty passwordEncryptionAlgorithmProperty() {
+    return passwordEncryptionAlgorithm;
   }
 
   public String getPasswordForEncryption() {
@@ -243,5 +265,31 @@ public class State {
 
   public StringProperty passwordDecryptionPathProperty() {
     return passwordDecryptionPath;
+  }
+
+  public String getPasswordEncryptionKeyLength() {
+    return passwordEncryptionKeyLength.get();
+  }
+
+  public void setPasswordEncryptionKeyLength(
+          String passwordEncryptionKeyLength) {
+    this.passwordEncryptionKeyLength.set(passwordEncryptionKeyLength);
+  }
+
+  public StringProperty passwordEncryptionKeyLengthProperty() {
+    return passwordEncryptionKeyLength;
+  }
+
+  public String getPasswordEncryptionValidation() {
+    return passwordEncryptionValidation.get();
+  }
+
+  public void setPasswordEncryptionValidation(
+          String passwordEncryptionValidation) {
+    this.passwordEncryptionValidation.set(passwordEncryptionValidation);
+  }
+
+  public StringProperty passwordEncryptionValidationProperty() {
+    return passwordEncryptionValidation;
   }
 }

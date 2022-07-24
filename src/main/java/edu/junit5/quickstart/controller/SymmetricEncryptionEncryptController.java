@@ -1,6 +1,5 @@
 package edu.junit5.quickstart.controller;
 
-import edu.junit5.quickstart.algorithm.Algorithms;
 import edu.junit5.quickstart.mode.Mode;
 import edu.junit5.quickstart.model.*;
 import edu.junit5.quickstart.state.State;
@@ -14,14 +13,8 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.stage.FileChooser;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-import javax.crypto.KeyGenerator;
 import java.io.File;
-import java.security.AlgorithmParameterGenerator;
-import java.security.AlgorithmParameters;
-import java.security.Key;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 public class SymmetricEncryptionEncryptController {
@@ -80,7 +73,7 @@ public class SymmetricEncryptionEncryptController {
     ControllerUtil.bindToggleGroupToProperty(encryption_mode,
                                              state.symmetricEncryptionModeProperty());
     ControllerUtil.bindToggleGroupToProperty(encryption_keysize,
-                                             state.symmetricEncryptionKeySizeProperty());
+                                             state.symmetricEncryptionKeyLengthProperty());
     ControllerUtil.bindToggleGroupToProperty(encryption_padding,
                                              state.symmetricEncryptionPaddingProperty());
     ControllerUtil.bindToggleGroupToProperty(encryption_validation,
@@ -140,69 +133,46 @@ public class SymmetricEncryptionEncryptController {
     if (!isFormFilledOut()) {
       return;
     }
-    try {
-      byte[] fileAsByteArray =
-              FileHandler.getFileAsByteArray(
-                      state.getSymmetricEncryptionEncryptFilePath());
+    byte[] fileAsByteArray =
+            FileHandler.getFileAsByteArray(
+                    state.getSymmetricEncryptionEncryptFilePath());
 
-      Transformation transformation =
-              new Transformation(
-                      state.getSymmetricEncryptionAlgorithm(),
-                      state.getSymmetricEncryptionMode(),
-                      state.getSymmetricEncryptionPadding());
+    Transformation transformation =
+            new Transformation(
+                    state.getSymmetricEncryptionAlgorithm(),
+                    state.getSymmetricEncryptionMode(),
+                    state.getSymmetricEncryptionPadding());
 
-      KeyGenerator keyGenerator =
-              KeyGenerator.getInstance(
-                      state.getSymmetricEncryptionAlgorithm(),
-                      new BouncyCastleProvider());
-      keyGenerator.init(Integer.parseInt(
-              state.getSymmetricEncryptionKeySize()));
-      Key key = keyGenerator.generateKey();
+    int keySize = Integer.valueOf(state.getSymmetricEncryptionKeyLength());
+    String symmetricEncryptionValidation =
+            state.getSymmetricEncryptionValidation();
 
-      Algorithms algorithms = new Algorithms();
-      String algorithmForParameterGeneration =
-              algorithms.getNameForParameterGeneration(
-                      transformation.getAlgorithm());
+    SymmetricEncryptionModel symmetricEncryptionModel =
+            new SymmetricEncryptionModel();
+    symmetricEncryptionModel.manageSymmetricEncryption(
+            new PublicPreEncryptionData(fileAsByteArray, transformation,
+                                        keySize));
 
-      AlgorithmParameterGenerator algorithmParameterGenerator =
-              AlgorithmParameterGenerator.getInstance(
-                      algorithmForParameterGeneration,
-                      new BouncyCastleProvider());
-      AlgorithmParameters algorithmParameters =
-              algorithmParameterGenerator.generateParameters();
+    byte[] encryptedBytes = symmetricEncryptionModel.getResult();
+    PublicPostEncryptionData publicPostEncryptionData =
+            symmetricEncryptionModel.getPublicEncryptionData();
+    SecretEncryptionData secretEncryptionData =
+            symmetricEncryptionModel.getSecretEncryptionData();
 
+    Validator validator = new Validator();
+    validator.generateValidation(encryptedBytes,
+                                 state.getSymmetricEncryptionValidation());
+    PublicValidationData publicValidationData =
+            validator.getPublicValidationData();
+    SecretValidationData secretValidationData =
+            validator.getSecretValidationData();
 
-      String symmetricEncryptionValidation =
-              state.getSymmetricEncryptionValidation();
-
-      SymmetricEncryptionModel symmetricEncryptionModel =
-              new SymmetricEncryptionModel();
-      symmetricEncryptionModel.manageSymmetricEncryption(
-              fileAsByteArray, transformation, key,
-              algorithmParameters);
-      byte[] encryptedBytes = symmetricEncryptionModel.getResult();
-      PublicEncryptionData publicEncryptionData =
-              symmetricEncryptionModel.getPublicEncryptionData();
-      SecretEncryptionData secretEncryptionData =
-              symmetricEncryptionModel.getSecretEncryptionData();
-
-      Validator validator = new Validator();
-      validator.generateValidation(encryptedBytes,
-                                   state.getSymmetricEncryptionValidation());
-      PublicValidationData publicValidationData =
-              validator.getPublicValidationData();
-      SecretValidationData secretValidationData =
-              validator.getSecretValidationData();
-
-      FileHandler.savePublicData(encryptedBytes,
-                                 publicEncryptionData,
-                                 publicValidationData,
-                                 state.getSymmetricEncryptionEncryptFilePath());
-      FileHandler.saveSecretData(secretEncryptionData,
-                                 secretValidationData,
-                                 state.getSymmetricEncryptionEncryptFilePath());
-    } catch (NoSuchAlgorithmException e) {
-      throw new RuntimeException(e);
-    }
+    FileHandler.savePublicData(encryptedBytes,
+                               publicPostEncryptionData,
+                               publicValidationData,
+                               state.getSymmetricEncryptionEncryptFilePath());
+    FileHandler.saveSecretData(secretEncryptionData,
+                               secretValidationData,
+                               state.getSymmetricEncryptionEncryptFilePath());
   }
 }

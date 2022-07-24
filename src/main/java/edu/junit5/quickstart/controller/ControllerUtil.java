@@ -6,64 +6,94 @@ import javafx.scene.Node;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Pair;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * @author Robin STeil
  */
 public class ControllerUtil {
 
-    /**
-     * Binds ToggleGroup to Property. Needed since ToggleGroups can't be bound directly
-     *
-     * @param toggleGroup ToggleGroup that should change the value of property in the modal and should change on value
-     *                    changes in the model
-     * @param property    Property that represents the current UI State. Will change based on ToggleGroup change
-     */
-    public static void bindToggleGroupToProperty(ToggleGroup toggleGroup, StringProperty property) {
+  /**
+   * Binds ToggleGroup to Property. Needed since ToggleGroups can't be
+   * bound directly
+   *
+   * @param toggleGroup ToggleGroup that should change the value of
+   *                    property in the modal and should change on value
+   *                    changes in the model
+   * @param property    Property that represents the current UI State. Will
+   *                    change based on ToggleGroup change
+   */
+  public static void bindToggleGroupToProperty(ToggleGroup toggleGroup,
+                                               StringProperty property) {
 
-        Map<String, Toggle> toggleMap = new HashMap<>();
-        for (Toggle toggle : toggleGroup.getToggles()) {
-            toggleMap.put((String) toggle.getUserData(), toggle);
-        }
+    Map<String, Toggle> toggleMap = new HashMap<>();
+    for (Toggle toggle : toggleGroup.getToggles()) {
+      toggleMap.put((String) toggle.getUserData(), toggle);
+    }
 
-        toggleGroup.selectToggle(toggleMap.get(property.getValue()));
+    toggleGroup.selectToggle(toggleMap.get(property.getValue()));
 
-        toggleGroup.selectedToggleProperty().addListener((observableValue, oldValue, newValue) -> {
-            if (newValue == null) {
+    toggleGroup.selectedToggleProperty().addListener(
+            (observableValue, oldValue, newValue) -> {
+              if (newValue == null) {
                 property.setValue(null);
-            } else {
+              } else {
                 property.setValue((String) newValue.getUserData());
-            }
-        });
+              }
+            });
 
-        property.addListener((observableValue, oldValue, newValue) ->
-                toggleGroup.selectToggle(toggleMap.get(newValue))
-        );
-    }
+    property.addListener((observableValue, oldValue, newValue) ->
+                                 toggleGroup.selectToggle(
+                                         toggleMap.get(newValue))
+    );
+  }
 
-    public static void bindViewsToToggleOptions(Toggle toggle, Pane pane, int indexToChange, Pair<String, String>[] pairArray) {
-        Node newChild = null;
-        String newChildKey = (String) toggle.getUserData();
-        for (Pair<String, String> pair : pairArray) {
-            if (pair.getKey().equals(newChildKey)) {
-                try {
-                    newChild = FXMLLoader.load(Objects.requireNonNull(ControllerUtil.class.getResource(pair.getValue())));
-                } catch (IOException e) {
+  public static void bindViewsToToggleOptions(ToggleGroup toggleGroup,
+                                              Pane parentContainer,
+                                              int indexToChange,
+                                              Pair<String, String>[] pairArray) {
+    toggleGroup.selectedToggleProperty().addListener(
+            (observableValue, oldToggle, newToggle) -> {
+              if (newToggle == null) {
+                parentContainer.getChildren().remove(indexToChange);
+                return;
+              }
+
+              Node newChild = null;
+
+              String newChildKey = (String) newToggle.getUserData();
+              for (Pair<String, String> pair : pairArray) {
+                if (pair.getKey().equals(newChildKey)) {
+                  try {
+                    newChild = FXMLLoader.load(
+                            ControllerUtil.class.getResource(pair.getValue()));
+                  } catch (IOException e) {
                     throw new RuntimeException(e);
+                  }
                 }
-            }
-        }
+              }
 
-        if (newChild != null) {
-            pane.getChildren().set(indexToChange, newChild);
-        } else {
-            pane.getChildren().remove(indexToChange);
-        }
-    }
+              if (newChild != null) {
+                parentContainer.getChildren().set(indexToChange, newChild);
+              } else {
+                parentContainer.getChildren().remove(indexToChange);
+              }
+            });
+  }
+
+  public static void showErrorModal() {
+    Stage stage = new Stage();
+    stage.initModality(Modality.APPLICATION_MODAL);
+    //stage.initModality(Modality.WINDOW_MODAL);
+    //stage.initModality(Modality.NONE);
+    stage.setWidth(600);
+    stage.setHeight(300);
+    stage.showAndWait();
+  }
 }

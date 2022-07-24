@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ECB extends Mode {
-    ECB() {
-        super("ECB", "ECB", false, new ArrayList<>(Arrays.asList(
-                new NoPadding(),
-                new PKCS7Padding(),
-                new ZeroBytePadding()
-        )));
-    }
+  public ECB() {
+    super("ECB", "ECB", false, new ArrayList<>(Arrays.asList(
+            new NoPadding(),
+            new PKCS7Padding(),
+            new ZeroBytePadding()
+    )));
+  }
 }

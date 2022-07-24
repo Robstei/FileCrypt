@@ -2,24 +2,22 @@ package edu.junit5.quickstart.model;
 
 import edu.junit5.quickstart.state.Transformation;
 
-import java.security.AlgorithmParameters;
-
-public class PublicEncryptionData {
+public class PublicPostEncryptionData {
 
   private final byte[] encryptedBytes;
   private final String algorithm;
   private final String mode;
   private final String padding;
-  private final AlgorithmParameters algorithmParameters;
+  private final byte[] algorithmParametersAsBytes;
 
 
-  PublicEncryptionData(byte[] encryptedBytes, Transformation transformation,
-                       AlgorithmParameters algorithmParameters) {
+  PublicPostEncryptionData(byte[] encryptedBytes, Transformation transformation,
+                           byte[] algorithmParametersAsBytes) {
     this.encryptedBytes = encryptedBytes;
     this.algorithm = transformation.getAlgorithm();
     this.mode = transformation.getMode();
     this.padding = transformation.getPadding();
-    this.algorithmParameters = algorithmParameters;
+    this.algorithmParametersAsBytes = algorithmParametersAsBytes;
   }
 
   public byte[] getEncryptedBytes() {
@@ -42,7 +40,7 @@ public class PublicEncryptionData {
     return new Transformation(algorithm, mode, padding);
   }
 
-  public AlgorithmParameters getAlgorithmParameters() {
-    return algorithmParameters;
+  public byte[] getAlgorithmParametersAsBytes() {
+    return algorithmParametersAsBytes;
   }
 }

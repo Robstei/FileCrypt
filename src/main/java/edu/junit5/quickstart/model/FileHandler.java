@@ -5,7 +5,6 @@ import edu.junit5.quickstart.password.PublicPasswordData;
 import edu.junit5.quickstart.state.Transformation;
 import edu.junit5.quickstart.validation.PublicValidationData;
 import edu.junit5.quickstart.validation.SecretValidationData;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.encoders.Hex;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -25,9 +24,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.security.AlgorithmParameters;
 import java.security.Key;
-import java.security.NoSuchAlgorithmException;
 
 public class FileHandler {
 
@@ -52,17 +49,18 @@ public class FileHandler {
   }
 
   public static void savePublicData(byte[] encryptedBytes,
-                                    PublicEncryptionData publicEncryptionData,
+                                    PublicPostEncryptionData publicPostEncryptionData,
                                     PublicValidationData publicValidationData,
                                     String encryptedFilePath) {
-    savePublicData(encryptedBytes, publicEncryptionData, publicValidationData,
+    savePublicData(encryptedBytes, publicPostEncryptionData,
+                   publicValidationData,
                    null, encryptedFilePath);
   }
 
   //saves encryption data with public metadata as xml file
   //TODO remove bytes since they are in the publicMetaData object
   public static void savePublicData(byte[] encryptedBytes,
-                                    PublicEncryptionData publicEncryptionData,
+                                    PublicPostEncryptionData publicPostEncryptionData,
                                     PublicValidationData publicValidationData,
                                     PublicPasswordData publicPasswordData,
                                     String encryptedFilePath) {
@@ -83,30 +81,30 @@ public class FileHandler {
 
       Element algorithm = document.createElement("algorithm");
       algorithm.appendChild(document.createTextNode(
-              publicEncryptionData.getAlgorithm()));
+              publicPostEncryptionData.getAlgorithm()));
       publicData.appendChild(algorithm);
 
       Element mode = document.createElement("mode");
       mode.appendChild(
-              document.createTextNode(publicEncryptionData.getMode()));
+              document.createTextNode(publicPostEncryptionData.getMode()));
       publicData.appendChild(mode);
 
 
       Element padding = document.createElement("padding");
       padding.appendChild(document.createTextNode(
-              publicEncryptionData.getPadding()));
+              publicPostEncryptionData.getPadding()));
       publicData.appendChild(padding);
 
-      Element algorithmParameters = document.createElement(
-              "algorithmParameters");
+      Element algorithmParametersAsBytes = document.createElement(
+              "algorithmParametersAsBytes");
       // might be null because the algorithm / mode combination does
       // not need one
-      if (publicEncryptionData.getAlgorithmParameters() != null) {
-        algorithmParameters.appendChild(document.createTextNode(
+      if (publicPostEncryptionData.getAlgorithmParametersAsBytes() != null) {
+        algorithmParametersAsBytes.appendChild(document.createTextNode(
                 Hex.toHexString(
-                        publicEncryptionData.getAlgorithmParameters().getEncoded())));
+                        publicPostEncryptionData.getAlgorithmParametersAsBytes())));
       }
-      publicData.appendChild(algorithmParameters);
+      publicData.appendChild(algorithmParametersAsBytes);
 
       Element validationName = document.createElement("validationName");
       publicData.appendChild(validationName);
@@ -122,12 +120,20 @@ public class FileHandler {
                       publicValidationData.getComputedBytes())));
 
       //write public password data
+      Element passwordAlgorithm = document.createElement("passwordAlgorithm");
+      publicData.appendChild(passwordAlgorithm);
       Element passwordSalt = document.createElement("passwordSalt");
       publicData.appendChild(passwordSalt);
+      Element passwordKeyLength = document.createElement("passwordKeyLength");
+      publicData.appendChild(passwordKeyLength);
 
       if (publicPasswordData != null) {
+        passwordAlgorithm.appendChild(
+                document.createTextNode(publicPasswordData.getAlgorithm()));
         passwordSalt.appendChild(document.createTextNode(
                 Hex.toHexString(publicPasswordData.getSalt())));
+        passwordKeyLength.appendChild(document.createTextNode(
+                String.valueOf(publicPasswordData.getKeyLength())));
       }
 
       TransformerFactory transformerFactory =
@@ -135,8 +141,7 @@ public class FileHandler {
       Transformer transformer = transformerFactory.newTransformer();
       File file = new File(encryptedFilePath + ".encrypted");
       transformer.transform(new DOMSource(document), new StreamResult(file));
-    } catch (ParserConfigurationException | IOException |
-             TransformerException e) {
+    } catch (ParserConfigurationException | TransformerException e) {
       throw new RuntimeException(e);
     }
   }
@@ -191,7 +196,7 @@ public class FileHandler {
     }
   }
 
-  public static PublicEncryptionData getPublicEncryptionDataFromFile(
+  public static PublicPostEncryptionData getPublicEncryptionDataFromFile(
           String path) {
     try {
       DocumentBuilderFactory documentBuilderFactory =
@@ -214,18 +219,15 @@ public class FileHandler {
               algorithms.getNameForParameterGeneration(algorithm);
       byte[] algorithmParametersAsBytes = Hex.decode(
               document.getElementsByTagName(
-                      "algorithmParameters").item(0).getTextContent());
-      AlgorithmParameters algorithmParameters = AlgorithmParameters.getInstance(
-              algorithmForParameterGeneration, new BouncyCastleProvider());
-      algorithmParameters.init(algorithmParametersAsBytes);
+                      "algorithmParametersAsBytes").item(0).getTextContent());
+
 
       Transformation transformation = new Transformation(algorithm, mode,
                                                          padding);
 
-      return new PublicEncryptionData(encryptedBytes, transformation,
-                                      algorithmParameters);
-    } catch (ParserConfigurationException | NoSuchAlgorithmException |
-             IOException | SAXException e) {
+      return new PublicPostEncryptionData(encryptedBytes, transformation,
+                                          algorithmParametersAsBytes);
+    } catch (ParserConfigurationException | IOException | SAXException e) {
       throw new RuntimeException(e);
     }
   }
@@ -260,11 +262,15 @@ public class FileHandler {
               documentBuilderFactory.newDocumentBuilder();
       Document document = documentBuilder.parse(new File(path));
 
+      String passwordAlgorithm = document.getElementsByTagName(
+              "passwordAlgorithm").item(0).getTextContent();
       byte[] salt = Hex.decode(
               document.getElementsByTagName("passwordSalt").item(
                       0).getTextContent());
-
-      PublicPasswordData publicPasswordData = new PublicPasswordData(salt);
+      int keyLength = Integer.parseInt(document.getElementsByTagName(
+              "passwordKeyLength").item(0).getTextContent());
+      PublicPasswordData publicPasswordData = new PublicPasswordData(
+              passwordAlgorithm, salt, keyLength);
       return publicPasswordData;
     } catch (ParserConfigurationException | SAXException | IOException e) {
       throw new RuntimeException(e);

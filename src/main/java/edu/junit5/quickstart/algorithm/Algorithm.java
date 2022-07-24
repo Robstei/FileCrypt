@@ -8,6 +8,8 @@ public class Algorithm {
   private String UIName;
   private Mode[] possibleModes;
 
+  //TODO only show possible key sizes of the algorithm in the frontend. Might
+  // be needed for passwords too
   private int[] possibleKeySizes;
 
   private String nameForParameterGeneration;
