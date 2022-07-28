@@ -7,6 +7,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 
@@ -23,14 +24,14 @@ public class PasswordModel {
   public Key generateKey(String password, String algorithm, int keySize) {
     try {
       SecureRandom secureRandom = SecureRandom.getInstance("DEFAULT",
-                                                           new BouncyCastleProvider());
+                                                           "BC");
       byte[] salt = secureRandom.generateSeed(SALT_LENGTH_IN_BYTES);
       PublicPasswordData publicPasswordData = new PublicPasswordData().fill(
               algorithm,
               salt,
               keySize);
       return generateKey(password, publicPasswordData);
-    } catch (NoSuchAlgorithmException e) {
+    } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
       throw new RuntimeException(e);
     }
   }

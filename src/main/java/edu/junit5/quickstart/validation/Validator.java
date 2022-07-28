@@ -68,7 +68,7 @@ public class Validator {
           byte[] bytesToGenerateValidationFor, String validationName, Key key) {
     Validations validations = new Validations();
     if (validations.getValidationType(
-            validationName) == ValidationType.DIGGEST) {
+            validationName) == ValidationType.DIGEST) {
       generateValidationWithDigest(
               bytesToGenerateValidationFor, validationName);
     } else if (validations.getValidationType(
@@ -113,7 +113,7 @@ public class Validator {
     boolean valid = false;
     Validations validations = new Validations();
     if (validations.getValidationType(
-            publicValidationData.getName()) == ValidationType.DIGGEST) {
+            publicValidationData.getName()) == ValidationType.DIGEST) {
       valid = validateWithDigest(bytesToValidate,
                                  publicValidationData);
     } else if (validations.getValidationType(

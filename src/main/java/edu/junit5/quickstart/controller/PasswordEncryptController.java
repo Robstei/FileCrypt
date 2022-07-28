@@ -11,10 +11,7 @@ import edu.junit5.quickstart.state.Transformation;
 import edu.junit5.quickstart.validation.PublicValidationData;
 import edu.junit5.quickstart.validation.Validator;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.Toggle;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -34,6 +31,9 @@ public class PasswordEncryptController {
   private ToggleGroup password_validation;
   @FXML
   private PasswordField password_encryption;
+
+  @FXML
+  private Button passwordEncryptButton;
 
   @FXML
   private void initialize() {
@@ -75,6 +75,11 @@ public class PasswordEncryptController {
             state.passwordForEncryptionProperty());
     encryptFilePathLabel.textProperty().bind(
             state.passwordEncryptionPathProperty());
+
+    passwordEncryptButton.disableProperty().bind(
+            state.passwordEncryptionAlgorithmProperty().isEmpty().or(
+                    state.passwordEncryptionValidationProperty().isEmpty().or(
+                            state.passwordForEncryptionProperty().isEmpty())));
   }
 
   @FXML

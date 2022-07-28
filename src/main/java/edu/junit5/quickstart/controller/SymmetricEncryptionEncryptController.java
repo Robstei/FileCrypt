@@ -8,10 +8,7 @@ import edu.junit5.quickstart.validation.PublicValidationData;
 import edu.junit5.quickstart.validation.SecretValidationData;
 import edu.junit5.quickstart.validation.Validator;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.Toggle;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -33,25 +30,13 @@ public class SymmetricEncryptionEncryptController {
   @FXML
   private ToggleGroup encryption_validation;
 
-  private void updateValidPaddings(String mode) {
-    Model model = Model.getInstance();
-    ArrayList<String> validPaddingNames =
-            model.getModeByKey(mode).getValidPaddingNames();
-    for (Toggle toggle : encryption_padding.getToggles()) {
-      if (validPaddingNames.contains(toggle.getUserData())) {
-        ((RadioButton) toggle).setDisable(false);
-        if (validPaddingNames.size() == 1) {
-          toggle.setSelected(true);
-        }
-      } else {
-        ((RadioButton) toggle).setDisable(true);
-        toggle.setSelected(false);
-      }
-    }
-  }
+  @FXML
+  private Button encryptionEncryptButton;
+
 
   @FXML
   private void initialize() {
+
 
     ControllerUtil.bindToggleGroupToProperty(encryption_algorithm,
                                              state.symmetricEncryptionAlgorithmProperty());
@@ -89,6 +74,32 @@ public class SymmetricEncryptionEncryptController {
     String mode =
             state.getSymmetricEncryptionMode();
     updateValidPaddings(mode);
+    
+    encryptionEncryptButton.disableProperty().bind(
+            state.symmetricEncryptionAlgorithmProperty().isEmpty().or(
+                    state.symmetricEncryptionModeProperty().isEmpty()).or(
+                    state.symmetricEncryptionPaddingProperty().isEmpty()).or(
+                    state.symmetricEncryptionKeyLengthProperty().isEmpty()).or(
+                    state.symmetricEncryptionValidationProperty().isEmpty()).or(
+                    state.symmetricEncryptionEncryptFilePathProperty().isEmpty()));
+
+  }
+
+  private void updateValidPaddings(String mode) {
+    Model model = Model.getInstance();
+    ArrayList<String> validPaddingNames =
+            model.getModeByKey(mode).getValidPaddingNames();
+    for (Toggle toggle : encryption_padding.getToggles()) {
+      if (validPaddingNames.contains(toggle.getUserData())) {
+        ((RadioButton) toggle).setDisable(false);
+        if (validPaddingNames.size() == 1) {
+          toggle.setSelected(true);
+        }
+      } else {
+        ((RadioButton) toggle).setDisable(true);
+        toggle.setSelected(false);
+      }
+    }
   }
 
   @FXML
@@ -103,36 +114,8 @@ public class SymmetricEncryptionEncryptController {
     }
   }
 
-
-  private boolean isFormFilledOut() {
-    boolean formFilledOut = true;
-
-    if (encryption_algorithm.selectedToggleProperty() == null) {
-      formFilledOut = false;
-    }
-    if (encryption_mode.selectedToggleProperty() == null) {
-      formFilledOut = false;
-    }
-
-    if (encryption_padding.selectedToggleProperty() == null) {
-      formFilledOut = false;
-    }
-
-    if (encryption_validation.selectedToggleProperty() == null) {
-      formFilledOut = false;
-    }
-
-    if (encryptFilePathLabel.getText() == null) {
-      formFilledOut = false;
-    }
-    return formFilledOut;
-  }
-
   @FXML
   private void encrypt() {
-    if (!isFormFilledOut()) {
-      return;
-    }
     byte[] fileAsByteArray =
             FileHandler.getFileAsByteArray(
                     state.getSymmetricEncryptionEncryptFilePath());

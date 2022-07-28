@@ -15,7 +15,7 @@ public class PublicSignatureData implements AbstractCryptoData<PublicSignatureDa
   private String algorithm;
   private byte[] signedBytes;
   private byte[] signature;
-
+  
   public PublicSignatureData fill(String algorithm, byte[] signedBytes,
                                   byte[] signature) {
     this.algorithm = algorithm;

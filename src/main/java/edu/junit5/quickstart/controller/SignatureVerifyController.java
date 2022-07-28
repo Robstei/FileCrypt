@@ -6,6 +6,7 @@ import edu.junit5.quickstart.signature.PublicSignatureKeyData;
 import edu.junit5.quickstart.signature.SignatureModel;
 import edu.junit5.quickstart.state.State;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
 
@@ -14,10 +15,24 @@ import java.io.File;
 public class SignatureVerifyController {
   State state = State.getInstance();
   @FXML
-  private Label signatureValidateFilePathLabel;
+  private Label signatureVerifyFilePathLabel;
   @FXML
   private Label signatureVerifyKeyPathLabel;
+  @FXML
+  private Button signatureVerifyButton;
 
+
+  @FXML
+  private void initialize() {
+    signatureVerifyFilePathLabel.textProperty().bind(
+            state.signatureVerifyFilePathProperty());
+    signatureVerifyKeyPathLabel.textProperty().bind(
+            state.signatureVerifyKeyFilePathProperty());
+
+    signatureVerifyButton.disableProperty().bind(
+            state.signatureVerifyFilePathProperty().isEmpty().or(
+                    state.signatureVerifyKeyFilePathProperty().isEmpty()));
+  }
 
   @FXML
   private void selectFileToVerify() {
@@ -26,7 +41,7 @@ public class SignatureVerifyController {
     File file = fileChooser.showOpenDialog(null);
 
     if (file != null) {
-      state.setSignatureSignFilePath(
+      state.setSignatureVerifyFilePath(
               file.getPath());
     }
   }

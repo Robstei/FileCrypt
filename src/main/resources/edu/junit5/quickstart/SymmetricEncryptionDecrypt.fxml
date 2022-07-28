@@ -24,7 +24,7 @@
             <children>
                 <Button mnemonicParsing="false" onAction="#selectFileToDecrypt" text="Select File" />
                 <Button mnemonicParsing="false" onAction="#selectKeyFile" text="Select Key File" GridPane.rowIndex="2" />
-                <Button mnemonicParsing="false" onAction="#decrypt" text="Decrypt" GridPane.rowIndex="4" />
+                <Button fx:id="encryptionDecryptButton" mnemonicParsing="false" onAction="#decrypt" text="Decrypt" GridPane.rowIndex="4" />
                 <Label fx:id="decryptFilePathLabel" GridPane.rowIndex="1" />
                 <Label fx:id="keyFilePathLabel" GridPane.rowIndex="3" />
             </children>

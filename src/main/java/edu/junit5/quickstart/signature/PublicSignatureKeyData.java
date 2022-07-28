@@ -1,5 +1,6 @@
 package edu.junit5.quickstart.signature;
 
+import edu.junit5.quickstart.algorithm.Algorithms;
 import edu.junit5.quickstart.model.AbstractCryptoData;
 import org.bouncycastle.util.encoders.Hex;
 
@@ -31,7 +32,11 @@ public class PublicSignatureKeyData implements AbstractCryptoData<PublicSignatur
     try {
       String algorithm = map.get(ALGORITHM);
       byte[] publicKeyAsBytes = Hex.decode(map.get(PUBLIC_KEY_AS_BYTES));
-      KeyFactory keyFactory = KeyFactory.getInstance(algorithm, "BC");
+      String nameForParameterGeneration =
+              new Algorithms().getNameForParameterGeneration(
+                      algorithm);
+      KeyFactory keyFactory = KeyFactory.getInstance(nameForParameterGeneration,
+                                                     "BC");
       PublicKey publicKey = keyFactory.generatePublic(
               new X509EncodedKeySpec(publicKeyAsBytes));
       return fill(algorithm, publicKey);
@@ -39,7 +44,6 @@ public class PublicSignatureKeyData implements AbstractCryptoData<PublicSignatur
              InvalidKeySpecException e) {
       throw new RuntimeException(e);
     }
-
   }
 
   @Override
@@ -57,7 +61,6 @@ public class PublicSignatureKeyData implements AbstractCryptoData<PublicSignatur
   public PublicKey getPublicKey() {
     return publicKey;
   }
-
 
   @Override
   public String[] getMapKeys() {

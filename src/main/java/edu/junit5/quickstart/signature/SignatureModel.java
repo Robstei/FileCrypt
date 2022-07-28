@@ -27,9 +27,7 @@ public class SignatureModel {
                                                                  keyPair.getPublic());
       secretSignatureKeyData = new SecretSignatureKeyData().fill(algorithm,
                                                                  keyPair.getPrivate());
-    } catch (NoSuchAlgorithmException e) {
-      throw new RuntimeException(e);
-    } catch (NoSuchProviderException e) {
+    } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
       throw new RuntimeException(e);
     }
   }
@@ -58,14 +56,13 @@ public class SignatureModel {
       Signature signature = Signature.getInstance(
               publicSignatureData.getAlgorithm(), "BC");
       signature.initVerify(publicSignatureKeyData.getPublicKey());
-      signature.update(publicSignatureData.getSignature());
+      signature.update(publicSignatureData.getSignedBytes());
       return signature.verify(publicSignatureData.getSignature());
     } catch (NoSuchAlgorithmException | NoSuchProviderException |
              InvalidKeyException | SignatureException e) {
       throw new RuntimeException(e);
     }
   }
-
 
   public PublicSignatureData getPublicSignatureData() {
     return publicSignatureData;

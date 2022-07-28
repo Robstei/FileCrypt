@@ -9,6 +9,7 @@ import edu.junit5.quickstart.validation.PublicValidationData;
 import edu.junit5.quickstart.validation.SecretValidationData;
 import edu.junit5.quickstart.validation.Validator;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
 
@@ -23,12 +24,19 @@ public class SymmetricEncryptionDecryptController {
   private Label keyFilePathLabel;
 
   @FXML
+  private Button encryptionDecryptButton;
+
+  @FXML
   private void initialize() {
+    
     decryptFilePathLabel.textProperty().bind(
             state.symmetricEncryptionDecryptFilePathProperty());
     keyFilePathLabel.textProperty().bind(
             state.symmetricEncryptionKeyFilePathProperty());
 
+    encryptionDecryptButton.disableProperty().bind(
+            state.symmetricEncryptionDecryptFilePathProperty().isEmpty().or(
+                    state.symmetricEncryptionKeyFilePathProperty().isEmpty()));
   }
 
   @FXML
@@ -94,7 +102,7 @@ public class SymmetricEncryptionDecryptController {
             publicValidationData,
             secretValidationData);
     if (!valid) {
-      //TODO: STOP and show modal with message instead.
+      return;
     }
     symmetricEncryptionModel.manageSymmetricDecryption(publicPostEncryptionData,
                                                        secretEncryptionData);

@@ -4,7 +4,9 @@ import edu.junit5.quickstart.model.FileHandler;
 import edu.junit5.quickstart.signature.SignatureModel;
 import edu.junit5.quickstart.state.State;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToggleGroup;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -13,12 +15,25 @@ public class SignatureSignController {
   private State state = State.getInstance();
 
   @FXML
+  private ToggleGroup signature_algorithm;
+
+  @FXML
   private Label signatureSignFilePathLabel;
 
   @FXML
+  private Button signatureSignButton;
+
+  @FXML
   private void initialize() {
+    ControllerUtil.bindToggleGroupToProperty(signature_algorithm,
+                                             state.signatureSignAlgorithmProperty());
+
     signatureSignFilePathLabel.textProperty().bind(
             state.signatureSignFilePathProperty());
+    
+    signatureSignButton.disableProperty().bind(
+            state.signatureSignAlgorithmProperty().isEmpty().or(
+                    state.signatureVerifyFilePathProperty().isEmpty()));
   }
 
   @FXML

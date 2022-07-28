@@ -10,6 +10,5 @@ public interface AbstractCryptoData<T> {
           Map<String, String> map);
 
   String[] getMapKeys();
-
-
+  
 }

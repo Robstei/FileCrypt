@@ -11,6 +11,7 @@ import edu.junit5.quickstart.validation.PublicValidationData;
 import edu.junit5.quickstart.validation.SecretValidationData;
 import edu.junit5.quickstart.validation.Validator;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.stage.FileChooser;
@@ -26,6 +27,9 @@ public class PasswordDecryptController {
   private Label encryptFilePathLabel;
 
   @FXML
+  private Button passwordDecryptButton;
+
+  @FXML
   private void initialize() {
     password_decryption.textProperty().addListener(
             (observableValue, oldValue, newValue) -> {
@@ -33,6 +37,10 @@ public class PasswordDecryptController {
             });
     encryptFilePathLabel.textProperty().bind(
             state.passwordDecryptionPathProperty());
+
+    passwordDecryptButton.disableProperty().bind(
+            state.passwordForDecryptionProperty().isEmpty().or(
+                    state.passwordDecryptionPathProperty().isEmpty()));
   }
 
   @FXML

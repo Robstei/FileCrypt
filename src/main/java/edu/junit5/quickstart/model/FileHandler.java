@@ -4,7 +4,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
@@ -45,11 +44,9 @@ public class FileHandler {
           T dataContainer,
           String path) {
     try {
-      DocumentBuilderFactory documentBuilderFactory =
-              DocumentBuilderFactory.newInstance();
-      DocumentBuilder documentBuilder =
-              documentBuilderFactory.newDocumentBuilder();
-      Document document = documentBuilder.parse(new File(path));
+      Document document =
+              DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(
+                      new File(path));
       String[] keys = dataContainer.getMapKeys();
       Map<String, String> map = new HashMap<>();
       for (String key : keys) {
