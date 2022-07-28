@@ -25,9 +25,10 @@ public class PasswordModel {
       SecureRandom secureRandom = SecureRandom.getInstance("DEFAULT",
                                                            new BouncyCastleProvider());
       byte[] salt = secureRandom.generateSeed(SALT_LENGTH_IN_BYTES);
-      PublicPasswordData publicPasswordData = new PublicPasswordData(algorithm,
-                                                                     salt,
-                                                                     keySize);
+      PublicPasswordData publicPasswordData = new PublicPasswordData().fill(
+              algorithm,
+              salt,
+              keySize);
       return generateKey(password, publicPasswordData);
     } catch (NoSuchAlgorithmException e) {
       throw new RuntimeException(e);

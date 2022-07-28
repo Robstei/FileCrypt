@@ -123,10 +123,11 @@ public class PasswordEncryptController {
 
     PublicValidationData publicValidationData =
             validator.getPublicValidationData();
-    FileHandler.savePublicData(encryptedBytes,
-                               publicPostEncryptionData,
-                               publicValidationData,
-                               publicPasswordData,
-                               state.getPasswordEncryptionPath());
+    FileHandler.saveDataToXMLFile(
+            state.getPasswordEncryptionPath() + ".encrypted",
+            publicPostEncryptionData,
+            publicValidationData,
+            publicPasswordData
+    );
   }
 }

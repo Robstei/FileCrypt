@@ -25,7 +25,7 @@ public class Validator {
                                          new BouncyCastleProvider());
       digest.update(bytesToGenerateValidationFor);
       result = digest.digest();
-      publicValidationData = new PublicValidationData(
+      publicValidationData = new PublicValidationData().fill(
               validationName, result);
       secretValidationData = null;
     } catch (NoSuchAlgorithmException e) {
@@ -51,9 +51,9 @@ public class Validator {
       mac = Mac.getInstance(validationName, new BouncyCastleProvider());
       mac.init(key);
       result = mac.doFinal(bytesToGenerateValidationFor);
-      publicValidationData = new PublicValidationData(
+      publicValidationData = new PublicValidationData().fill(
               validationName, result);
-      secretValidationData = new SecretValidationData(key);
+      secretValidationData = new SecretValidationData().fill(key);
     } catch (NoSuchAlgorithmException | InvalidKeyException e) {
       throw new RuntimeException(e);
     }

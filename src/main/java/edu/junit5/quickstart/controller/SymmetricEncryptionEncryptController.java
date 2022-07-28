@@ -167,12 +167,15 @@ public class SymmetricEncryptionEncryptController {
     SecretValidationData secretValidationData =
             validator.getSecretValidationData();
 
-    FileHandler.savePublicData(encryptedBytes,
-                               publicPostEncryptionData,
-                               publicValidationData,
-                               state.getSymmetricEncryptionEncryptFilePath());
-    FileHandler.saveSecretData(secretEncryptionData,
-                               secretValidationData,
-                               state.getSymmetricEncryptionEncryptFilePath());
+    FileHandler.saveDataToXMLFile(
+            state.getSymmetricEncryptionEncryptFilePath() + ".encrypted",
+            publicPostEncryptionData,
+            publicValidationData
+    );
+    FileHandler.saveDataToXMLFile(
+            state.getSymmetricEncryptionEncryptFilePath() + ".encryptionkey",
+            secretEncryptionData,
+            secretValidationData
+    );
   }
 }

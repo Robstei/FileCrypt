@@ -16,8 +16,8 @@ public class SignatureController {
   @FXML
   private void initialize() {
     Pair[] userDataFileNamePairs = {
-            new Pair<>("sign", "../SignatureCreate.fxml"),
-            new Pair<>("validate", "../SignatureValidate.fxml")
+            new Pair<>("sign", "../SignatureSign.fxml"),
+            new Pair<>("verify", "../SignatureVerify.fxml")
     };
     ControllerUtil.bindViewsToToggleOptions(signature_direction,
                                             signature_function_container, 2,

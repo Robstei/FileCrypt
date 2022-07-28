@@ -49,20 +49,21 @@ public class PasswordDecryptController {
   @FXML
   private void decrypt() {
     PublicValidationData publicValidationData =
-            FileHandler.getPublicValidationDataFromFile(
-                    state.getPasswordDecryptionPath());
+            FileHandler.fillDataContainer(new PublicValidationData(),
+                                          state.getPasswordDecryptionPath());
     PublicPostEncryptionData publicPostEncryptionData =
-            FileHandler.getPublicEncryptionDataFromFile(
-                    state.getPasswordDecryptionPath());
+            FileHandler.fillDataContainer(new PublicPostEncryptionData(),
+                                          state.getPasswordDecryptionPath());
     PublicPasswordData publicPasswordData =
-            FileHandler.getPublicPasswordDataFromFile(
-                    state.getPasswordDecryptionPath());
+            FileHandler.fillDataContainer(new PublicPasswordData(),
+                                          state.getPasswordDecryptionPath());
     String password = state.getPasswordForDecryption();
     PasswordModel passwordModel = new PasswordModel();
     Key key = passwordModel.generateKey(password,
                                         publicPasswordData);
     Validator validator = new Validator();
-    SecretValidationData secretValidationData = new SecretValidationData(key);
+    SecretValidationData secretValidationData = new SecretValidationData().fill(
+            key);
     boolean valid = validator.validate(
             publicPostEncryptionData.getEncryptedBytes(),
             publicValidationData,
@@ -72,7 +73,8 @@ public class PasswordDecryptController {
       return;
     }
 
-    SecretEncryptionData secretEncryptionData = new SecretEncryptionData(key);
+    SecretEncryptionData secretEncryptionData = new SecretEncryptionData().fill(
+            key);
     SymmetricEncryptionModel symmetricEncryptionModel =
             new SymmetricEncryptionModel();
     symmetricEncryptionModel.manageSymmetricDecryption(

@@ -24,6 +24,11 @@ public class State {
   private final StringProperty passwordEncryptionPath;
   private final StringProperty passwordForDecryption;
   private final StringProperty passwordDecryptionPath;
+  private final StringProperty signatureSignAlgorithm;
+  private final StringProperty signatureSignFilePath;
+  private final StringProperty signatureVerifyFilePath;
+  private final StringProperty signatureVerifyKeyFilePath;
+
   private State() {
     symmetricEncryptionAlgorithm = new SimpleStringProperty(
             Defaults.symmetricEncryptionAlgorithm);
@@ -43,7 +48,8 @@ public class State {
             Defaults.passwordEncryptionKeyLength);
     passwordEncryptionValidation = new SimpleStringProperty(
             Defaults.passwordEncryptionValidation);
-
+    signatureSignAlgorithm = new SimpleStringProperty(
+            Defaults.signatureSignAlgorithm);
 
     symmetricEncryptionEncryptFilePath = new SimpleStringProperty();
     symmetricEncryptionDecryptFilePath = new SimpleStringProperty();
@@ -54,6 +60,9 @@ public class State {
     passwordEncryptionPath = new SimpleStringProperty();
     passwordForDecryption = new SimpleStringProperty();
     passwordDecryptionPath = new SimpleStringProperty();
+    signatureSignFilePath = new SimpleStringProperty();
+    signatureVerifyFilePath = new SimpleStringProperty();
+    signatureVerifyKeyFilePath = new SimpleStringProperty();
   }
 
   public static State getInstance() {
@@ -291,5 +300,53 @@ public class State {
 
   public StringProperty passwordEncryptionValidationProperty() {
     return passwordEncryptionValidation;
+  }
+
+  public String getSignatureSignAlgorithm() {
+    return signatureSignAlgorithm.get();
+  }
+
+  public void setSignatureSignAlgorithm(String signatureSignAlgorithm) {
+    this.signatureSignAlgorithm.set(signatureSignAlgorithm);
+  }
+
+  public StringProperty signatureSignAlgorithmProperty() {
+    return signatureSignAlgorithm;
+  }
+
+  public String getSignatureSignFilePath() {
+    return signatureSignFilePath.get();
+  }
+
+  public void setSignatureSignFilePath(String signatureSignFilePath) {
+    this.signatureSignFilePath.set(signatureSignFilePath);
+  }
+
+  public StringProperty signatureSignFilePathProperty() {
+    return signatureSignFilePath;
+  }
+
+  public String getSignatureVerifyFilePath() {
+    return signatureVerifyFilePath.get();
+  }
+
+  public void setSignatureVerifyFilePath(String signatureVerifyFilePath) {
+    this.signatureVerifyFilePath.set(signatureVerifyFilePath);
+  }
+
+  public StringProperty signatureVerifyFilePathProperty() {
+    return signatureVerifyFilePath;
+  }
+
+  public String getSignatureVerifyKeyFilePath() {
+    return signatureVerifyKeyFilePath.get();
+  }
+
+  public void setSignatureVerifyKeyFilePath(String signatureVerifyKeyFilePath) {
+    this.signatureVerifyKeyFilePath.set(signatureVerifyKeyFilePath);
+  }
+
+  public StringProperty signatureVerifyKeyFilePathProperty() {
+    return signatureVerifyKeyFilePath;
   }
 }

@@ -74,17 +74,17 @@ public class SymmetricEncryptionDecryptController {
       return;
     }
     PublicPostEncryptionData publicPostEncryptionData =
-            FileHandler.getPublicEncryptionDataFromFile(
-                    state.getSymmetricEncryptionDecryptFilePath());
+            FileHandler.fillDataContainer(new PublicPostEncryptionData(),
+                                          state.getSymmetricEncryptionDecryptFilePath());
     PublicValidationData publicValidationData =
-            FileHandler.getPublicValidationDataFromFile(
-                    state.getSymmetricEncryptionDecryptFilePath());
+            FileHandler.fillDataContainer(new PublicValidationData(),
+                                          state.getSymmetricEncryptionDecryptFilePath());
     SecretEncryptionData secretEncryptionData =
-            FileHandler.getSecretEncryptionDataFromFile(
-                    state.getSymmetricEncryptionKeyFilePath());
+            FileHandler.fillDataContainer(new SecretEncryptionData(),
+                                          state.getSymmetricEncryptionKeyFilePath());
     SecretValidationData secretValidationData =
-            FileHandler.getSecretValidationDataFromFile(
-                    state.getSymmetricEncryptionKeyFilePath());
+            FileHandler.fillDataContainer(new SecretValidationData(),
+                                          state.getSymmetricEncryptionKeyFilePath());
 
     SymmetricEncryptionModel symmetricEncryptionModel =
             new SymmetricEncryptionModel();

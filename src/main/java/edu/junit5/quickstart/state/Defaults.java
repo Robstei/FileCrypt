@@ -15,4 +15,6 @@ public class Defaults {
   protected static final String passwordEncryptionKeyLength = "128";
 
   protected static final String passwordEncryptionValidation = "HMACSHA256";
+
+  protected static final String signatureSignAlgorithm = "SHA256withDSA";
 }
