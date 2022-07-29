@@ -34,7 +34,8 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/18"
+<VBox xmlns:fx="http://javafx.com/fxml/1" prefHeight="600.0" prefWidth="900.0"
+      xmlns="http://javafx.com/javafx/18"
       fx:controller="edu.junit5.quickstart.controller.RootController">
     <children>
         <MenuBar VBox.vgrow="NEVER">
@@ -71,7 +72,8 @@
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="About MyHelloApp"/>
+                        <MenuItem mnemonicParsing="false"
+                                  text="About MyHelloApp"/>
                     </items>
                 </Menu>
             </menus>
@@ -80,15 +82,23 @@
             <children>
                 <VBox minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0">
                     <children>
-                        <Button onAction="#changeMainWindow" userData="symmetric_encryption" mnemonicParsing="false"
-                                prefHeight="100.0"
-                                prefWidth="215.0" text="Symmetric Encryption" textAlignment="CENTER"/>
-                        <Button onAction="#changeMainWindow" userData="password" mnemonicParsing="false"
-                                prefHeight="100.0"
-                                prefWidth="215.0" text="Password" textAlignment="CENTER"/>
-                        <Button onAction="#changeMainWindow" userData="signature" mnemonicParsing="false"
-                                prefHeight="100.0"
-                                prefWidth="215.0" text="Signatures" textAlignment="CENTER"/>
+                        <Button mnemonicParsing="false"
+                                onAction="#changeMainWindow" prefHeight="100.0"
+                                prefWidth="215.0" text="Symmetric Encryption"
+                                textAlignment="CENTER"
+                                userData="symmetric_encryption"/>
+                        <Button mnemonicParsing="false"
+                                onAction="#changeMainWindow" prefHeight="100.0"
+                                prefWidth="215.0" text="Password"
+                                textAlignment="CENTER" userData="password"/>
+                        <Button mnemonicParsing="false"
+                                onAction="#changeMainWindow" prefHeight="100.0"
+                                prefWidth="215.0" text="Signatures"
+                                textAlignment="CENTER" userData="signature"/>
+                        <Button mnemonicParsing="false"
+                                onAction="#changeMainWindow" prefHeight="100.0"
+                                prefWidth="215.0" text="Keystore"
+                                textAlignment="CENTER" userData="keystore"/>
                     </children>
                 </VBox>
                 <VBox fx:id="main_window" prefHeight="200.0" prefWidth="100.0">

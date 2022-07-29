@@ -10,33 +10,37 @@ import java.io.IOException;
 
 public class RootController {
 
-    @FXML
-    private VBox main_window;
+  @FXML
+  private VBox main_window;
 
-    @FXML
-    private void changeMainWindow(ActionEvent event) {
-        Node targetNode = (Node) event.getTarget();
-        String userData = (String) targetNode.getUserData();
-        Node node = null;
-        try {
-            switch (userData) {
-                case "symmetric_encryption":
-                    node = FXMLLoader.load(getClass().getResource("../SymmetricEncryption.fxml"));
-                    break;
-                case "password":
-                    node = FXMLLoader.load(getClass().getResource("../Password.fxml"));
-                    break;
-                case "signature":
-                    node = FXMLLoader.load(getClass().getResource("../Signature.fxml"));
-                    break;
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+  @FXML
+  private void changeMainWindow(ActionEvent event) {
+    Node targetNode = (Node) event.getTarget();
+    String userData = (String) targetNode.getUserData();
+    Node node = null;
+    try {
+      switch (userData) {
+        case "symmetric_encryption":
+          node = FXMLLoader.load(
+                  getClass().getResource("../SymmetricEncryption.fxml"));
+          break;
+        case "password":
+          node = FXMLLoader.load(getClass().getResource("../Password.fxml"));
+          break;
+        case "signature":
+          node = FXMLLoader.load(getClass().getResource("../Signature.fxml"));
+          break;
+        case "keystore":
+          node = FXMLLoader.load(getClass().getResource("../KeyStore.fxml"));
+          break;
+      }
+    } catch (IOException e) {
+      throw new RuntimeException(e);
 
-        }
-        if (node != null) {
-            main_window.getChildren().remove(0);
-            main_window.getChildren().add(node);
-        }
     }
+    if (node != null) {
+      main_window.getChildren().remove(0);
+      main_window.getChildren().add(node);
+    }
+  }
 }

@@ -28,6 +28,11 @@ public class State {
   private final StringProperty signatureSignFilePath;
   private final StringProperty signatureVerifyFilePath;
   private final StringProperty signatureVerifyKeyFilePath;
+  private final StringProperty keyStoreGetFilePath;
+  private final StringProperty keyStoreGetKeyStorePassword;
+  private final StringProperty keyStoreGetPassword;
+  private final StringProperty keyStoreGetIdentifier;
+
 
   private State() {
     symmetricEncryptionAlgorithm = new SimpleStringProperty(
@@ -63,6 +68,10 @@ public class State {
     signatureSignFilePath = new SimpleStringProperty();
     signatureVerifyFilePath = new SimpleStringProperty();
     signatureVerifyKeyFilePath = new SimpleStringProperty();
+    keyStoreGetFilePath = new SimpleStringProperty();
+    keyStoreGetKeyStorePassword = new SimpleStringProperty();
+    keyStoreGetPassword = new SimpleStringProperty();
+    keyStoreGetIdentifier = new SimpleStringProperty();
   }
 
   public static State getInstance() {
@@ -348,5 +357,54 @@ public class State {
 
   public StringProperty signatureVerifyKeyFilePathProperty() {
     return signatureVerifyKeyFilePath;
+  }
+
+  public String getKeyStoreGetFilePath() {
+    return keyStoreGetFilePath.get();
+  }
+
+  public void setKeyStoreGetFilePath(String keyStoreGetFilePath) {
+    this.keyStoreGetFilePath.set(keyStoreGetFilePath);
+  }
+
+  public StringProperty keyStoreGetFilePathProperty() {
+    return keyStoreGetFilePath;
+  }
+
+  public String getKeyStoreGetPassword() {
+    return keyStoreGetPassword.get();
+  }
+
+  public void setKeyStoreGetPassword(String keyStoreGetPassword) {
+    this.keyStoreGetPassword.set(keyStoreGetPassword);
+  }
+
+  public StringProperty keyStoreGetPasswordProperty() {
+    return keyStoreGetPassword;
+  }
+
+  public String getKeyStoreGetIdentifier() {
+    return keyStoreGetIdentifier.get();
+  }
+
+  public void setKeyStoreGetIdentifier(String keyStoreGetIdentifier) {
+    this.keyStoreGetIdentifier.set(keyStoreGetIdentifier);
+  }
+
+  public StringProperty keyStoreGetIdentifierProperty() {
+    return keyStoreGetIdentifier;
+  }
+
+  public String getKeyStoreGetKeyStorePassword() {
+    return keyStoreGetKeyStorePassword.get();
+  }
+
+  public void setKeyStoreGetKeyStorePassword(
+          String keyStoreGetKeyStorePassword) {
+    this.keyStoreGetKeyStorePassword.set(keyStoreGetKeyStorePassword);
+  }
+
+  public StringProperty keyStoreGetKeyStorePasswordProperty() {
+    return keyStoreGetKeyStorePassword;
   }
 }
