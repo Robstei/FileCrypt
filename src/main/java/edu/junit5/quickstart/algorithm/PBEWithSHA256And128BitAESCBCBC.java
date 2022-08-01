@@ -7,6 +7,6 @@ public class PBEWithSHA256And128BitAESCBCBC extends Algorithm {
     super("PBEWithSHA256And128BitAES-CBC-BC",
           "PBEWithSHA256And128BitAES-CBC-BC",
           new Mode[0],
-          "AES");
+          true, "AES");
   }
 }

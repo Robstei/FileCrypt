@@ -1,6 +1,6 @@
 package edu.junit5.quickstart.password;
 
-import edu.junit5.quickstart.model.AbstractCryptoData;
+import edu.junit5.quickstart.data.AbstractCryptoData;
 import org.bouncycastle.util.encoders.Hex;
 
 import java.util.HashMap;
@@ -15,7 +15,6 @@ public class PublicPasswordData implements AbstractCryptoData<PublicPasswordData
           KEY_LENGTH};
   private String algorithm;
   private byte[] salt;
-
   private int keyLength;
 
 

@@ -1,9 +1,14 @@
 package edu.junit5.quickstart.controller;
 
+import edu.junit5.quickstart.data.Transformation;
+import edu.junit5.quickstart.io.FileHandler;
 import edu.junit5.quickstart.mode.Mode;
-import edu.junit5.quickstart.model.*;
+import edu.junit5.quickstart.mode.Modes;
 import edu.junit5.quickstart.state.State;
-import edu.junit5.quickstart.state.Transformation;
+import edu.junit5.quickstart.symmetricEncryption.PublicPostEncryptionData;
+import edu.junit5.quickstart.symmetricEncryption.PublicPreEncryptionData;
+import edu.junit5.quickstart.symmetricEncryption.SecretEncryptionData;
+import edu.junit5.quickstart.symmetricEncryption.SymmetricEncryptionModel;
 import edu.junit5.quickstart.validation.PublicValidationData;
 import edu.junit5.quickstart.validation.SecretValidationData;
 import edu.junit5.quickstart.validation.Validator;
@@ -43,7 +48,8 @@ public class SymmetricEncryptionEncryptController {
     state.symmetricEncryptionModeProperty().addListener(
             (observableValue, oldValue, newValue) -> {
 
-              Mode mode = Model.getInstance().getModeByKey(newValue);
+              Modes modes = new Modes();
+              Mode mode = modes.getModeByName(newValue);
 
               for (Toggle toggle : encryption_padding.getToggles()) {
                 if (mode.isValidPadding(
@@ -74,7 +80,7 @@ public class SymmetricEncryptionEncryptController {
     String mode =
             state.getSymmetricEncryptionMode();
     updateValidPaddings(mode);
-    
+
     encryptionEncryptButton.disableProperty().bind(
             state.symmetricEncryptionAlgorithmProperty().isEmpty().or(
                     state.symmetricEncryptionModeProperty().isEmpty()).or(
@@ -86,9 +92,9 @@ public class SymmetricEncryptionEncryptController {
   }
 
   private void updateValidPaddings(String mode) {
-    Model model = Model.getInstance();
+    Modes modes = new Modes();
     ArrayList<String> validPaddingNames =
-            model.getModeByKey(mode).getValidPaddingNames();
+            modes.getModeByName(mode).getValidPaddingNames();
     for (Toggle toggle : encryption_padding.getToggles()) {
       if (validPaddingNames.contains(toggle.getUserData())) {
         ((RadioButton) toggle).setDisable(false);

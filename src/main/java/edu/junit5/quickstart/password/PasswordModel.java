@@ -21,7 +21,8 @@ public class PasswordModel {
 
   private PublicPasswordData publicPasswordData;
 
-  public Key generateKey(String password, String algorithm, int keySize) {
+
+  public Key generateKey(String password, String algorithm, int keyLength) {
     try {
       SecureRandom secureRandom = SecureRandom.getInstance("DEFAULT",
                                                            "BC");
@@ -29,7 +30,7 @@ public class PasswordModel {
       PublicPasswordData publicPasswordData = new PublicPasswordData().fill(
               algorithm,
               salt,
-              keySize);
+              keyLength);
       return generateKey(password, publicPasswordData);
     } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
       throw new RuntimeException(e);
@@ -50,12 +51,20 @@ public class PasswordModel {
                                   publicPasswordData.getSalt(), 1048576, 8, 1,
                                   publicPasswordData.getKeyLength()));
       } else {
-        key = secretKeyFactory.generateSecret(
-                new PBEKeySpec(password.toCharArray(),
-                               publicPasswordData.getSalt(), ITERATION_COUNT,
-                               publicPasswordData.getKeyLength()));
 
-      }//TODO: Check slides on how to properly delete plain text password after
+        if (publicPasswordData.getKeyLength() > 0) {
+          key = secretKeyFactory.generateSecret(
+                  new PBEKeySpec(password.toCharArray(),
+                                 publicPasswordData.getSalt(), ITERATION_COUNT,
+                                 publicPasswordData.getKeyLength()));
+        } else {
+          key = secretKeyFactory.generateSecret(
+                  new PBEKeySpec(password.toCharArray(),
+                                 publicPasswordData.getSalt(),
+                                 ITERATION_COUNT));
+        }
+      }
+      //TODO: Check slides on how to properly delete plain text password after
       // usage
       password = "";
       this.publicPasswordData = publicPasswordData;

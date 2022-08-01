@@ -1,7 +1,9 @@
-package edu.junit5.quickstart.model;
+package edu.junit5.quickstart.io;
 
+import edu.junit5.quickstart.data.AbstractCryptoData;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -38,6 +40,21 @@ public class FileHandler {
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+
+  public static boolean doesXMLFileContainKeys(String[] keys,
+                                               String path) throws ParserConfigurationException, IOException, SAXException {
+    Document document =
+            DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(
+                    new File(path));
+    for (String key : keys) {
+      Node node = document.getElementsByTagName(key).item(0);
+      if (node == null) {
+        return false;
+      }
+    }
+    return true;
   }
 
   public static <T extends AbstractCryptoData<T>> T fillDataContainer(

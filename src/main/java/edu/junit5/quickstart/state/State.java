@@ -28,10 +28,16 @@ public class State {
   private final StringProperty signatureSignFilePath;
   private final StringProperty signatureVerifyFilePath;
   private final StringProperty signatureVerifyKeyFilePath;
-  private final StringProperty keyStoreGetFilePath;
+  private final StringProperty keyStoreSaveKeyStoreFilePath;
+  private final StringProperty keyStoreSaveKeyStorePassword;
+  private final StringProperty keyStoreSaveKeyFilePath;
+  private final StringProperty keyStoreSaveKeyIdentifier;
+  private final StringProperty keyStoreSaveKeyPassword;
+
+  private final StringProperty keyStoreGetKeyStoreFilePath;
   private final StringProperty keyStoreGetKeyStorePassword;
-  private final StringProperty keyStoreGetPassword;
-  private final StringProperty keyStoreGetIdentifier;
+  private final StringProperty keyStoreGetKeyPassword;
+  private final StringProperty keyStoreGetKeyIdentifier;
 
 
   private State() {
@@ -68,10 +74,15 @@ public class State {
     signatureSignFilePath = new SimpleStringProperty();
     signatureVerifyFilePath = new SimpleStringProperty();
     signatureVerifyKeyFilePath = new SimpleStringProperty();
-    keyStoreGetFilePath = new SimpleStringProperty();
+    keyStoreSaveKeyStoreFilePath = new SimpleStringProperty();
+    keyStoreSaveKeyStorePassword = new SimpleStringProperty();
+    keyStoreSaveKeyFilePath = new SimpleStringProperty();
+    keyStoreSaveKeyIdentifier = new SimpleStringProperty();
+    keyStoreSaveKeyPassword = new SimpleStringProperty();
+    keyStoreGetKeyStoreFilePath = new SimpleStringProperty();
     keyStoreGetKeyStorePassword = new SimpleStringProperty();
-    keyStoreGetPassword = new SimpleStringProperty();
-    keyStoreGetIdentifier = new SimpleStringProperty();
+    keyStoreGetKeyPassword = new SimpleStringProperty();
+    keyStoreGetKeyIdentifier = new SimpleStringProperty();
   }
 
   public static State getInstance() {
@@ -359,40 +370,104 @@ public class State {
     return signatureVerifyKeyFilePath;
   }
 
-  public String getKeyStoreGetFilePath() {
-    return keyStoreGetFilePath.get();
+  public String getKeyStoreSaveKeyStoreFilePath() {
+    return keyStoreSaveKeyStoreFilePath.get();
   }
 
-  public void setKeyStoreGetFilePath(String keyStoreGetFilePath) {
-    this.keyStoreGetFilePath.set(keyStoreGetFilePath);
+  public void setKeyStoreSaveKeyStoreFilePath(
+          String keyStoreSaveKeyStoreFilePath) {
+    this.keyStoreSaveKeyStoreFilePath.set(keyStoreSaveKeyStoreFilePath);
   }
 
-  public StringProperty keyStoreGetFilePathProperty() {
-    return keyStoreGetFilePath;
+  public StringProperty keyStoreSaveKeyStoreFilePathProperty() {
+    return keyStoreSaveKeyStoreFilePath;
   }
 
-  public String getKeyStoreGetPassword() {
-    return keyStoreGetPassword.get();
+  public String getKeyStoreSaveKeyStorePassword() {
+    return keyStoreSaveKeyStorePassword.get();
   }
 
-  public void setKeyStoreGetPassword(String keyStoreGetPassword) {
-    this.keyStoreGetPassword.set(keyStoreGetPassword);
+  public void setKeyStoreSaveKeyStorePassword(
+          String keyStoreSaveKeyStorePassword) {
+    this.keyStoreSaveKeyStorePassword.set(keyStoreSaveKeyStorePassword);
   }
 
-  public StringProperty keyStoreGetPasswordProperty() {
-    return keyStoreGetPassword;
+  public StringProperty keyStoreSaveKeyStorePasswordProperty() {
+    return keyStoreSaveKeyStorePassword;
   }
 
-  public String getKeyStoreGetIdentifier() {
-    return keyStoreGetIdentifier.get();
+  public String getKeyStoreSaveKeyFilePath() {
+    return keyStoreSaveKeyFilePath.get();
   }
 
-  public void setKeyStoreGetIdentifier(String keyStoreGetIdentifier) {
-    this.keyStoreGetIdentifier.set(keyStoreGetIdentifier);
+  public void setKeyStoreSaveKeyFilePath(String keyStoreSaveKeyFilePath) {
+    this.keyStoreSaveKeyFilePath.set(keyStoreSaveKeyFilePath);
   }
 
-  public StringProperty keyStoreGetIdentifierProperty() {
-    return keyStoreGetIdentifier;
+  public StringProperty keyStoreSaveKeyFilePathProperty() {
+    return keyStoreSaveKeyFilePath;
+  }
+
+  public String getKeyStoreSaveKeyIdentifier() {
+    return keyStoreSaveKeyIdentifier.get();
+  }
+
+  public void setKeyStoreSaveKeyIdentifier(
+          String keyStoreSaveKeyIdentifier) {
+    this.keyStoreSaveKeyIdentifier.set(keyStoreSaveKeyIdentifier);
+  }
+
+  public StringProperty keyStoreSaveKeyIdentifierProperty() {
+    return keyStoreSaveKeyIdentifier;
+  }
+
+  public String getKeyStoreSaveKeyPassword() {
+    return keyStoreSaveKeyPassword.get();
+  }
+
+  public void setKeyStoreSaveKeyPassword(String keyStoreSaveKeyPassword) {
+    this.keyStoreSaveKeyPassword.set(keyStoreSaveKeyPassword);
+  }
+
+  public StringProperty keyStoreSaveKeyPasswordProperty() {
+    return keyStoreSaveKeyPassword;
+  }
+
+  public String getKeyStoreGetKeyStoreFilePath() {
+    return keyStoreGetKeyStoreFilePath.get();
+  }
+
+  public void setKeyStoreGetKeyStoreFilePath(
+          String keyStoreGetKeyStoreFilePath) {
+    this.keyStoreGetKeyStoreFilePath.set(keyStoreGetKeyStoreFilePath);
+  }
+
+  public StringProperty keyStoreGetKeyStoreFilePathProperty() {
+    return keyStoreGetKeyStoreFilePath;
+  }
+
+  public String getKeyStoreGetKeyPassword() {
+    return keyStoreGetKeyPassword.get();
+  }
+
+  public void setKeyStoreGetKeyPassword(String keyStoreGetKeyPassword) {
+    this.keyStoreGetKeyPassword.set(keyStoreGetKeyPassword);
+  }
+
+  public StringProperty keyStoreGetKeyPasswordProperty() {
+    return keyStoreGetKeyPassword;
+  }
+
+  public String getKeyStoreGetKeyIdentifier() {
+    return keyStoreGetKeyIdentifier.get();
+  }
+
+  public void setKeyStoreGetKeyIdentifier(String keyStoreGetKeyIdentifier) {
+    this.keyStoreGetKeyIdentifier.set(keyStoreGetKeyIdentifier);
+  }
+
+  public StringProperty keyStoreGetKeyIdentifierProperty() {
+    return keyStoreGetKeyIdentifier;
   }
 
   public String getKeyStoreGetKeyStorePassword() {

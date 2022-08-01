@@ -1,12 +1,12 @@
 package edu.junit5.quickstart.controller;
 
-import edu.junit5.quickstart.model.FileHandler;
-import edu.junit5.quickstart.model.PublicPostEncryptionData;
-import edu.junit5.quickstart.model.SecretEncryptionData;
-import edu.junit5.quickstart.model.SymmetricEncryptionModel;
+import edu.junit5.quickstart.io.FileHandler;
 import edu.junit5.quickstart.password.PasswordModel;
 import edu.junit5.quickstart.password.PublicPasswordData;
 import edu.junit5.quickstart.state.State;
+import edu.junit5.quickstart.symmetricEncryption.PublicPostEncryptionData;
+import edu.junit5.quickstart.symmetricEncryption.SecretEncryptionData;
+import edu.junit5.quickstart.symmetricEncryption.SymmetricEncryptionModel;
 import edu.junit5.quickstart.validation.PublicValidationData;
 import edu.junit5.quickstart.validation.SecretValidationData;
 import edu.junit5.quickstart.validation.Validator;

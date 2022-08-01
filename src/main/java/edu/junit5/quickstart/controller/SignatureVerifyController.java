@@ -1,6 +1,6 @@
 package edu.junit5.quickstart.controller;
 
-import edu.junit5.quickstart.model.FileHandler;
+import edu.junit5.quickstart.io.FileHandler;
 import edu.junit5.quickstart.signature.PublicSignatureData;
 import edu.junit5.quickstart.signature.PublicSignatureKeyData;
 import edu.junit5.quickstart.signature.SignatureModel;

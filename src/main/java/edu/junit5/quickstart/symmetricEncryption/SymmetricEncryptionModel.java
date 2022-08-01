@@ -1,7 +1,7 @@
-package edu.junit5.quickstart.model;
+package edu.junit5.quickstart.symmetricEncryption;
 
-import edu.junit5.quickstart.algorithm.Algorithms;
-import edu.junit5.quickstart.state.Transformation;
+import edu.junit5.quickstart.data.OperationResult;
+import edu.junit5.quickstart.data.Transformation;
 
 import javax.crypto.*;
 import java.io.IOException;
@@ -43,26 +43,31 @@ public class SymmetricEncryptionModel {
         key = keyGenerator.generateKey();
       }
 
-      // generate parameter
-      Algorithms algorithms = new Algorithms();
+
       String algorithmForParameterGeneration =
-              algorithms.getNameForParameterGeneration(
-                      publicPreEncryptionData.getAlgorithm());
-      AlgorithmParameterGenerator algorithmParameterGenerator =
-              AlgorithmParameterGenerator.getInstance(
-                      algorithmForParameterGeneration,
-                      "BC");
-      AlgorithmParameters algorithmParameters =
-              algorithmParameterGenerator.generateParameters();
+              publicPreEncryptionData.getTransformation().getNameForParameterGeneration();
+      AlgorithmParameters algorithmParameters = null;
+      if (algorithmForParameterGeneration != null) {
+        AlgorithmParameterGenerator algorithmParameterGenerator =
+                AlgorithmParameterGenerator.getInstance(
+                        algorithmForParameterGeneration,
+                        "BC");
+        algorithmParameters =
+                algorithmParameterGenerator.generateParameters();
+      }
 
       result = encryptSymmetric(publicPreEncryptionData.getBytesToEncrypt(),
                                 publicPreEncryptionData.getTransformation(),
                                 key, algorithmParameters);
 
+      byte[] algorithmParametersAsBytes = algorithmParameters != null ?
+              algorithmParameters.getEncoded() : new byte[0];
+
       this.publicPostEncryptionData = new PublicPostEncryptionData().fill(
               result,
               publicPreEncryptionData.getTransformation(),
-              algorithmParameters.getEncoded());
+              algorithmParametersAsBytes
+      );
       this.secretEncryptionData = new SecretEncryptionData().fill(key);
     } catch (NoSuchAlgorithmException | IOException |
              NoSuchProviderException e) {
@@ -74,10 +79,8 @@ public class SymmetricEncryptionModel {
           PublicPostEncryptionData publicPostEncryptionData,
           SecretEncryptionData secretEncryptionData) {
     try {
-      Algorithms algorithms = new Algorithms();
       String nameForParameterGeneration =
-              algorithms.getNameForParameterGeneration(
-                      publicPostEncryptionData.getAlgorithm());
+              publicPostEncryptionData.getTransformation().getNameForParameterGeneration();
       AlgorithmParameters algorithmParameters = AlgorithmParameters.getInstance(
               nameForParameterGeneration,
               "BC");

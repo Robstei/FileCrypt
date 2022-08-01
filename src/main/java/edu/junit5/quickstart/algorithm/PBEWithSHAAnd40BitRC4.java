@@ -6,7 +6,7 @@ public class PBEWithSHAAnd40BitRC4 extends Algorithm {
   public PBEWithSHAAnd40BitRC4() {
     super("PBEWithSHAAnd40BitRC4",
           "PBEWithSHAAnd40BitRC4",
-          new Mode[0],
+          new Mode[0], false,
           null);
   }
 }

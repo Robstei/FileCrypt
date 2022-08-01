@@ -9,12 +9,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class CBC extends Mode {
-    public CBC() {
-        super("CBC", "CBC", false, new ArrayList<>(Arrays.asList(
-                new NoPadding(),
-                new PKCS7Padding(),
-                new ZeroBytePadding(),
-                new CTS()
-        )));
-    }
+  public CBC() {
+    super("CBC", "CBC", new ArrayList<>(Arrays.asList(
+            new NoPadding(),
+            new PKCS7Padding(),
+            new ZeroBytePadding(),
+            new CTS()
+    )), true, false);
+  }
 }

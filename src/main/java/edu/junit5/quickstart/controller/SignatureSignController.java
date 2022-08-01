@@ -1,6 +1,6 @@
 package edu.junit5.quickstart.controller;
 
-import edu.junit5.quickstart.model.FileHandler;
+import edu.junit5.quickstart.io.FileHandler;
 import edu.junit5.quickstart.signature.SignatureModel;
 import edu.junit5.quickstart.state.State;
 import javafx.fxml.FXML;
@@ -30,7 +30,7 @@ public class SignatureSignController {
 
     signatureSignFilePathLabel.textProperty().bind(
             state.signatureSignFilePathProperty());
-    
+
     signatureSignButton.disableProperty().bind(
             state.signatureSignAlgorithmProperty().isEmpty().or(
                     state.signatureVerifyFilePathProperty().isEmpty()));

@@ -13,6 +13,15 @@ public class Algorithms {
     };
   }
 
+  public Algorithm getAlgorithm(String algorithmName) {
+    for (Algorithm algorithm : availableAlgorithm) {
+      if (algorithm.getBouncyCastleName().equals(algorithmName)) {
+        return algorithm;
+      }
+    }
+    return null;
+  }
+
   public String getNameForParameterGeneration(String algorithmName) {
     for (Algorithm algorithm : availableAlgorithm) {
       if (algorithm.getBouncyCastleName().equals(algorithmName)) {

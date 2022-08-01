@@ -1,15 +1,16 @@
 package edu.junit5.quickstart.controller;
 
-import edu.junit5.quickstart.model.FileHandler;
-import edu.junit5.quickstart.model.PublicPostEncryptionData;
-import edu.junit5.quickstart.model.PublicPreEncryptionData;
-import edu.junit5.quickstart.model.SymmetricEncryptionModel;
+import edu.junit5.quickstart.data.Transformation;
+import edu.junit5.quickstart.io.FileHandler;
 import edu.junit5.quickstart.password.PasswordModel;
 import edu.junit5.quickstart.password.PublicPasswordData;
 import edu.junit5.quickstart.state.State;
-import edu.junit5.quickstart.state.Transformation;
+import edu.junit5.quickstart.symmetricEncryption.PublicPostEncryptionData;
+import edu.junit5.quickstart.symmetricEncryption.PublicPreEncryptionData;
+import edu.junit5.quickstart.symmetricEncryption.SymmetricEncryptionModel;
 import edu.junit5.quickstart.validation.PublicValidationData;
 import edu.junit5.quickstart.validation.Validator;
+import javafx.beans.binding.BooleanBinding;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
@@ -37,16 +38,40 @@ public class PasswordEncryptController {
 
   @FXML
   private void initialize() {
-    for (Toggle toggle : password_algorithm.getToggles()) {
-      if (toggle.getUserData().equals(
-              state.getPasswordEncryptionAlgorithm())) {
-        password_algorithm.selectToggle(toggle);
+
+
+    BooleanBinding disableKeyLength = new BooleanBinding() {
+      {
+        super.bind(state.passwordEncryptionAlgorithmProperty());
       }
+
+      @Override
+      protected boolean computeValue() {
+        String algorithm =
+                state.passwordEncryptionAlgorithmProperty().getValue();
+        return algorithm.equals(
+                "PBEWithSHA256And128BitAES-CBC-BC") || algorithm.equals(
+                "PBEWithSHAAnd40BitRC4");
+      }
+    };
+
+    disableKeyLength.addListener(((observableValue, oldValue, newValue) -> {
+      if (newValue) {
+        state.setPasswordEncryptionKeyLength(null);
+      }
+    }));
+    for (Toggle toggle : password_keysize.getToggles()) {
+      ((RadioButton) toggle).disableProperty().bind(disableKeyLength);
     }
+    ControllerUtil.bindToggleGroupToProperty(password_keysize,
+                                             state.passwordEncryptionKeyLengthProperty());
+    ControllerUtil.bindToggleGroupToProperty(password_validation,
+                                             state.passwordEncryptionValidationProperty());
+
     password_algorithm.selectedToggleProperty().addListener(
             (observableValue, oldValue, newValue) -> {
               if (newValue.getUserData().equals(
-                      "PBEWithSHA256And128BitAES") || newValue.getUserData().equals(
+                      "PBEWithSHA256And128BitAES-CBC-BC") || newValue.getUserData().equals(
                       "PBEWithSHAAnd40BitRC4")) {
                 state.setPasswordGenerationAlgorithm(
                         (String) newValue.getUserData());
@@ -54,23 +79,22 @@ public class PasswordEncryptController {
                         (String) newValue.getUserData());
                 state.setPasswordEncryptionMode("");
                 state.setPasswordEncryptionPadding("");
+                state.setPasswordEncryptionKeyLength(null);
               } else if (newValue.getUserData().equals(
                       "SCRYPT-AES-GCM")) {
                 state.setPasswordGenerationAlgorithm("SCRYPT");
                 state.setPasswordEncryptionAlgorithm("AES");
                 state.setPasswordEncryptionMode("GCM");
                 state.setPasswordEncryptionPadding("NoPadding");
-                //TODO: change state. maybe combine symmetric encryption from
-                // password and encryption view. there needs to be a
-                // differentiation between the password generation algorithm and
-                // the encryption algorithm when using a password
               }
             });
+    for (Toggle toggle : password_algorithm.getToggles()) {
+      if (toggle.getUserData().equals(
+              state.getPasswordEncryptionAlgorithm())) {
+        password_algorithm.selectToggle(toggle);
+      }
+    }
 
-    ControllerUtil.bindToggleGroupToProperty(password_keysize,
-                                             state.passwordEncryptionKeyLengthProperty());
-    ControllerUtil.bindToggleGroupToProperty(password_validation,
-                                             state.passwordEncryptionValidationProperty());
     password_encryption.textProperty().bindBidirectional(
             state.passwordForEncryptionProperty());
     encryptFilePathLabel.textProperty().bind(
@@ -79,8 +103,12 @@ public class PasswordEncryptController {
     passwordEncryptButton.disableProperty().bind(
             state.passwordEncryptionAlgorithmProperty().isEmpty().or(
                     state.passwordEncryptionValidationProperty().isEmpty().or(
-                            state.passwordForEncryptionProperty().isEmpty())));
+                            state.passwordForEncryptionProperty().isEmpty().or(
+                                    state.passwordEncryptionPathProperty().isEmpty().or(
+                                            disableKeyLength.not().and(
+                                                    state.passwordEncryptionKeyLengthProperty().isNull()))))));
   }
+
 
   @FXML
   private void selectFileToEncrypt() {
@@ -98,10 +126,15 @@ public class PasswordEncryptController {
     String password = state.getPasswordForEncryption();
     String algorithm = state.getPasswordEncryptionAlgorithm();
     PasswordModel passwordModel = new PasswordModel();
+    int keyLength;
+    if (state.getPasswordEncryptionKeyLength() == null) {
+      keyLength = -1;
+    } else {
+      keyLength = Integer.parseInt(state.getPasswordEncryptionKeyLength());
+    }
     Key key = passwordModel.generateKey(password,
                                         state.getPasswordGenerationAlgorithm(),
-                                        Integer.parseInt(
-                                                state.getPasswordEncryptionKeyLength()));
+                                        keyLength);
     PublicPasswordData publicPasswordData =
             passwordModel.getPublicPasswordData();
 

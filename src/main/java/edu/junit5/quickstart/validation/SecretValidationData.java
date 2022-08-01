@@ -1,6 +1,6 @@
 package edu.junit5.quickstart.validation;
 
-import edu.junit5.quickstart.model.AbstractCryptoData;
+import edu.junit5.quickstart.data.AbstractCryptoData;
 import org.bouncycastle.util.encoders.Hex;
 
 import javax.crypto.spec.SecretKeySpec;

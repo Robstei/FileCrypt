@@ -1,7 +1,7 @@
 package edu.junit5.quickstart.signature;
 
 import edu.junit5.quickstart.algorithm.Algorithms;
-import edu.junit5.quickstart.model.AbstractCryptoData;
+import edu.junit5.quickstart.data.AbstractCryptoData;
 import org.bouncycastle.util.encoders.Hex;
 
 import java.security.KeyFactory;

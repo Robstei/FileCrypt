@@ -1,4 +1,4 @@
-package edu.junit5.quickstart.model;
+package edu.junit5.quickstart.data;
 
 import java.util.Map;
 
@@ -10,5 +10,5 @@ public interface AbstractCryptoData<T> {
           Map<String, String> map);
 
   String[] getMapKeys();
-  
+
 }

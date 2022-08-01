@@ -9,10 +9,10 @@ import java.util.Arrays;
 
 public class ECB extends Mode {
   public ECB() {
-    super("ECB", "ECB", false, new ArrayList<>(Arrays.asList(
+    super("ECB", "ECB", new ArrayList<>(Arrays.asList(
             new NoPadding(),
             new PKCS7Padding(),
             new ZeroBytePadding()
-    )));
+    )), false, false);
   }
 }

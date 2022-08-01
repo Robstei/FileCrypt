@@ -1,6 +1,6 @@
-package edu.junit5.quickstart.model;
+package edu.junit5.quickstart.symmetricEncryption;
 
-import edu.junit5.quickstart.state.Transformation;
+import edu.junit5.quickstart.data.Transformation;
 
 public class PublicPreEncryptionData {
 
@@ -14,9 +14,9 @@ public class PublicPreEncryptionData {
   public PublicPreEncryptionData(byte[] bytesToEncrypt,
                                  Transformation transformation, int keySize) {
     this.bytesToEncrypt = bytesToEncrypt;
-    this.algorithm = transformation.getAlgorithm();
-    this.mode = transformation.getMode();
-    this.padding = transformation.getPadding();
+    this.algorithm = transformation.getAlgorithmName();
+    this.mode = transformation.getModeName();
+    this.padding = transformation.getPaddingName();
     this.keySize = keySize;
   }
 

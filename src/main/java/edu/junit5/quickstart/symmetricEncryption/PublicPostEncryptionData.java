@@ -1,6 +1,7 @@
-package edu.junit5.quickstart.model;
+package edu.junit5.quickstart.symmetricEncryption;
 
-import edu.junit5.quickstart.state.Transformation;
+import edu.junit5.quickstart.data.AbstractCryptoData;
+import edu.junit5.quickstart.data.Transformation;
 import org.bouncycastle.util.encoders.Hex;
 
 import java.util.HashMap;
@@ -26,9 +27,9 @@ public class PublicPostEncryptionData implements AbstractCryptoData<PublicPostEn
                                        Transformation transformation,
                                        byte[] algorithmParametersAsBytes) {
     this.encryptedBytes = encryptedBytes;
-    this.algorithm = transformation.getAlgorithm();
-    this.mode = transformation.getMode();
-    this.padding = transformation.getPadding();
+    this.algorithm = transformation.getAlgorithmName();
+    this.mode = transformation.getModeName();
+    this.padding = transformation.getPaddingName();
     this.algorithmParametersAsBytes = algorithmParametersAsBytes;
     return this;
   }

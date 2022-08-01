@@ -12,6 +12,6 @@ public class AES extends Algorithm {
                   new CBC(),
                   new OFB(),
                   new GCM(),
-          }, "AES");
+          }, true, "AES");
   }
 }

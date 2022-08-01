@@ -8,6 +8,8 @@ public class Algorithm {
   private String UIName;
   private Mode[] possibleModes;
 
+  private boolean mightNeedAlgorithmParameters;
+
   //TODO only show possible key sizes of the algorithm in the frontend. Might
   // be needed for passwords too
   private int[] possibleKeySizes;
@@ -15,10 +17,12 @@ public class Algorithm {
   private String nameForParameterGeneration;
 
   public Algorithm(String bouncyCastleName, String UIName,
-                   Mode[] possibleModes, String nameForParameterGeneration) {
+                   Mode[] possibleModes, boolean mightNeedAlgorithmParameters,
+                   String nameForParameterGeneration) {
     this.bouncyCastleName = bouncyCastleName;
     this.UIName = UIName;
     this.possibleModes = possibleModes;
+    this.mightNeedAlgorithmParameters = mightNeedAlgorithmParameters;
     this.nameForParameterGeneration = nameForParameterGeneration;
   }
 
@@ -36,6 +40,15 @@ public class Algorithm {
 
   public Mode[] getPossibleModes() {
     return possibleModes;
+  }
+
+  public boolean doesMightNeedAlgorithmParameters() {
+    return mightNeedAlgorithmParameters;
+  }
+
+  public void setMightNeedAlgorithmParameters(
+          boolean mightNeedAlgorithmParameters) {
+    this.mightNeedAlgorithmParameters = mightNeedAlgorithmParameters;
   }
 
   public String getNameForParameterGeneration() {

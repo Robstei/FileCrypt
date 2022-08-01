@@ -7,9 +7,9 @@ import java.util.Arrays;
 
 public class OFB extends Mode {
 
-    public OFB() {
-        super("OFB", "OFB", true, new ArrayList<>(Arrays.asList(
-                new NoPadding()
-        )));
-    }
+  public OFB() {
+    super("OFB", "OFB", new ArrayList<>(Arrays.asList(
+            new NoPadding()
+    )), true, false);
+  }
 }

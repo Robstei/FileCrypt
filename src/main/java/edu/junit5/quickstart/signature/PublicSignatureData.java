@@ -1,6 +1,6 @@
 package edu.junit5.quickstart.signature;
 
-import edu.junit5.quickstart.model.AbstractCryptoData;
+import edu.junit5.quickstart.data.AbstractCryptoData;
 import org.bouncycastle.util.encoders.Hex;
 
 import java.util.HashMap;
@@ -15,7 +15,7 @@ public class PublicSignatureData implements AbstractCryptoData<PublicSignatureDa
   private String algorithm;
   private byte[] signedBytes;
   private byte[] signature;
-  
+
   public PublicSignatureData fill(String algorithm, byte[] signedBytes,
                                   byte[] signature) {
     this.algorithm = algorithm;
