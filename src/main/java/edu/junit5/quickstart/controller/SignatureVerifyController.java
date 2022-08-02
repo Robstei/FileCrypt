@@ -19,6 +19,11 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SignatureException;
 
+/**
+ * The Signature verify controller.
+ *
+ * @author Robin Steil
+ */
 public class SignatureVerifyController {
   private final State state = State.getInstance();
   @FXML

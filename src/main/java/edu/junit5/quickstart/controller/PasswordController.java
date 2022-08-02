@@ -8,6 +8,11 @@ import javafx.util.Pair;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Password controller.
+ *
+ * @author Robin Steil
+ */
 public class PasswordController {
   @FXML
   private ToggleGroup password_direction;

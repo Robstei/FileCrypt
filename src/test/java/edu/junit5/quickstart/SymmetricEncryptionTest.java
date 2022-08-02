@@ -20,7 +20,16 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+/**
+ * The type Symmetric encryption test.
+ */
 public class SymmetricEncryptionTest {
+  /**
+   * Gets known answers aes tests.
+   *
+   * @return the known answers aes tests
+   * @throws IOException the io exception
+   */
   static Stream<AESSingleTest> getKnownAnswersAESTests() throws IOException {
     File file = new File("src/test/resources/knownAnswer/AES");
     ArrayList<AESSingleTest> AESSingleTests = new ArrayList<>();
@@ -35,11 +44,19 @@ public class SymmetricEncryptionTest {
     return AESSingleTests.stream();
   }
 
+  /**
+   * Add provider.
+   */
   @BeforeAll
   static void addProvider() {
     Security.insertProviderAt(new BouncyCastleProvider(), 1);
   }
 
+  /**
+   * Known answers aes.
+   *
+   * @param AESSingleTest the aes single test
+   */
   @ParameterizedTest
   @MethodSource("getKnownAnswersAESTests")
   void knownAnswersAES(AESSingleTest AESSingleTest) {

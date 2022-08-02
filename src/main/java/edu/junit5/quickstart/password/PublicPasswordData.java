@@ -6,18 +6,37 @@ import org.bouncycastle.util.encoders.Hex;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Data container for public password data.
+ *
+ * @author Robin Steil
+ */
 public class PublicPasswordData implements CryptoData<PublicPasswordData> {
 
   private static final String ALGORITHM = "passwordAlgorithm";
+
   private static final String SALT_AS_BYTES = "passwordSalt";
+
   private static final String KEY_LENGTH = "passwordKeyLength";
+
   private static final String[] XMLKeys = {ALGORITHM, SALT_AS_BYTES,
           KEY_LENGTH};
+
   private String algorithm;
+
   private byte[] salt;
+
   private int keyLength;
 
 
+  /**
+   * Fill public password data.
+   *
+   * @param algorithm the algorithm
+   * @param salt      the salt
+   * @param keyLength the key length
+   * @return the public password data
+   */
   public PublicPasswordData fill(String algorithm, byte[] salt, int keyLength) {
     this.algorithm = algorithm;
     this.salt = salt;
@@ -25,14 +44,29 @@ public class PublicPasswordData implements CryptoData<PublicPasswordData> {
     return this;
   }
 
+  /**
+   * Gets the salt.
+   *
+   * @return the salt
+   */
   public byte[] getSalt() {
     return salt;
   }
 
+  /**
+   * Gets algorithm.
+   *
+   * @return the algorithm
+   */
   public String getAlgorithm() {
     return algorithm;
   }
 
+  /**
+   * Gets key length.
+   *
+   * @return the key length
+   */
   public int getKeyLength() {
     return keyLength;
   }

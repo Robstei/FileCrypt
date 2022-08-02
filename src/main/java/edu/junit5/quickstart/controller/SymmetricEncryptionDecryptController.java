@@ -25,6 +25,11 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 
+/**
+ * The Symmetric encryption decrypt controller.
+ *
+ * @author Robin Steil
+ */
 public class SymmetricEncryptionDecryptController {
 
   private final State state = State.getInstance();

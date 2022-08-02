@@ -8,6 +8,11 @@ import javafx.util.Pair;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The Signature controller.
+ *
+ * @author Robin Steil
+ */
 public class SignatureController {
 
   @FXML

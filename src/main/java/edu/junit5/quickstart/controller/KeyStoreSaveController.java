@@ -18,6 +18,11 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.cert.CertificateException;
 
+/**
+ * The type Key store save controller.
+ *
+ * @author Robin Steil
+ */
 public class KeyStoreSaveController {
   private final State state = State.getInstance();
   @FXML

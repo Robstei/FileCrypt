@@ -4,47 +4,145 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 /**
- * The type State.
+ * Singleton representation of the underlying state, which will be used by
+ * the controllers.
  *
  * @author Robin Steil
  */
 public class State {
 
+  /**
+   * The constant state.
+   */
   private static final State state = new State();
+  /**
+   * The Symmetric encryption algorithm.
+   */
   private final StringProperty symmetricEncryptionAlgorithm;
+  /**
+   * The Symmetric encryption mode.
+   */
   private final StringProperty symmetricEncryptionMode;
+  /**
+   * The Symmetric encryption padding.
+   */
   private final StringProperty symmetricEncryptionPadding;
+  /**
+   * The Symmetric encryption key length.
+   */
   private final StringProperty symmetricEncryptionKeyLength;
+  /**
+   * The Symmetric encryption encrypt file path.
+   */
   private final StringProperty symmetricEncryptionEncryptFilePath;
+  /**
+   * The Symmetric encryption decrypt file path.
+   */
   private final StringProperty symmetricEncryptionDecryptFilePath;
+  /**
+   * The Symmetric encryption key file path.
+   */
   private final StringProperty symmetricEncryptionKeyFilePath;
+  /**
+   * The Symmetric encryption validation.
+   */
   private final StringProperty symmetricEncryptionValidation;
+  /**
+   * The Password for encryption.
+   */
   private final StringProperty passwordForEncryption;
+  /**
+   * The Password generation algorithm.
+   */
   private final StringProperty passwordGenerationAlgorithm;
+  /**
+   * The Password encryption algorithm.
+   */
   private final StringProperty passwordEncryptionAlgorithm;
+  /**
+   * The Password encryption mode.
+   */
   private final StringProperty passwordEncryptionMode;
+  /**
+   * The Password encryption padding.
+   */
   private final StringProperty passwordEncryptionPadding;
+  /**
+   * The Password encryption key length.
+   */
   private final StringProperty passwordEncryptionKeyLength;
+  /**
+   * The Password encryption validation.
+   */
   private final StringProperty passwordEncryptionValidation;
+  /**
+   * The Password encryption path.
+   */
   private final StringProperty passwordEncryptionPath;
+  /**
+   * The Password for decryption.
+   */
   private final StringProperty passwordForDecryption;
+  /**
+   * The Password decryption path.
+   */
   private final StringProperty passwordDecryptionPath;
+  /**
+   * The Signature sign algorithm.
+   */
   private final StringProperty signatureSignAlgorithm;
+  /**
+   * The Signature sign file path.
+   */
   private final StringProperty signatureSignFilePath;
+  /**
+   * The Signature verify file path.
+   */
   private final StringProperty signatureVerifyFilePath;
+  /**
+   * The Signature verify key file path.
+   */
   private final StringProperty signatureVerifyKeyFilePath;
+  /**
+   * The Key store save key store file path.
+   */
   private final StringProperty keyStoreSaveKeyStoreFilePath;
+  /**
+   * The Key store save key store password.
+   */
   private final StringProperty keyStoreSaveKeyStorePassword;
+  /**
+   * The Key store save key file path.
+   */
   private final StringProperty keyStoreSaveKeyFilePath;
+  /**
+   * The Key store save key identifier.
+   */
   private final StringProperty keyStoreSaveKeyIdentifier;
+  /**
+   * The Key store save key password.
+   */
   private final StringProperty keyStoreSaveKeyPassword;
-
+  /**
+   * The Key store get key store file path.
+   */
   private final StringProperty keyStoreGetKeyStoreFilePath;
+  /**
+   * The Key store get key store password.
+   */
   private final StringProperty keyStoreGetKeyStorePassword;
+  /**
+   * The Key store get key password.
+   */
   private final StringProperty keyStoreGetKeyPassword;
+  /**
+   * The Key store get key identifier.
+   */
   private final StringProperty keyStoreGetKeyIdentifier;
 
-
+  /**
+   * Instantiates a new State.
+   */
   private State() {
     symmetricEncryptionAlgorithm = new SimpleStringProperty(
             Defaults.symmetricEncryptionAlgorithm);
@@ -97,34 +195,6 @@ public class State {
    */
   public static State getInstance() {
     return state;
-  }
-
-  /**
-   * Gets password generation algorithm.
-   *
-   * @return the password generation algorithm
-   */
-  public String getPasswordGenerationAlgorithm() {
-    return passwordGenerationAlgorithm.get();
-  }
-
-  /**
-   * Sets password generation algorithm.
-   *
-   * @param passwordGenerationAlgorithm the password generation algorithm
-   */
-  public void setPasswordGenerationAlgorithm(
-          String passwordGenerationAlgorithm) {
-    this.passwordGenerationAlgorithm.set(passwordGenerationAlgorithm);
-  }
-
-  /**
-   * Password generation algorithm property string property.
-   *
-   * @return the string property
-   */
-  public StringProperty passwordGenerationAlgorithmProperty() {
-    return passwordGenerationAlgorithm;
   }
 
   /**
@@ -250,18 +320,21 @@ public class State {
   /**
    * Sets symmetric encryption encrypt file path.
    *
-   * @param filePath the file path
+   * @param symmetricEncryptionEncryptFilePath the symmetric encryption
+   *                                           encrypt file path
    */
-  public void setSymmetricEncryptionEncryptFilePath(String filePath) {
-    this.symmetricEncryptionEncryptFilePath.set(filePath);
+  public void setSymmetricEncryptionEncryptFilePath(
+          String symmetricEncryptionEncryptFilePath) {
+    this.symmetricEncryptionEncryptFilePath.set(
+            symmetricEncryptionEncryptFilePath);
   }
 
   /**
-   * File path property string property.
+   * Symmetric encryption encrypt file path property string property.
    *
    * @return the string property
    */
-  public StringProperty filePathProperty() {
+  public StringProperty symmetricEncryptionEncryptFilePathProperty() {
     return symmetricEncryptionEncryptFilePath;
   }
 
@@ -353,35 +426,6 @@ public class State {
   }
 
   /**
-   * Gets password encryption algorithm.
-   *
-   * @return the password encryption algorithm
-   */
-  public String getPasswordEncryptionAlgorithm() {
-    return passwordEncryptionAlgorithm.get();
-  }
-
-  /**
-   * Sets password encryption algorithm.
-   *
-   * @param passwordEncryptionAlgorithm the password encryption algorithm
-   */
-  public void setPasswordEncryptionAlgorithm(
-          String passwordEncryptionAlgorithm) {
-    this.passwordEncryptionAlgorithm.set(
-            passwordEncryptionAlgorithm);
-  }
-
-  /**
-   * Password encryption algorithm property string property.
-   *
-   * @return the string property
-   */
-  public StringProperty passwordEncryptionAlgorithmProperty() {
-    return passwordEncryptionAlgorithm;
-  }
-
-  /**
    * Gets password for encryption.
    *
    * @return the password for encryption
@@ -409,39 +453,59 @@ public class State {
   }
 
   /**
-   * Gets password encryption path.
+   * Gets password generation algorithm.
    *
-   * @return the password encryption path
+   * @return the password generation algorithm
    */
-  public String getPasswordEncryptionPath() {
-    return passwordEncryptionPath.get();
+  public String getPasswordGenerationAlgorithm() {
+    return passwordGenerationAlgorithm.get();
   }
 
   /**
-   * Sets password encryption path.
+   * Sets password generation algorithm.
    *
-   * @param passwordEncryptionPath the password encryption path
+   * @param passwordGenerationAlgorithm the password generation algorithm
    */
-  public void setPasswordEncryptionPath(String passwordEncryptionPath) {
-    this.passwordEncryptionPath.set(passwordEncryptionPath);
+  public void setPasswordGenerationAlgorithm(
+          String passwordGenerationAlgorithm) {
+    this.passwordGenerationAlgorithm.set(passwordGenerationAlgorithm);
   }
 
   /**
-   * Password encryption path property string property.
+   * Password generation algorithm property string property.
    *
    * @return the string property
    */
-  public StringProperty passwordEncryptionPathProperty() {
-    return passwordEncryptionPath;
+  public StringProperty passwordGenerationAlgorithmProperty() {
+    return passwordGenerationAlgorithm;
   }
 
   /**
-   * Symmetric encryption encrypt file path property string property.
+   * Gets password encryption algorithm.
+   *
+   * @return the password encryption algorithm
+   */
+  public String getPasswordEncryptionAlgorithm() {
+    return passwordEncryptionAlgorithm.get();
+  }
+
+  /**
+   * Sets password encryption algorithm.
+   *
+   * @param passwordEncryptionAlgorithm the password encryption algorithm
+   */
+  public void setPasswordEncryptionAlgorithm(
+          String passwordEncryptionAlgorithm) {
+    this.passwordEncryptionAlgorithm.set(passwordEncryptionAlgorithm);
+  }
+
+  /**
+   * Password encryption algorithm property string property.
    *
    * @return the string property
    */
-  public StringProperty symmetricEncryptionEncryptFilePathProperty() {
-    return symmetricEncryptionEncryptFilePath;
+  public StringProperty passwordEncryptionAlgorithmProperty() {
+    return passwordEncryptionAlgorithm;
   }
 
   /**
@@ -500,60 +564,6 @@ public class State {
   }
 
   /**
-   * Gets password for decryption.
-   *
-   * @return the password for decryption
-   */
-  public String getPasswordForDecryption() {
-    return passwordForDecryption.get();
-  }
-
-  /**
-   * Sets password for decryption.
-   *
-   * @param passwordForDecryption the password for decryption
-   */
-  public void setPasswordForDecryption(String passwordForDecryption) {
-    this.passwordForDecryption.set(passwordForDecryption);
-  }
-
-  /**
-   * Password for decryption property string property.
-   *
-   * @return the string property
-   */
-  public StringProperty passwordForDecryptionProperty() {
-    return passwordForDecryption;
-  }
-
-  /**
-   * Gets password decryption path.
-   *
-   * @return the password decryption path
-   */
-  public String getPasswordDecryptionPath() {
-    return passwordDecryptionPath.get();
-  }
-
-  /**
-   * Sets password decryption path.
-   *
-   * @param passwordDecryptionPath the password decryption path
-   */
-  public void setPasswordDecryptionPath(String passwordDecryptionPath) {
-    this.passwordDecryptionPath.set(passwordDecryptionPath);
-  }
-
-  /**
-   * Password decryption path property string property.
-   *
-   * @return the string property
-   */
-  public StringProperty passwordDecryptionPathProperty() {
-    return passwordDecryptionPath;
-  }
-
-  /**
    * Gets password encryption key length.
    *
    * @return the password encryption key length
@@ -607,6 +617,87 @@ public class State {
    */
   public StringProperty passwordEncryptionValidationProperty() {
     return passwordEncryptionValidation;
+  }
+
+  /**
+   * Gets password encryption path.
+   *
+   * @return the password encryption path
+   */
+  public String getPasswordEncryptionPath() {
+    return passwordEncryptionPath.get();
+  }
+
+  /**
+   * Sets password encryption path.
+   *
+   * @param passwordEncryptionPath the password encryption path
+   */
+  public void setPasswordEncryptionPath(String passwordEncryptionPath) {
+    this.passwordEncryptionPath.set(passwordEncryptionPath);
+  }
+
+  /**
+   * Password encryption path property string property.
+   *
+   * @return the string property
+   */
+  public StringProperty passwordEncryptionPathProperty() {
+    return passwordEncryptionPath;
+  }
+
+  /**
+   * Gets password for decryption.
+   *
+   * @return the password for decryption
+   */
+  public String getPasswordForDecryption() {
+    return passwordForDecryption.get();
+  }
+
+  /**
+   * Sets password for decryption.
+   *
+   * @param passwordForDecryption the password for decryption
+   */
+  public void setPasswordForDecryption(String passwordForDecryption) {
+    this.passwordForDecryption.set(passwordForDecryption);
+  }
+
+  /**
+   * Password for decryption property string property.
+   *
+   * @return the string property
+   */
+  public StringProperty passwordForDecryptionProperty() {
+    return passwordForDecryption;
+  }
+
+  /**
+   * Gets password decryption path.
+   *
+   * @return the password decryption path
+   */
+  public String getPasswordDecryptionPath() {
+    return passwordDecryptionPath.get();
+  }
+
+  /**
+   * Sets password decryption path.
+   *
+   * @param passwordDecryptionPath the password decryption path
+   */
+  public void setPasswordDecryptionPath(String passwordDecryptionPath) {
+    this.passwordDecryptionPath.set(passwordDecryptionPath);
+  }
+
+  /**
+   * Password decryption path property string property.
+   *
+   * @return the string property
+   */
+  public StringProperty passwordDecryptionPathProperty() {
+    return passwordDecryptionPath;
   }
 
   /**
@@ -704,7 +795,8 @@ public class State {
    *
    * @param signatureVerifyKeyFilePath the signature verify key file path
    */
-  public void setSignatureVerifyKeyFilePath(String signatureVerifyKeyFilePath) {
+  public void setSignatureVerifyKeyFilePath(
+          String signatureVerifyKeyFilePath) {
     this.signatureVerifyKeyFilePath.set(signatureVerifyKeyFilePath);
   }
 
@@ -884,6 +976,34 @@ public class State {
   }
 
   /**
+   * Gets key store get key store password.
+   *
+   * @return the key store get key store password
+   */
+  public String getKeyStoreGetKeyStorePassword() {
+    return keyStoreGetKeyStorePassword.get();
+  }
+
+  /**
+   * Sets key store get key store password.
+   *
+   * @param keyStoreGetKeyStorePassword the key store get key store password
+   */
+  public void setKeyStoreGetKeyStorePassword(
+          String keyStoreGetKeyStorePassword) {
+    this.keyStoreGetKeyStorePassword.set(keyStoreGetKeyStorePassword);
+  }
+
+  /**
+   * Key store get key store password property string property.
+   *
+   * @return the string property
+   */
+  public StringProperty keyStoreGetKeyStorePasswordProperty() {
+    return keyStoreGetKeyStorePassword;
+  }
+
+  /**
    * Gets key store get key password.
    *
    * @return the key store get key password
@@ -924,7 +1044,8 @@ public class State {
    *
    * @param keyStoreGetKeyIdentifier the key store get key identifier
    */
-  public void setKeyStoreGetKeyIdentifier(String keyStoreGetKeyIdentifier) {
+  public void setKeyStoreGetKeyIdentifier(
+          String keyStoreGetKeyIdentifier) {
     this.keyStoreGetKeyIdentifier.set(keyStoreGetKeyIdentifier);
   }
 
@@ -937,31 +1058,4 @@ public class State {
     return keyStoreGetKeyIdentifier;
   }
 
-  /**
-   * Gets key store get key store password.
-   *
-   * @return the key store get key store password
-   */
-  public String getKeyStoreGetKeyStorePassword() {
-    return keyStoreGetKeyStorePassword.get();
-  }
-
-  /**
-   * Sets key store get key store password.
-   *
-   * @param keyStoreGetKeyStorePassword the key store get key store password
-   */
-  public void setKeyStoreGetKeyStorePassword(
-          String keyStoreGetKeyStorePassword) {
-    this.keyStoreGetKeyStorePassword.set(keyStoreGetKeyStorePassword);
-  }
-
-  /**
-   * Key store get key store password property string property.
-   *
-   * @return the string property
-   */
-  public StringProperty keyStoreGetKeyStorePasswordProperty() {
-    return keyStoreGetKeyStorePassword;
-  }
 }

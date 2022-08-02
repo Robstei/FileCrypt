@@ -8,6 +8,11 @@ import javafx.util.Pair;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The Symmetric encryption controller.
+ *
+ * @author Robin Steil
+ */
 public class SymmetricEncryptionController {
   @FXML
   private ToggleGroup encryption_function;

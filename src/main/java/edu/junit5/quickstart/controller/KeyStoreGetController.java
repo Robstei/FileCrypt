@@ -19,7 +19,11 @@ import java.security.NoSuchProviderException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 
-
+/**
+ * The type Key store get controller.
+ *
+ * @author Robin Steil
+ */
 public class KeyStoreGetController {
 
   private final State state = State.getInstance();
@@ -36,6 +40,9 @@ public class KeyStoreGetController {
   @FXML
   private Button keyStoreSaveButton;
 
+  /**
+   * Initialize.
+   */
   @FXML
   public void initialize() {
     keyStoreGetKeyStoreFilePathLabel.textProperty().bind(

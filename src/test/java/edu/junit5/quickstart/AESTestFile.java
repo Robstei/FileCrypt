@@ -8,11 +8,20 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * The type Aes test file.
+ */
 public class AESTestFile {
 
   private final ArrayList<AESSingleTest> AESSingleTests = new ArrayList<>();
   private String mode;
 
+  /**
+   * Instantiates a new Aes test file.
+   *
+   * @param path the path
+   * @throws IOException the io exception
+   */
   public AESTestFile(String path) throws IOException {
     setTestValues(path);
   }
@@ -76,6 +85,11 @@ public class AESTestFile {
     }
   }
 
+  /**
+   * Gets aes single tests.
+   *
+   * @return the aes single tests
+   */
   public ArrayList<AESSingleTest> getAESSingleTests() {
     return AESSingleTests;
   }

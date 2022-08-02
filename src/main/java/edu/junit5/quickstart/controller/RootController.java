@@ -9,6 +9,11 @@ import javafx.scene.layout.VBox;
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * The Root controller.
+ *
+ * @author Robin Steil
+ */
 public class RootController {
 
   @FXML

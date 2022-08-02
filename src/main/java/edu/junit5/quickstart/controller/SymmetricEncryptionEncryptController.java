@@ -29,6 +29,11 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.util.ArrayList;
 
+/**
+ * The Symmetric encryption encrypt controller.
+ *
+ * @author Robin Steil
+ */
 public class SymmetricEncryptionEncryptController {
 
   private final State state = State.getInstance();
@@ -80,7 +85,7 @@ public class SymmetricEncryptionEncryptController {
     ControllerUtil.bindToggleGroupToProperty(encryption_validation,
                                              state.symmetricEncryptionValidationProperty());
     encryptFilePathLabel.textProperty().bind(
-            state.filePathProperty());
+            state.symmetricEncryptionEncryptFilePathProperty());
     encryption_mode.selectedToggleProperty().addListener((observableValue,
                                                           oldValue,
                                                           newValue) -> updateValidPaddings(

@@ -50,6 +50,15 @@ public class SymmetricEncryptionModel {
    * a key.
    *
    * @param publicPreEncryptionData the public pre encryption data
+   * @throws NoSuchAlgorithmException           the no such algorithm exception
+   * @throws IOException                        the io exception
+   * @throws NoSuchProviderException            the no such provider exception
+   * @throws InvalidAlgorithmParameterException the invalid algorithm
+   *                                            parameter exception
+   * @throws NoSuchPaddingException             the no such padding exception
+   * @throws IllegalBlockSizeException          the illegal block size exception
+   * @throws BadPaddingException                the bad padding exception
+   * @throws InvalidKeyException                the invalid key exception
    */
   public void manageSymmetricEncryption(
           PublicPreEncryptionData publicPreEncryptionData) throws NoSuchAlgorithmException, IOException, NoSuchProviderException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
@@ -61,9 +70,15 @@ public class SymmetricEncryptionModel {
    *
    * @param publicPreEncryptionData the public pre encryption data
    * @param providedKey             the provided key
-   * @throws NoSuchAlgorithmException the no such algorithm exception
-   * @throws IOException              the io exception
-   * @throws NoSuchProviderException  the no such provider exception
+   * @throws NoSuchAlgorithmException           the no such algorithm exception
+   * @throws IOException                        the io exception
+   * @throws NoSuchProviderException            the no such provider exception
+   * @throws InvalidAlgorithmParameterException the invalid algorithm
+   *                                            parameter exception
+   * @throws NoSuchPaddingException             the no such padding exception
+   * @throws IllegalBlockSizeException          the illegal block size exception
+   * @throws BadPaddingException                the bad padding exception
+   * @throws InvalidKeyException                the invalid key exception
    */
   public void manageSymmetricEncryption(
           PublicPreEncryptionData publicPreEncryptionData,
@@ -129,7 +144,11 @@ public class SymmetricEncryptionModel {
    */
   public OperationResult manageSymmetricDecryption(
           PublicPostEncryptionData publicPostEncryptionData,
-          SecretEncryptionData secretEncryptionData) throws NoSuchAlgorithmException, IOException, NoSuchProviderException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
+          SecretEncryptionData secretEncryptionData) throws
+          NoSuchAlgorithmException, IOException, NoSuchProviderException,
+          InvalidAlgorithmParameterException, NoSuchPaddingException,
+          IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
+
     String nameForParameterGeneration =
             publicPostEncryptionData.getTransformation().getNameForParameterGeneration();
     AlgorithmParameters algorithmParameters = AlgorithmParameters.getInstance(

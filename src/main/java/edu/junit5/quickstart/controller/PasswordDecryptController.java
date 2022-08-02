@@ -26,6 +26,11 @@ import java.io.IOException;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 
+/**
+ * The type Password decrypt controller.
+ *
+ * @author Robin Steil
+ */
 public class PasswordDecryptController {
   private final State state = State.getInstance();
   @FXML

@@ -35,6 +35,9 @@ public class PasswordModel {
    * @param algorithm the algorithm
    * @param keyLength the key length. use -1 if algorithm dictates key length
    * @return the generated key
+   * @throws NoSuchAlgorithmException the no such algorithm exception
+   * @throws NoSuchProviderException  the no such provider exception
+   * @throws InvalidKeySpecException  the invalid key spec exception
    */
   public Key generateKey(char[] password, String algorithm,
                          int keyLength) throws NoSuchAlgorithmException,
@@ -55,6 +58,8 @@ public class PasswordModel {
    * @param password           the password
    * @param publicPasswordData the public password data
    * @return the generated key
+   * @throws NoSuchAlgorithmException the no such algorithm exception
+   * @throws InvalidKeySpecException  the invalid key spec exception
    */
   public Key generateKey(char[] password,
                          PublicPasswordData publicPasswordData) throws NoSuchAlgorithmException, InvalidKeySpecException {

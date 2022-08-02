@@ -130,12 +130,14 @@ public class KeyStoreHandler {
    * @param passwordForKeyStore the password for key store
    * @param identifier          the identifier
    * @param passwordForKey      the password for key
-   * @throws KeyStoreException         the key store exception
-   * @throws NoSuchProviderException   the no such provider exception
-   * @throws IOException               the io exception
-   * @throws CertificateException      the certificate exception
-   * @throws NoSuchAlgorithmException  the no such algorithm exception
-   * @throws UnrecoverableKeyException the unrecoverable key exception
+   * @throws KeyStoreException            the key store exception
+   * @throws NoSuchProviderException      the no such provider exception
+   * @throws IOException                  the io exception
+   * @throws CertificateException         the certificate exception
+   * @throws NoSuchAlgorithmException     the no such algorithm exception
+   * @throws UnrecoverableKeyException    the unrecoverable key exception
+   * @throws ParserConfigurationException the parser configuration exception
+   * @throws TransformerException         the transformer exception
    */
   public static void createKeyFileFromKeyStore(String pathToKeyStore,
                                                char[] passwordForKeyStore,

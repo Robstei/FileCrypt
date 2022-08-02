@@ -18,6 +18,11 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SignatureException;
 
+/**
+ * The Signature sign controller.
+ *
+ * @author Robin Steil
+ */
 public class SignatureSignController {
   private final State state = State.getInstance();
 

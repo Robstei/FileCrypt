@@ -25,6 +25,11 @@ import java.io.IOException;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 
+/**
+ * The type Password encrypt controller.
+ *
+ * @author Robin Steil
+ */
 public class PasswordEncryptController {
 
   private final State state = State.getInstance();

@@ -33,6 +33,7 @@ public class FileHandler {
    *
    * @param path path of the file
    * @return file with the given path as a byte array
+   * @throws IOException the io exception
    */
   public static byte[] getFileAsByteArray(String path) throws IOException {
     byte[] fileAsBytes;
@@ -47,6 +48,7 @@ public class FileHandler {
    *
    * @param array    the byte array to save as a file
    * @param filePath the path of the new file
+   * @throws IOException the io exception
    */
   public static void saveByteArrayAsFile(byte[] array,
                                          String filePath) throws IOException {
@@ -90,6 +92,9 @@ public class FileHandler {
    * @param dataContainer the data container instance
    * @param path          the path of the XMl file
    * @return the data container instance with values set from the XML file
+   * @throws ParserConfigurationException the parser configuration exception
+   * @throws IOException                  the io exception
+   * @throws SAXException                 the sax exception
    */
   public static <T extends CryptoData<T>> T fillDataContainer(
           T dataContainer,
@@ -115,6 +120,8 @@ public class FileHandler {
    * @param path            the path of the XML file
    * @param cryptoDataArray an array of all crypto data container that are
    *                        supposed to be saved in the file
+   * @throws ParserConfigurationException the parser configuration exception
+   * @throws TransformerException         the transformer exception
    */
   public static void saveDataToXMLFile(String path,
                                        CryptoData<?
