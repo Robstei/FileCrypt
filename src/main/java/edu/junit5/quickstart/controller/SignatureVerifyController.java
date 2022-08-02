@@ -9,11 +9,18 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.SignatureException;
 
 public class SignatureVerifyController {
-  State state = State.getInstance();
+  private final State state = State.getInstance();
   @FXML
   private Label signatureVerifyFilePathLabel;
   @FXML
@@ -59,19 +66,25 @@ public class SignatureVerifyController {
 
   @FXML
   private void verify() {
-    SignatureModel signatureModel = new SignatureModel();
-    PublicSignatureData publicSignatureData =
-            FileHandler.fillDataContainer(new PublicSignatureData(),
-                                          state.getSignatureVerifyFilePath());
-    PublicSignatureKeyData publicSignatureKeyData =
-            FileHandler.fillDataContainer(new PublicSignatureKeyData(),
-                                          state.getSignatureVerifyKeyFilePath());
-    boolean verified = signatureModel.verify(publicSignatureData,
-                                             publicSignatureKeyData);
-    if (verified) {
-      FileHandler.saveByteArrayAsFile(publicSignatureData.getSignedBytes(),
-                                      state.getSignatureVerifyFilePath() +
-                                              ".verified");
+    try {
+      SignatureModel signatureModel = new SignatureModel();
+      PublicSignatureData publicSignatureData =
+              FileHandler.fillDataContainer(new PublicSignatureData(),
+                                            state.getSignatureVerifyFilePath());
+      PublicSignatureKeyData publicSignatureKeyData =
+              FileHandler.fillDataContainer(new PublicSignatureKeyData(),
+                                            state.getSignatureVerifyKeyFilePath());
+      boolean verified = signatureModel.verify(publicSignatureData,
+                                               publicSignatureKeyData);
+      if (verified) {
+        FileHandler.saveByteArrayAsFile(publicSignatureData.getSignedBytes(),
+                                        state.getSignatureVerifyFilePath() +
+                                                ".verified");
+      }
+    } catch (ParserConfigurationException | IOException |
+             NoSuchAlgorithmException | SignatureException |
+             NoSuchProviderException | InvalidKeyException | SAXException e) {
+      throw new RuntimeException(e);
     }
   }
 }

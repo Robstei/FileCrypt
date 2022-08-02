@@ -12,10 +12,14 @@ import javafx.util.Pair;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
- * @author Robin STeil
+ * This class offers static utility methods for controllers.
+ *
+ * @author Robin Steil
  */
 public class ControllerUtil {
 
@@ -24,8 +28,8 @@ public class ControllerUtil {
    * bound directly
    *
    * @param toggleGroup ToggleGroup that should change the value of
-   *                    property in the modal and should change on value
-   *                    changes in the model
+   *                    property in the state and should change on value
+   *                    changes in the state
    * @param property    Property that represents the current UI State. Will
    *                    change based on ToggleGroup change
    */
@@ -54,10 +58,19 @@ public class ControllerUtil {
     );
   }
 
+  /**
+   * Bind views to toggle options. The pane will change element at
+   * indexToChange if the User selects a different Option from the ToggleGroup
+   *
+   * @param toggleGroup     the toggle group
+   * @param parentContainer the parent container
+   * @param indexToChange   the index to change
+   * @param pairArray       the pair array that maps Strings to fxml files
+   */
   public static void bindViewsToToggleOptions(ToggleGroup toggleGroup,
                                               Pane parentContainer,
                                               int indexToChange,
-                                              Pair<String, String>[] pairArray) {
+                                              List<Pair<String, String>> pairArray) {
     toggleGroup.selectedToggleProperty().addListener(
             (observableValue, oldToggle, newToggle) -> {
               if (newToggle == null) {
@@ -72,7 +85,11 @@ public class ControllerUtil {
                 if (pair.getKey().equals(newChildKey)) {
                   try {
                     newChild = FXMLLoader.load(
-                            ControllerUtil.class.getResource(pair.getValue()));
+                            Objects.requireNonNull(
+                                    ControllerUtil.class.getResource(
+                                            pair.getValue()),
+                                    "File " + pair.getValue() + " could not " +
+                                            "be loaded"));
                   } catch (IOException e) {
                     throw new RuntimeException(e);
                   }
@@ -87,6 +104,9 @@ public class ControllerUtil {
             });
   }
 
+  /**
+   * Show error modal.
+   */
   public static void showErrorModal() {
     Stage stage = new Stage();
     stage.initModality(Modality.APPLICATION_MODAL);

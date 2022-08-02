@@ -1,12 +1,12 @@
 package edu.junit5.quickstart.password;
 
-import edu.junit5.quickstart.data.AbstractCryptoData;
+import edu.junit5.quickstart.data.CryptoData;
 import org.bouncycastle.util.encoders.Hex;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class PublicPasswordData implements AbstractCryptoData<PublicPasswordData> {
+public class PublicPasswordData implements CryptoData<PublicPasswordData> {
 
   private static final String ALGORITHM = "passwordAlgorithm";
   private static final String SALT_AS_BYTES = "passwordSalt";

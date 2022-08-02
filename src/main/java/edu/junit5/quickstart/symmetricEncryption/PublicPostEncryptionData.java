@@ -1,13 +1,18 @@
 package edu.junit5.quickstart.symmetricEncryption;
 
-import edu.junit5.quickstart.data.AbstractCryptoData;
+import edu.junit5.quickstart.data.CryptoData;
 import edu.junit5.quickstart.data.Transformation;
 import org.bouncycastle.util.encoders.Hex;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class PublicPostEncryptionData implements AbstractCryptoData<PublicPostEncryptionData> {
+/**
+ * Data container for public post encryption data.
+ *
+ * @author Robin Steil
+ */
+public class PublicPostEncryptionData implements CryptoData<PublicPostEncryptionData> {
 
   private static final String ENCRYPTED_BYTES = "encryptionEncryptedBytes";
   private static final String ALGORITHM = "encryptionAlgorithm";
@@ -23,6 +28,14 @@ public class PublicPostEncryptionData implements AbstractCryptoData<PublicPostEn
   private String padding;
   private byte[] algorithmParametersAsBytes;
 
+  /**
+   * Sets member with the given parameter
+   *
+   * @param encryptedBytes             the encrypted bytes
+   * @param transformation             the transformation
+   * @param algorithmParametersAsBytes the algorithm parameters as bytes
+   * @return the public post encryption data
+   */
   public PublicPostEncryptionData fill(byte[] encryptedBytes,
                                        Transformation transformation,
                                        byte[] algorithmParametersAsBytes) {
@@ -59,26 +72,56 @@ public class PublicPostEncryptionData implements AbstractCryptoData<PublicPostEn
     return map;
   }
 
+  /**
+   * Get encrypted bytes as array.
+   *
+   * @return tencrypted bytes as array
+   */
   public byte[] getEncryptedBytes() {
     return encryptedBytes;
   }
 
+  /**
+   * Gets algorithm.
+   *
+   * @return the algorithm
+   */
   public String getAlgorithm() {
     return algorithm;
   }
 
+  /**
+   * Gets mode.
+   *
+   * @return the mode
+   */
   public String getMode() {
     return mode;
   }
 
+  /**
+   * Gets padding.
+   *
+   * @return the padding
+   */
   public String getPadding() {
     return padding;
   }
 
+  /**
+   * Gets transformation.
+   *
+   * @return the transformation
+   */
   public Transformation getTransformation() {
     return new Transformation(algorithm, mode, padding);
   }
 
+  /**
+   * Get algorithm parameters as byte array.
+   *
+   * @return algorithm parameters as byte array
+   */
   public byte[] getAlgorithmParametersAsBytes() {
     return algorithmParametersAsBytes;
   }

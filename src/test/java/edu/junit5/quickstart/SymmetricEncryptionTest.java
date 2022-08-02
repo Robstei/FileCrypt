@@ -9,36 +9,30 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
+import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.File;
 import java.io.IOException;
-import java.security.AlgorithmParameters;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.Security;
+import java.security.*;
 import java.security.spec.InvalidParameterSpecException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 public class SymmetricEncryptionTest {
   static Stream<AESSingleTest> getKnownAnswersAESTests() throws IOException {
     File file = new File("src/test/resources/knownAnswer/AES");
     ArrayList<AESSingleTest> AESSingleTests = new ArrayList<>();
-    for (String fileName : file.list()) {
+    for (String fileName : Objects.requireNonNull(file.list(),
+                                                  "no test for AES found in " +
+                                                          "src/test/resources" +
+                                                          "/knownAnswer/AES")) {
       AESTestFile AESTestfile = new AESTestFile("src/test/resources" +
                                                         "/knownAnswer/AES/" + fileName);
       AESSingleTests.addAll(AESTestfile.getAESSingleTests());
     }
-    /**
-     for (int i = 0; i < 1; i++) {
-     AESSingleTests.remove(1);
-     }
-     */
     return AESSingleTests.stream();
-
   }
 
   @BeforeAll
@@ -46,21 +40,6 @@ public class SymmetricEncryptionTest {
     Security.insertProviderAt(new BouncyCastleProvider(), 1);
   }
 
-  //    @Test
-//    void simpleFunctionality() {
-//        Model model = Model.getInstance();
-//        byte[] plaintext = Hex.decode("f34481ec3cc627bacd5dc3fb08f273e6");
-//        byte[] keyBytes = Hex.decode("00000000000000000000000000000000");
-//        String ivString = "00000000000000000000000000000000";
-//        SecretKey key = new SecretKeySpec(keyBytes, "AES");
-//        byte[] encryptedData = model.encryptSymmetric(plaintext, "AES", "CBC"
-//                , "NoPadding", key, ivString);
-//
-//        byte[] supposedResult = Hex.decode
-//        ("0336763e966d92595a567cc9ce537f5e");
-//        assertArrayEquals(encryptedData, supposedResult);
-//    }
-//
   @ParameterizedTest
   @MethodSource("getKnownAnswersAESTests")
   void knownAnswersAES(AESSingleTest AESSingleTest) {
@@ -130,7 +109,9 @@ public class SymmetricEncryptionTest {
         Assertions.assertArrayEquals(supposedResult, decryptedData);
       }
     } catch (NoSuchAlgorithmException | NoSuchProviderException |
-             InvalidParameterSpecException e) {
+             InvalidParameterSpecException | NoSuchPaddingException |
+             IllegalBlockSizeException | BadPaddingException |
+             InvalidKeyException | InvalidAlgorithmParameterException e) {
       throw new RuntimeException(e);
     }
   }

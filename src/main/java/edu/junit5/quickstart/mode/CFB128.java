@@ -7,7 +7,16 @@ import edu.junit5.quickstart.padding.ZeroBytePadding;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Representation of CFB128 mode
+ *
+ * @author Robin Steil
+ */
 public class CFB128 extends Mode {
+
+  /**
+   * Instantiates CFB128 with its properties for later lockups
+   */
   public CFB128() {
     super("CFB128",
           "CFB128",

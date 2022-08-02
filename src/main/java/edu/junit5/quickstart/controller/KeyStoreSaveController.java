@@ -19,8 +19,7 @@ import java.security.NoSuchProviderException;
 import java.security.cert.CertificateException;
 
 public class KeyStoreSaveController {
-  State state = State.getInstance();
-
+  private final State state = State.getInstance();
   @FXML
   private Label keyStoreSaveKeyStoreFilePathLabel;
   @FXML
@@ -84,19 +83,9 @@ public class KeyStoreSaveController {
                                         state.getKeyStoreSaveKeyFilePath(),
                                         state.getKeyStoreSaveKeyIdentifier(),
                                         state.getKeyStoreSaveKeyPassword().toCharArray());
-    } catch (KeyStoreException e) {
-      throw new RuntimeException(e);
-    } catch (NoSuchProviderException e) {
-      throw new RuntimeException(e);
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    } catch (CertificateException e) {
-      throw new RuntimeException(e);
-    } catch (NoSuchAlgorithmException e) {
-      throw new RuntimeException(e);
-    } catch (ParserConfigurationException e) {
-      throw new RuntimeException(e);
-    } catch (SAXException e) {
+    } catch (KeyStoreException | NoSuchProviderException | IOException |
+             CertificateException | NoSuchAlgorithmException |
+             ParserConfigurationException | SAXException e) {
       throw new RuntimeException(e);
     }
   }

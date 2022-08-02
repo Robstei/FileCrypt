@@ -11,17 +11,27 @@ import edu.junit5.quickstart.symmetricEncryption.SecretEncryptionData;
 import edu.junit5.quickstart.symmetricEncryption.SymmetricEncryptionModel;
 import edu.junit5.quickstart.validation.PublicValidationData;
 import edu.junit5.quickstart.validation.SecretValidationData;
-import edu.junit5.quickstart.validation.Validator;
+import edu.junit5.quickstart.validation.ValidationModal;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.io.File;
+import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.util.ArrayList;
 
 public class SymmetricEncryptionEncryptController {
 
-  State state = State.getInstance();
+  private final State state = State.getInstance();
   @FXML
   private Label encryptFilePathLabel;
   @FXML
@@ -73,9 +83,8 @@ public class SymmetricEncryptionEncryptController {
             state.filePathProperty());
     encryption_mode.selectedToggleProperty().addListener((observableValue,
                                                           oldValue,
-                                                          newValue) -> {
-      updateValidPaddings((String) newValue.getUserData());
-    });
+                                                          newValue) -> updateValidPaddings(
+            (String) newValue.getUserData()));
 
     String mode =
             state.getSymmetricEncryptionMode();
@@ -96,7 +105,7 @@ public class SymmetricEncryptionEncryptController {
     ArrayList<String> validPaddingNames =
             modes.getModeByName(mode).getValidPaddingNames();
     for (Toggle toggle : encryption_padding.getToggles()) {
-      if (validPaddingNames.contains(toggle.getUserData())) {
+      if (validPaddingNames.contains((String) toggle.getUserData())) {
         ((RadioButton) toggle).setDisable(false);
         if (validPaddingNames.size() == 1) {
           toggle.setSelected(true);
@@ -122,49 +131,53 @@ public class SymmetricEncryptionEncryptController {
 
   @FXML
   private void encrypt() {
-    byte[] fileAsByteArray =
-            FileHandler.getFileAsByteArray(
-                    state.getSymmetricEncryptionEncryptFilePath());
+    try {
+      byte[] fileAsByteArray = FileHandler.getFileAsByteArray(
+              state.getSymmetricEncryptionEncryptFilePath());
+      Transformation transformation =
+              new Transformation(
+                      state.getSymmetricEncryptionAlgorithm(),
+                      state.getSymmetricEncryptionMode(),
+                      state.getSymmetricEncryptionPadding());
 
-    Transformation transformation =
-            new Transformation(
-                    state.getSymmetricEncryptionAlgorithm(),
-                    state.getSymmetricEncryptionMode(),
-                    state.getSymmetricEncryptionPadding());
+      int keySize = Integer.parseInt(state.getSymmetricEncryptionKeyLength());
 
-    int keySize = Integer.valueOf(state.getSymmetricEncryptionKeyLength());
-    String symmetricEncryptionValidation =
-            state.getSymmetricEncryptionValidation();
+      SymmetricEncryptionModel symmetricEncryptionModel =
+              new SymmetricEncryptionModel();
+      symmetricEncryptionModel.manageSymmetricEncryption(
+              new PublicPreEncryptionData(fileAsByteArray, transformation,
+                                          keySize));
 
-    SymmetricEncryptionModel symmetricEncryptionModel =
-            new SymmetricEncryptionModel();
-    symmetricEncryptionModel.manageSymmetricEncryption(
-            new PublicPreEncryptionData(fileAsByteArray, transformation,
-                                        keySize));
+      byte[] encryptedBytes = symmetricEncryptionModel.getResult();
+      PublicPostEncryptionData publicPostEncryptionData =
+              symmetricEncryptionModel.getPublicEncryptionData();
+      SecretEncryptionData secretEncryptionData =
+              symmetricEncryptionModel.getSecretEncryptionData();
 
-    byte[] encryptedBytes = symmetricEncryptionModel.getResult();
-    PublicPostEncryptionData publicPostEncryptionData =
-            symmetricEncryptionModel.getPublicEncryptionData();
-    SecretEncryptionData secretEncryptionData =
-            symmetricEncryptionModel.getSecretEncryptionData();
+      ValidationModal validationModal = new ValidationModal();
+      validationModal.generateValidation(encryptedBytes,
+                                         state.getSymmetricEncryptionValidation());
+      PublicValidationData publicValidationData =
+              validationModal.getPublicValidationData();
+      SecretValidationData secretValidationData =
+              validationModal.getSecretValidationData();
 
-    Validator validator = new Validator();
-    validator.generateValidation(encryptedBytes,
-                                 state.getSymmetricEncryptionValidation());
-    PublicValidationData publicValidationData =
-            validator.getPublicValidationData();
-    SecretValidationData secretValidationData =
-            validator.getSecretValidationData();
-
-    FileHandler.saveDataToXMLFile(
-            state.getSymmetricEncryptionEncryptFilePath() + ".encrypted",
-            publicPostEncryptionData,
-            publicValidationData
-    );
-    FileHandler.saveDataToXMLFile(
-            state.getSymmetricEncryptionEncryptFilePath() + ".encryptionkey",
-            secretEncryptionData,
-            secretValidationData
-    );
+      FileHandler.saveDataToXMLFile(
+              state.getSymmetricEncryptionEncryptFilePath() + ".encrypted",
+              publicPostEncryptionData,
+              publicValidationData
+      );
+      FileHandler.saveDataToXMLFile(
+              state.getSymmetricEncryptionEncryptFilePath() + ".encryptionkey",
+              secretEncryptionData,
+              secretValidationData
+      );
+    } catch (IOException | NoSuchAlgorithmException | NoSuchProviderException |
+             InvalidAlgorithmParameterException | NoSuchPaddingException |
+             IllegalBlockSizeException | BadPaddingException |
+             InvalidKeyException | ParserConfigurationException |
+             TransformerException e) {
+      throw new RuntimeException(e);
+    }
   }
 }

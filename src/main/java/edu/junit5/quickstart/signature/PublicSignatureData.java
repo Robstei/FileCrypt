@@ -1,12 +1,17 @@
 package edu.junit5.quickstart.signature;
 
-import edu.junit5.quickstart.data.AbstractCryptoData;
+import edu.junit5.quickstart.data.CryptoData;
 import org.bouncycastle.util.encoders.Hex;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class PublicSignatureData implements AbstractCryptoData<PublicSignatureData> {
+/**
+ * Data container for public signature data.
+ *
+ * @author Robin Steil
+ */
+public class PublicSignatureData implements CryptoData<PublicSignatureData> {
 
   private static final String ALGORITHM = "signatureAlgorithm";
   private static final String SIGNED_BYTES = "signatureSignedBytes";
@@ -16,6 +21,14 @@ public class PublicSignatureData implements AbstractCryptoData<PublicSignatureDa
   private byte[] signedBytes;
   private byte[] signature;
 
+  /**
+   * Sets member with the given parameter
+   *
+   * @param algorithm   the algorithm
+   * @param signedBytes the signed bytes
+   * @param signature   the signature
+   * @return the public signature data
+   */
   public PublicSignatureData fill(String algorithm, byte[] signedBytes,
                                   byte[] signature) {
     this.algorithm = algorithm;
@@ -41,14 +54,29 @@ public class PublicSignatureData implements AbstractCryptoData<PublicSignatureDa
     return map;
   }
 
+  /**
+   * Gets algorithm.
+   *
+   * @return the algorithm
+   */
   public String getAlgorithm() {
     return algorithm;
   }
 
+  /**
+   * Get signed bytes as array.
+   *
+   * @return signed bytes as array
+   */
   public byte[] getSignedBytes() {
     return signedBytes;
   }
 
+  /**
+   * Get signature as bytes array.
+   *
+   * @return signature as bytes array
+   */
   public byte[] getSignature() {
     return signature;
   }

@@ -7,15 +7,46 @@ import edu.junit5.quickstart.validation.SecretValidationData;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.*;
 import java.security.cert.CertificateException;
+import java.util.Objects;
 
+/**
+ * The type Key store handler.
+ *
+ * @author Robin Steil
+ */
 public class KeyStoreHandler {
 
+  /**
+   * Saves key in key store. Checks the file with the path pathToKey for its
+   * content. The format of the file is supposed to be on of the xml formats
+   * of fileCrypt. Might save multiple key in one call because file format
+   * might contain multiple keys. For example the key file for symmetric
+   * encryption contains the mac and the encryption key. Both will be saved
+   * separately.
+   * <p>
+   * Creates new keyStore if providedPathToKeyStore is null in the same
+   * directory as the key is.
+   *
+   * @param providedPathToKeyStore the provided path to key store
+   * @param passwordForKeyStore    the password for key store
+   * @param pathToKey              the path to key
+   * @param identifierForKey       the identifier for key
+   * @param passwordForKey         the password for key
+   * @throws KeyStoreException            the key store exception
+   * @throws NoSuchProviderException      the no such provider exception
+   * @throws IOException                  the io exception
+   * @throws CertificateException         the certificate exception
+   * @throws NoSuchAlgorithmException     the no such algorithm exception
+   * @throws ParserConfigurationException the parser configuration exception
+   * @throws SAXException                 the sax exception
+   */
   public static void saveKeyInKeyStore(String providedPathToKeyStore,
                                        char[] passwordForKeyStore,
                                        String pathToKey,
@@ -81,24 +112,39 @@ public class KeyStoreHandler {
 
 
     String pathToKeyStore;
-    if (providedPathToKeyStore == null) {
-      pathToKeyStore = new File(pathToKey).getParent() + "/keystore.bks";
-    } else {
-      pathToKeyStore = providedPathToKeyStore;
-    }
+    pathToKeyStore = Objects.requireNonNullElse(providedPathToKeyStore,
+                                                new File(
+                                                        pathToKey).getParent() + "/keystore.bks");
     try (FileOutputStream fileOutputStream = new FileOutputStream(
             pathToKeyStore)) {
       keyStore.store(fileOutputStream, passwordForKeyStore);
     }
   }
 
+  /**
+   * Creates key file from key store. key resulting file has a format of a
+   * fileCrypt keyfile and can be used like a regular keyfile for the same
+   * operation.
+   *
+   * @param pathToKeyStore      the path to key store
+   * @param passwordForKeyStore the password for key store
+   * @param identifier          the identifier
+   * @param passwordForKey      the password for key
+   * @throws KeyStoreException         the key store exception
+   * @throws NoSuchProviderException   the no such provider exception
+   * @throws IOException               the io exception
+   * @throws CertificateException      the certificate exception
+   * @throws NoSuchAlgorithmException  the no such algorithm exception
+   * @throws UnrecoverableKeyException the unrecoverable key exception
+   */
   public static void createKeyFileFromKeyStore(String pathToKeyStore,
                                                char[] passwordForKeyStore,
                                                String identifier,
                                                char[] passwordForKey)
           throws KeyStoreException, NoSuchProviderException, IOException,
           CertificateException, NoSuchAlgorithmException,
-          UnrecoverableKeyException {
+          UnrecoverableKeyException, ParserConfigurationException,
+          TransformerException {
 
     KeyStore keystore = KeyStore.getInstance("BCFKS", "BC");
     try (FileInputStream fis = new FileInputStream(

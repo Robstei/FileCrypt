@@ -5,6 +5,9 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 import javafx.util.Pair;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SymmetricEncryptionController {
   @FXML
   private ToggleGroup encryption_function;
@@ -13,10 +16,11 @@ public class SymmetricEncryptionController {
 
   @FXML
   private void initialize() {
-    Pair[] userDataFileNamePairs = {
-            new Pair<>("decrypt", "../SymmetricEncryptionDecrypt.fxml"),
-            new Pair<>("encrypt", "../SymmetricEncryptionEncrypt.fxml")
-    };
+    List<Pair<String, String>> userDataFileNamePairs = new ArrayList<>(
+            List.of(
+                    new Pair<>("decrypt", "../SymmetricEncryptionDecrypt.fxml"),
+                    new Pair<>("encrypt",
+                               "../SymmetricEncryptionEncrypt.fxml")));
     ControllerUtil.bindViewsToToggleOptions(encryption_function,
                                             encryption_function_container, 2,
                                             userDataFileNamePairs);

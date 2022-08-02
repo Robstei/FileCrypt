@@ -11,10 +11,17 @@ import java.security.Key;
 import java.security.Provider;
 import java.security.Security;
 
+/**
+ * The type Test.
+ */
 public class Test {
 
-  ;
-
+  /**
+   * The entry point of application.
+   *
+   * @param args the input arguments
+   * @throws Exception the exception
+   */
   public static void main(String[] args) throws Exception {
 
     Security.insertProviderAt(new BouncyCastleProvider(), 1);

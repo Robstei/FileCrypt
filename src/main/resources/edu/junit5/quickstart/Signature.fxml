@@ -8,39 +8,35 @@
       minWidth="-Infinity" prefHeight="555.0" prefWidth="600.0"
       xmlns="http://javafx.com/javafx/18"
       fx:controller="edu.junit5.quickstart.controller.SignatureController">
-    <children>
-        <Label text="Signature"/>
-        <GridPane>
-            <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                   prefWidth="100.0"/>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                   prefWidth="100.0"/>
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                vgrow="SOMETIMES"/>
-                <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                vgrow="SOMETIMES"/>
-            </rowConstraints>
-            <children>
-                <Label text="Signature Mode"/>
-                <RadioButton mnemonicParsing="false" text="Sign" selected="true"
-                             userData="sign"
-                             GridPane.rowIndex="1">
-                    <toggleGroup>
-                        <ToggleGroup fx:id="signature_direction"/>
-                    </toggleGroup>
-                </RadioButton>
-                <RadioButton mnemonicParsing="false" text="verify"
-                             toggleGroup="$signature_direction"
-                             userData="verify" GridPane.columnIndex="1"
-                             GridPane.rowIndex="1"/>
-            </children>
-        </GridPane>
-        <fx:include source="SignatureSign.fxml"/>
-    </children>
     <padding>
         <Insets left="20.0"/>
     </padding>
+    <Label text="Signature"/>
+    <GridPane>
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
+                               prefWidth="100.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
+                               prefWidth="100.0"/>
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0"
+                            vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0"
+                            vgrow="SOMETIMES"/>
+        </rowConstraints>
+        <Label text="Signature Mode"/>
+        <RadioButton mnemonicParsing="false" text="Sign" selected="true"
+                     userData="sign"
+                     GridPane.rowIndex="1">
+            <toggleGroup>
+                <ToggleGroup fx:id="signature_direction"/>
+            </toggleGroup>
+        </RadioButton>
+        <RadioButton mnemonicParsing="false" text="verify"
+                     toggleGroup="$signature_direction"
+                     userData="verify" GridPane.columnIndex="1"
+                     GridPane.rowIndex="1"/>
+    </GridPane>
+    <fx:include source="SignatureSign.fxml"/>
 </VBox>

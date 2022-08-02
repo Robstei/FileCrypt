@@ -1,7 +1,7 @@
 package edu.junit5.quickstart.signature;
 
 import edu.junit5.quickstart.algorithm.Algorithms;
-import edu.junit5.quickstart.data.AbstractCryptoData;
+import edu.junit5.quickstart.data.CryptoData;
 import org.bouncycastle.util.encoders.Hex;
 
 import java.security.KeyFactory;
@@ -13,7 +13,12 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PublicSignatureKeyData implements AbstractCryptoData<PublicSignatureKeyData> {
+/**
+ * Data container for public signature key data.
+ *
+ * @author Robin Steil
+ */
+public class PublicSignatureKeyData implements CryptoData<PublicSignatureKeyData> {
   private static final String ALGORITHM = "signatureAlgorithm";
   private static final String PUBLIC_KEY_AS_BYTES =
           "signaturePublicKeyAsBytes";
@@ -21,6 +26,13 @@ public class PublicSignatureKeyData implements AbstractCryptoData<PublicSignatur
   private String algorithm;
   private PublicKey publicKey;
 
+  /**
+   * Sets member with the given parameter
+   *
+   * @param algorithm the algorithm
+   * @param publicKey the public key
+   * @return the public signature key data
+   */
   public PublicSignatureKeyData fill(String algorithm, PublicKey publicKey) {
     this.algorithm = algorithm;
     this.publicKey = publicKey;
@@ -54,10 +66,20 @@ public class PublicSignatureKeyData implements AbstractCryptoData<PublicSignatur
     return map;
   }
 
+  /**
+   * Gets algorithm.
+   *
+   * @return the algorithm
+   */
   public String getAlgorithm() {
     return algorithm;
   }
 
+  /**
+   * Gets public key.
+   *
+   * @return the public key
+   */
   public PublicKey getPublicKey() {
     return publicKey;
   }

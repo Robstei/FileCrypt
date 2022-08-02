@@ -1,6 +1,6 @@
 package edu.junit5.quickstart.validation;
 
-import edu.junit5.quickstart.data.AbstractCryptoData;
+import edu.junit5.quickstart.data.CryptoData;
 import org.bouncycastle.util.encoders.Hex;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -8,13 +8,24 @@ import java.security.Key;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SecretValidationData implements AbstractCryptoData<SecretValidationData> {
+/**
+ * Data container for secret validation data.
+ *
+ * @author Robin Steil
+ */
+public class SecretValidationData implements CryptoData<SecretValidationData> {
 
   private static final String ALGORITHM = "validationAlgorithm";
   private static final String KEY_AS_BYTES = "validationKeyAsBytes";
   private static final String[] XMLKeys = {ALGORITHM, KEY_AS_BYTES};
   private Key key;
 
+  /**
+   * Sets member with the given parameter
+   *
+   * @param key the key
+   * @return the secret validation data
+   */
   public SecretValidationData fill(Key key) {
     this.key = key;
     return this;
@@ -36,6 +47,11 @@ public class SecretValidationData implements AbstractCryptoData<SecretValidation
     return map;
   }
 
+  /**
+   * Gets key.
+   *
+   * @return the key
+   */
   public Key getKey() {
     return key;
   }

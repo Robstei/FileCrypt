@@ -5,11 +5,23 @@ import edu.junit5.quickstart.algorithm.Algorithms;
 import edu.junit5.quickstart.mode.Mode;
 import edu.junit5.quickstart.mode.Modes;
 
+/**
+ * Represents a symmetric encryption transformation used by the java JCAJCE
+ *
+ * @author Robin Steil
+ */
 public class Transformation {
   private final String algorithmName;
   private final String modeName;
   private final String paddingName;
 
+  /**
+   * Instantiates a new Transformation.
+   *
+   * @param algorithmName the algorithm name
+   * @param modeName      the mode name
+   * @param paddingName   the padding name
+   */
   public Transformation(String algorithmName, String modeName,
                         String paddingName) {
     this.algorithmName = algorithmName;
@@ -17,18 +29,41 @@ public class Transformation {
     this.paddingName = paddingName;
   }
 
+  /**
+   * Gets algorithm name.
+   *
+   * @return the algorithm name
+   */
   public String getAlgorithmName() {
     return algorithmName;
   }
 
+  /**
+   * Gets mode name.
+   *
+   * @return the mode name
+   */
   public String getModeName() {
     return modeName;
   }
 
+  /**
+   * Gets padding name.
+   *
+   * @return the padding name
+   */
   public String getPaddingName() {
     return paddingName;
   }
 
+
+  /**
+   * Transformations can consist of an algorithm or an algorithm and a mode
+   * or an algorithm, a mode and padding. Does necessary checks and returns
+   * a String representation for further usage with the JCAJCE.
+   *
+   * @return the String representation of the Transformation
+   */
   @Override
   public String toString() {
     String string = algorithmName;
@@ -41,6 +76,13 @@ public class Transformation {
     return string;
   }
 
+  /**
+   * Gets name for parameter generation. Necessary because the name for
+   * parameter generation might differ from the String representation or the
+   * algorithm name.
+   *
+   * @return the name for parameter generation
+   */
   public String getNameForParameterGeneration() {
     Algorithms algorithms = new Algorithms();
     Algorithm algorithm = algorithms.getAlgorithm(algorithmName);

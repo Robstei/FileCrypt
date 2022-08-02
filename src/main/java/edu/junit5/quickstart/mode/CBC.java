@@ -8,7 +8,16 @@ import edu.junit5.quickstart.padding.ZeroBytePadding;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Representation of CBC mode
+ *
+ * @author Robin Steil
+ */
 public class CBC extends Mode {
+
+  /**
+   * Instantiates CBC with its properties for later lockups
+   */
   public CBC() {
     super("CBC", "CBC", new ArrayList<>(Arrays.asList(
             new NoPadding(),

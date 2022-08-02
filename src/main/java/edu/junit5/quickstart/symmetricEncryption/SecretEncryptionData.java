@@ -1,6 +1,6 @@
 package edu.junit5.quickstart.symmetricEncryption;
 
-import edu.junit5.quickstart.data.AbstractCryptoData;
+import edu.junit5.quickstart.data.CryptoData;
 import org.bouncycastle.util.encoders.Hex;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -8,7 +8,12 @@ import java.security.Key;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SecretEncryptionData implements AbstractCryptoData<SecretEncryptionData> {
+/**
+ * Data container for secret encryption data.
+ *
+ * @author Robin Steil
+ */
+public class SecretEncryptionData implements CryptoData<SecretEncryptionData> {
 
   private static final String KEY_AS_BYTES = "encryptionKeyAsBytes";
   private static final String ALGORITHM = "encryptionKeyAlgorithm";
@@ -16,6 +21,12 @@ public class SecretEncryptionData implements AbstractCryptoData<SecretEncryption
   private static final String[] XMLKeys = {KEY_AS_BYTES, ALGORITHM};
   private Key key;
 
+  /**
+   * Sets member with the given parameter
+   *
+   * @param key the key
+   * @return the secret encryption data
+   */
   public SecretEncryptionData fill(Key key) {
     this.key = key;
     return this;
@@ -30,6 +41,11 @@ public class SecretEncryptionData implements AbstractCryptoData<SecretEncryption
     return fill(key);
   }
 
+  /**
+   * Gets key.
+   *
+   * @return the key
+   */
   public Key getKey() {
     return key;
   }

@@ -7,13 +7,23 @@ import edu.junit5.quickstart.symmetricEncryption.SecretEncryptionData;
 import edu.junit5.quickstart.symmetricEncryption.SymmetricEncryptionModel;
 import edu.junit5.quickstart.validation.PublicValidationData;
 import edu.junit5.quickstart.validation.SecretValidationData;
-import edu.junit5.quickstart.validation.Validator;
+import edu.junit5.quickstart.validation.ValidationModal;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
+import org.xml.sax.SAXException;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
+import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 
 public class SymmetricEncryptionDecryptController {
 
@@ -78,35 +88,40 @@ public class SymmetricEncryptionDecryptController {
 
   @FXML
   private void decrypt() {
-    if (!isFormFilledOut()) {
-      return;
-    }
-    PublicPostEncryptionData publicPostEncryptionData =
-            FileHandler.fillDataContainer(new PublicPostEncryptionData(),
-                                          state.getSymmetricEncryptionDecryptFilePath());
-    PublicValidationData publicValidationData =
-            FileHandler.fillDataContainer(new PublicValidationData(),
-                                          state.getSymmetricEncryptionDecryptFilePath());
-    SecretEncryptionData secretEncryptionData =
-            FileHandler.fillDataContainer(new SecretEncryptionData(),
-                                          state.getSymmetricEncryptionKeyFilePath());
-    SecretValidationData secretValidationData =
-            FileHandler.fillDataContainer(new SecretValidationData(),
-                                          state.getSymmetricEncryptionKeyFilePath());
+    try {
+      PublicPostEncryptionData publicPostEncryptionData =
+              FileHandler.fillDataContainer(new PublicPostEncryptionData(),
+                                            state.getSymmetricEncryptionDecryptFilePath());
+      PublicValidationData publicValidationData =
+              FileHandler.fillDataContainer(new PublicValidationData(),
+                                            state.getSymmetricEncryptionDecryptFilePath());
+      SecretEncryptionData secretEncryptionData =
+              FileHandler.fillDataContainer(new SecretEncryptionData(),
+                                            state.getSymmetricEncryptionKeyFilePath());
+      SecretValidationData secretValidationData =
+              FileHandler.fillDataContainer(new SecretValidationData(),
+                                            state.getSymmetricEncryptionKeyFilePath());
 
-    SymmetricEncryptionModel symmetricEncryptionModel =
-            new SymmetricEncryptionModel();
-    Validator validator = new Validator();
-    boolean valid = validator.validate(
-            publicPostEncryptionData.getEncryptedBytes(),
-            publicValidationData,
-            secretValidationData);
-    if (!valid) {
-      return;
+      SymmetricEncryptionModel symmetricEncryptionModel =
+              new SymmetricEncryptionModel();
+      ValidationModal validationModal = new ValidationModal();
+      boolean valid = validationModal.validate(
+              publicPostEncryptionData.getEncryptedBytes(),
+              publicValidationData,
+              secretValidationData);
+      if (!valid) {
+        return;
+      }
+      symmetricEncryptionModel.manageSymmetricDecryption(
+              publicPostEncryptionData,
+              secretEncryptionData);
+      FileHandler.saveByteArrayAsFile(symmetricEncryptionModel.getResult(),
+                                      state.getSymmetricEncryptionDecryptFilePath() + ".decrypted");
+    } catch (InvalidAlgorithmParameterException | NoSuchPaddingException |
+             IllegalBlockSizeException | ParserConfigurationException |
+             IOException | NoSuchAlgorithmException | BadPaddingException |
+             InvalidKeyException | NoSuchProviderException | SAXException e) {
+      throw new RuntimeException(e);
     }
-    symmetricEncryptionModel.manageSymmetricDecryption(publicPostEncryptionData,
-                                                       secretEncryptionData);
-    FileHandler.saveByteArrayAsFile(symmetricEncryptionModel.getResult(),
-                                    state.getSymmetricEncryptionDecryptFilePath() + ".decrypted");
   }
 }

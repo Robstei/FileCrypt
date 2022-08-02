@@ -9,6 +9,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.io.File;
 import java.io.IOException;
 import java.security.KeyStoreException;
@@ -20,7 +22,7 @@ import java.security.cert.CertificateException;
 
 public class KeyStoreGetController {
 
-  State state = State.getInstance();
+  private final State state = State.getInstance();
   @FXML
   private Label keyStoreGetKeyStoreFilePathLabel;
   @FXML
@@ -73,17 +75,10 @@ public class KeyStoreGetController {
               state.getKeyStoreGetKeyIdentifier(),
               state.getKeyStoreGetKeyPassword()
                       .toCharArray());
-    } catch (KeyStoreException e) {
-      throw new RuntimeException(e);
-    } catch (NoSuchProviderException e) {
-      throw new RuntimeException(e);
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    } catch (CertificateException e) {
-      throw new RuntimeException(e);
-    } catch (NoSuchAlgorithmException e) {
-      throw new RuntimeException(e);
-    } catch (UnrecoverableKeyException e) {
+    } catch (KeyStoreException | NoSuchProviderException | IOException |
+             CertificateException | NoSuchAlgorithmException |
+             UnrecoverableKeyException | ParserConfigurationException |
+             TransformerException e) {
       throw new RuntimeException(e);
     }
   }

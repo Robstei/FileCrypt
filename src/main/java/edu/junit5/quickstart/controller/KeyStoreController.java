@@ -5,6 +5,9 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 import javafx.util.Pair;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class KeyStoreController {
 
   @FXML
@@ -15,10 +18,12 @@ public class KeyStoreController {
 
   @FXML
   private void initialize() {
-    Pair[] userDataFileNamePairs = {
-            new Pair<>("save", "../KeyStoreSave.fxml"),
-            new Pair<>("get", "../KeyStoreGet.fxml")
+    List<Pair<String, String>> userDataFileNamePairs = new ArrayList<>(
+            List.of(
+                    new Pair<>("save", "../KeyStoreSave.fxml"),
+                    new Pair<>("get", "../KeyStoreGet.fxml"))) {
     };
+
     ControllerUtil.bindViewsToToggleOptions(keystore_direction,
                                             keystore_function_container, 2,
                                             userDataFileNamePairs);

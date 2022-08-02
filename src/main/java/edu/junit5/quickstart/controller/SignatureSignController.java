@@ -9,10 +9,17 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
 import javafx.stage.FileChooser;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.io.File;
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.SignatureException;
 
 public class SignatureSignController {
-  private State state = State.getInstance();
+  private final State state = State.getInstance();
 
   @FXML
   private ToggleGroup signature_algorithm;
@@ -50,18 +57,25 @@ public class SignatureSignController {
 
   @FXML
   private void sign() {
-    SignatureModel signatureModel = new SignatureModel();
-    signatureModel.generateKeys(state.getSignatureSignAlgorithm());
-    byte[] fileAsBytes = FileHandler.getFileAsByteArray(
-            state.getSignatureSignFilePath());
-    signatureModel.sign(fileAsBytes);
-    FileHandler.saveDataToXMLFile(state.getSignatureSignFilePath() + ".signed",
-                                  signatureModel.getPublicSignatureData());
-    FileHandler.saveDataToXMLFile(
-            state.getSignatureSignFilePath() + ".publicsigkey",
-            signatureModel.getPublicSignatureKeyData());
-    FileHandler.saveDataToXMLFile(
-            state.getSignatureSignFilePath() + ".secretsignaturekey",
-            signatureModel.getSecretSignatureKeyData());
+    try {
+      SignatureModel signatureModel = new SignatureModel();
+      signatureModel.generateKeys(state.getSignatureSignAlgorithm());
+      byte[] fileAsBytes = FileHandler.getFileAsByteArray(
+              state.getSignatureSignFilePath());
+      signatureModel.sign(fileAsBytes);
+      FileHandler.saveDataToXMLFile(
+              state.getSignatureSignFilePath() + ".signed",
+              signatureModel.getPublicSignatureData());
+      FileHandler.saveDataToXMLFile(
+              state.getSignatureSignFilePath() + ".publicsigkey",
+              signatureModel.getPublicSignatureKeyData());
+      FileHandler.saveDataToXMLFile(
+              state.getSignatureSignFilePath() + ".secretsignaturekey",
+              signatureModel.getSecretSignatureKeyData());
+    } catch (NoSuchAlgorithmException | IOException | SignatureException |
+             ParserConfigurationException | NoSuchProviderException |
+             InvalidKeyException | TransformerException e) {
+      throw new RuntimeException(e);
+    }
   }
 }

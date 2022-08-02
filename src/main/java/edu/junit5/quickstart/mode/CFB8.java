@@ -7,7 +7,16 @@ import edu.junit5.quickstart.padding.ZeroBytePadding;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Representation of CFB8 mode
+ *
+ * @author Robin Steil
+ */
 public class CFB8 extends Mode {
+
+  /**
+   * Instantiates CFB8 with its properties for later lockups
+   */
   public CFB8() {
     super("CFB8",
           "CFB8",

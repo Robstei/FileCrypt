@@ -5,6 +5,9 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 import javafx.util.Pair;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PasswordController {
   @FXML
   private ToggleGroup password_direction;
@@ -14,10 +17,9 @@ public class PasswordController {
 
   @FXML
   private void initialize() {
-    Pair[] userDataFileNamePairs = {
+    List<Pair<String, String>> userDataFileNamePairs = new ArrayList<>(List.of(
             new Pair<>("decrypt", "../PasswordDecrypt.fxml"),
-            new Pair<>("encrypt", "../PasswordEncrypt.fxml")
-    };
+            new Pair<>("encrypt", "../PasswordEncrypt.fxml")));
     ControllerUtil.bindViewsToToggleOptions(password_direction,
                                             password_function_container, 2,
                                             userDataFileNamePairs);

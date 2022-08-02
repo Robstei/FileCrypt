@@ -7,6 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class RootController {
 
@@ -17,23 +18,27 @@ public class RootController {
   private void changeMainWindow(ActionEvent event) {
     Node targetNode = (Node) event.getTarget();
     String userData = (String) targetNode.getUserData();
-    Node node = null;
+    Node node;
     try {
+      String newFXMLMainWindow = "";
       switch (userData) {
         case "symmetric_encryption":
-          node = FXMLLoader.load(
-                  getClass().getResource("../SymmetricEncryption.fxml"));
+          newFXMLMainWindow = "../SymmetricEncryption.fxml";
           break;
         case "password":
-          node = FXMLLoader.load(getClass().getResource("../Password.fxml"));
+          newFXMLMainWindow = "../Password.fxml";
           break;
         case "signature":
-          node = FXMLLoader.load(getClass().getResource("../Signature.fxml"));
+          newFXMLMainWindow = "../Signature.fxml";
           break;
         case "keystore":
-          node = FXMLLoader.load(getClass().getResource("../KeyStore.fxml"));
+          newFXMLMainWindow = "../KeyStore.fxml";
           break;
       }
+      node = FXMLLoader.load(
+              Objects.requireNonNull(
+                      getClass().getResource(newFXMLMainWindow),
+                      "File " + newFXMLMainWindow + " could no be loaded"));
     } catch (IOException e) {
       throw new RuntimeException(e);
 

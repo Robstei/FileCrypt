@@ -4,12 +4,12 @@ import edu.junit5.quickstart.data.Transformation;
 import org.bouncycastle.util.encoders.Hex;
 
 public class AESSingleTest {
-  private Transformation transformation;
+  private final Transformation transformation;
+  private final String cipherText;
+  private final int encryptOrDecrypt;
   private String plainText;
   private String key;
   private String iv;
-  private String cipherText;
-  private int encryptOrDecrypt;
 
 
   public AESSingleTest(String plainText, Transformation transformation,
@@ -21,10 +21,6 @@ public class AESSingleTest {
     this.iv = iv;
     this.cipherText = cipherText;
     this.encryptOrDecrypt = encryptOrDecrypt;
-  }
-
-  public String getPlainText() {
-    return plainText;
   }
 
   public byte[] getPlainTextAsBytes() {
@@ -52,10 +48,6 @@ public class AESSingleTest {
 
   public void setIv(String iv) {
     this.iv = iv;
-  }
-
-  public String getCipherText() {
-    return cipherText;
   }
 
   public byte[] getCipherTextAsBytes() {

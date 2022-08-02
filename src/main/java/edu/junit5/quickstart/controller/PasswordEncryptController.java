@@ -9,18 +9,25 @@ import edu.junit5.quickstart.symmetricEncryption.PublicPostEncryptionData;
 import edu.junit5.quickstart.symmetricEncryption.PublicPreEncryptionData;
 import edu.junit5.quickstart.symmetricEncryption.SymmetricEncryptionModel;
 import edu.junit5.quickstart.validation.PublicValidationData;
-import edu.junit5.quickstart.validation.Validator;
+import edu.junit5.quickstart.validation.ValidationModal;
 import javafx.beans.binding.BooleanBinding;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.io.File;
-import java.security.Key;
+import java.io.IOException;
+import java.security.*;
+import java.security.spec.InvalidKeySpecException;
 
 public class PasswordEncryptController {
 
-  State state = State.getInstance();
+  private final State state = State.getInstance();
   @FXML
   private Label encryptFilePathLabel;
   @FXML
@@ -123,49 +130,58 @@ public class PasswordEncryptController {
 
   @FXML
   private void encrypt() {
-    String password = state.getPasswordForEncryption();
-    String algorithm = state.getPasswordEncryptionAlgorithm();
-    PasswordModel passwordModel = new PasswordModel();
-    int keyLength;
-    if (state.getPasswordEncryptionKeyLength() == null) {
-      keyLength = -1;
-    } else {
-      keyLength = Integer.parseInt(state.getPasswordEncryptionKeyLength());
+    try {
+      char[] password = state.getPasswordForEncryption().toCharArray();
+      PasswordModel passwordModel = new PasswordModel();
+      int keyLength;
+      if (state.getPasswordEncryptionKeyLength() == null) {
+        keyLength = -1;
+      } else {
+        keyLength = Integer.parseInt(state.getPasswordEncryptionKeyLength());
+      }
+      Key key = passwordModel.generateKey(password,
+                                          state.getPasswordGenerationAlgorithm(),
+                                          keyLength);
+      PublicPasswordData publicPasswordData =
+              passwordModel.getPublicPasswordData();
+
+      byte[] fileAsBytes = FileHandler.getFileAsByteArray(
+              state.getPasswordEncryptionPath());
+
+      Transformation transformation = new Transformation(
+              state.getPasswordEncryptionAlgorithm(),
+              state.getPasswordEncryptionMode(),
+              state.getPasswordEncryptionPadding());
+
+      SymmetricEncryptionModel symmetricEncryptionModel =
+              new SymmetricEncryptionModel();
+
+      symmetricEncryptionModel.manageSymmetricEncryption(
+              new PublicPreEncryptionData(fileAsBytes, transformation, -1),
+              key);
+
+      byte[] encryptedBytes = symmetricEncryptionModel.getResult();
+      PublicPostEncryptionData publicPostEncryptionData =
+              symmetricEncryptionModel.getPublicEncryptionData();
+
+      ValidationModal validationModal = new ValidationModal();
+      validationModal.generateValidation(
+              encryptedBytes, state.getPasswordEncryptionValidation(), key);
+
+      PublicValidationData publicValidationData =
+              validationModal.getPublicValidationData();
+      FileHandler.saveDataToXMLFile(
+              state.getPasswordEncryptionPath() + ".encrypted",
+              publicPostEncryptionData,
+              publicValidationData,
+              publicPasswordData
+      );
+    } catch (NoSuchAlgorithmException | IOException | NoSuchProviderException |
+             InvalidAlgorithmParameterException | NoSuchPaddingException |
+             IllegalBlockSizeException | BadPaddingException |
+             InvalidKeyException | ParserConfigurationException |
+             TransformerException | InvalidKeySpecException e) {
+      throw new RuntimeException(e);
     }
-    Key key = passwordModel.generateKey(password,
-                                        state.getPasswordGenerationAlgorithm(),
-                                        keyLength);
-    PublicPasswordData publicPasswordData =
-            passwordModel.getPublicPasswordData();
-
-    byte[] fileAsBytes = FileHandler.getFileAsByteArray(
-            state.getPasswordEncryptionPath());
-
-    Transformation transformation = new Transformation(
-            state.getPasswordEncryptionAlgorithm(),
-            state.getPasswordEncryptionMode(),
-            state.getPasswordEncryptionPadding());
-
-    SymmetricEncryptionModel symmetricEncryptionModel =
-            new SymmetricEncryptionModel();
-    symmetricEncryptionModel.manageSymmetricEncryption(
-            new PublicPreEncryptionData(fileAsBytes, transformation, -1),
-            key);
-    byte[] encryptedBytes = symmetricEncryptionModel.getResult();
-    PublicPostEncryptionData publicPostEncryptionData =
-            symmetricEncryptionModel.getPublicEncryptionData();
-
-    Validator validator = new Validator();
-    validator.generateValidation(
-            encryptedBytes, state.getPasswordEncryptionValidation(), key);
-
-    PublicValidationData publicValidationData =
-            validator.getPublicValidationData();
-    FileHandler.saveDataToXMLFile(
-            state.getPasswordEncryptionPath() + ".encrypted",
-            publicPostEncryptionData,
-            publicValidationData,
-            publicPasswordData
-    );
   }
 }

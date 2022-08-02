@@ -10,8 +10,7 @@ import java.util.ArrayList;
 
 public class AESTestFile {
 
-  private ArrayList<AESSingleTest> AESSingleTests = new ArrayList<>();
-  private String padding = "NoPadding";
+  private final ArrayList<AESSingleTest> AESSingleTests = new ArrayList<>();
   private String mode;
 
   public AESTestFile(String path) throws IOException {
@@ -40,6 +39,7 @@ public class AESTestFile {
         encryptOrDecrypt = Cipher.DECRYPT_MODE;
       }
 
+      String padding = "NoPadding";
       switch (lineAsArray[0]) {
         case "KEY":
           key = lineAsArray[2];
