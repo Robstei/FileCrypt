@@ -1,5 +1,6 @@
 package edu.junit5.quickstart.controller;
 
+import edu.junit5.quickstart.data.OperationResult;
 import edu.junit5.quickstart.io.FileHandler;
 import edu.junit5.quickstart.signature.SignatureModel;
 import edu.junit5.quickstart.state.State;
@@ -9,14 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
 import javafx.stage.FileChooser;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
 import java.io.File;
-import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.SignatureException;
 
 /**
  * The Signature sign controller.
@@ -77,10 +71,8 @@ public class SignatureSignController {
       FileHandler.saveDataToXMLFile(
               state.getSignatureSignFilePath() + ".secretsignaturekey",
               signatureModel.getSecretSignatureKeyData());
-    } catch (NoSuchAlgorithmException | IOException | SignatureException |
-             ParserConfigurationException | NoSuchProviderException |
-             InvalidKeyException | TransformerException e) {
-      throw new RuntimeException(e);
+    } catch (Exception e) {
+      ControllerUtil.showModal(new OperationResult(false, e.getMessage(), e));
     }
   }
 }

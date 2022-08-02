@@ -1,5 +1,6 @@
 package edu.junit5.quickstart.controller;
 
+import edu.junit5.quickstart.data.OperationResult;
 import edu.junit5.quickstart.io.FileHandler;
 import edu.junit5.quickstart.state.State;
 import edu.junit5.quickstart.symmetricEncryption.PublicPostEncryptionData;
@@ -12,18 +13,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
-import org.xml.sax.SAXException;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
-import java.io.IOException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 
 /**
  * The Symmetric encryption decrypt controller.
@@ -120,13 +111,16 @@ public class SymmetricEncryptionDecryptController {
       symmetricEncryptionModel.manageSymmetricDecryption(
               publicPostEncryptionData,
               secretEncryptionData);
+      String originalFileName =
+              state.getSymmetricEncryptionDecryptFilePath()
+                      .substring(0,
+                                 state.getSymmetricEncryptionDecryptFilePath()
+                                         .lastIndexOf(".encrypted"));
+
       FileHandler.saveByteArrayAsFile(symmetricEncryptionModel.getResult(),
-                                      state.getSymmetricEncryptionDecryptFilePath() + ".decrypted");
-    } catch (InvalidAlgorithmParameterException | NoSuchPaddingException |
-             IllegalBlockSizeException | ParserConfigurationException |
-             IOException | NoSuchAlgorithmException | BadPaddingException |
-             InvalidKeyException | NoSuchProviderException | SAXException e) {
-      throw new RuntimeException(e);
+                                      originalFileName);
+    } catch (Exception e) {
+      ControllerUtil.showModal(new OperationResult(false, e.getMessage(), e));
     }
   }
 }

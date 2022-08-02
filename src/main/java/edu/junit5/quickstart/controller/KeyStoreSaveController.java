@@ -1,5 +1,6 @@
 package edu.junit5.quickstart.controller;
 
+import edu.junit5.quickstart.data.OperationResult;
 import edu.junit5.quickstart.io.KeyStoreHandler;
 import edu.junit5.quickstart.state.State;
 import javafx.fxml.FXML;
@@ -8,15 +9,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
-import java.io.IOException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.cert.CertificateException;
 
 /**
  * The type Key store save controller.
@@ -88,10 +82,8 @@ public class KeyStoreSaveController {
                                         state.getKeyStoreSaveKeyFilePath(),
                                         state.getKeyStoreSaveKeyIdentifier(),
                                         state.getKeyStoreSaveKeyPassword().toCharArray());
-    } catch (KeyStoreException | NoSuchProviderException | IOException |
-             CertificateException | NoSuchAlgorithmException |
-             ParserConfigurationException | SAXException e) {
-      throw new RuntimeException(e);
+    } catch (Exception e) {
+      ControllerUtil.showModal(new OperationResult(false, e.getMessage(), e));
     }
   }
 }

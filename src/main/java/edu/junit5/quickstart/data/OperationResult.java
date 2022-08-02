@@ -8,6 +8,7 @@ package edu.junit5.quickstart.data;
 public class OperationResult {
   private final boolean success;
   private final String message;
+  private final Exception exception;
 
 
   /**
@@ -15,8 +16,7 @@ public class OperationResult {
    * operations, where no message is needed.
    */
   public OperationResult() {
-    this.success = true;
-    this.message = "";
+    this(true, "", null);
   }
 
   /**
@@ -26,8 +26,20 @@ public class OperationResult {
    * @param message the message to show the user
    */
   public OperationResult(boolean success, String message) {
+    this(success, message, null);
+  }
+
+  /**
+   * Instantiates a new Operation result.
+   *
+   * @param success   the success
+   * @param message   the message
+   * @param exception the exception
+   */
+  public OperationResult(boolean success, String message, Exception exception) {
     this.success = success;
     this.message = message;
+    this.exception = exception;
   }
 
 
@@ -47,5 +59,14 @@ public class OperationResult {
    */
   public String getMessage() {
     return message;
+  }
+
+  /**
+   * Gets exception.
+   *
+   * @return the exception
+   */
+  public Exception getException() {
+    return exception;
   }
 }

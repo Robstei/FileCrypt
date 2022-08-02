@@ -1,11 +1,12 @@
 package edu.junit5.quickstart.controller;
 
+import edu.junit5.quickstart.data.OperationResult;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.Toggle;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -105,15 +106,46 @@ public class ControllerUtil {
   }
 
   /**
-   * Show error modal.
+   * Show modal with the message of the operationResult.
+   *
+   * @param operationResult the operation result
    */
-  public static void showErrorModal() {
+  public static void showModal(OperationResult operationResult) {
     Stage stage = new Stage();
     stage.initModality(Modality.APPLICATION_MODAL);
-    //stage.initModality(Modality.WINDOW_MODAL);
-    //stage.initModality(Modality.NONE);
+    stage.setTitle("Result");
+    VBox root = new VBox();
+    Alert.AlertType alertType = operationResult.isSuccess() ?
+            Alert.AlertType.INFORMATION : Alert.AlertType.ERROR;
+    //Label successLabel = new Label(result);
+    //Label messageLabel = new Label(operationResult.getMessage());
+    //root.getChildren().addAll(successLabel, messageLabel);
+    Alert alert = new Alert(alertType);
+    DialogPane dialogPane = alert.getDialogPane();
+    Label operationResultMessage = new Label(operationResult.getMessage());
+    root.getChildren().add(operationResultMessage);
+
+    if (operationResult.getException() != null) {
+
+      Label exceptionDetail = new Label("Full Exception: " +
+                                                operationResult.getException());
+      root.getChildren().add(exceptionDetail);
+
+      StackTraceElement[] stackTraceElements =
+              operationResult.getException().getStackTrace();
+      StringBuilder stringBuilder = new StringBuilder();
+      for (StackTraceElement stackTraceElement : stackTraceElements) {
+        stringBuilder.append(stackTraceElement.toString());
+        stringBuilder.append("\n");
+      }
+      Label operationResultStackTraceLabel = new Label(
+              stringBuilder.toString());
+      ScrollPane scrollPane = new ScrollPane(operationResultStackTraceLabel);
+      dialogPane.setExpandableContent(scrollPane);
+    }
+
+    dialogPane.setContent(root);
+    alert.showAndWait();
     stage.setWidth(600);
-    stage.setHeight(300);
-    stage.showAndWait();
   }
 }

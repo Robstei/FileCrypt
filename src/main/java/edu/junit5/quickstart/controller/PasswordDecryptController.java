@@ -1,5 +1,6 @@
 package edu.junit5.quickstart.controller;
 
+import edu.junit5.quickstart.data.OperationResult;
 import edu.junit5.quickstart.io.FileHandler;
 import edu.junit5.quickstart.password.PasswordModel;
 import edu.junit5.quickstart.password.PublicPasswordData;
@@ -15,16 +16,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.stage.FileChooser;
-import org.xml.sax.SAXException;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
-import java.io.IOException;
-import java.security.*;
-import java.security.spec.InvalidKeySpecException;
+import java.security.Key;
 
 /**
  * The type Password decrypt controller.
@@ -90,7 +84,10 @@ public class PasswordDecryptController {
               publicValidationData,
               secretValidationData);
       if (!valid) {
-        ControllerUtil.showErrorModal();
+        ControllerUtil.showModal(
+                new OperationResult(false,
+                                    "validation failed. data might be " +
+                                            "corrupted"));
         return;
       }
 
@@ -107,12 +104,8 @@ public class PasswordDecryptController {
       FileHandler.saveByteArrayAsFile(symmetricEncryptionModel.getResult(),
                                       state.getPasswordDecryptionPath() +
                                               ".decrypted");
-    } catch (NoSuchAlgorithmException | IOException | NoSuchProviderException |
-             InvalidAlgorithmParameterException | NoSuchPaddingException |
-             IllegalBlockSizeException | BadPaddingException |
-             InvalidKeyException | ParserConfigurationException | SAXException |
-             InvalidKeySpecException e) {
-      throw new RuntimeException(e);
+    } catch (Exception e) {
+      ControllerUtil.showModal(new OperationResult(false, e.getMessage(), e));
     }
   }
 }

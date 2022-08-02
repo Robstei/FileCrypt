@@ -1,5 +1,6 @@
 package edu.junit5.quickstart.controller;
 
+import edu.junit5.quickstart.data.OperationResult;
 import edu.junit5.quickstart.io.FileHandler;
 import edu.junit5.quickstart.signature.PublicSignatureData;
 import edu.junit5.quickstart.signature.PublicSignatureKeyData;
@@ -9,15 +10,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
-import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.SignatureException;
 
 /**
  * The Signature verify controller.
@@ -86,10 +80,8 @@ public class SignatureVerifyController {
                                         state.getSignatureVerifyFilePath() +
                                                 ".verified");
       }
-    } catch (ParserConfigurationException | IOException |
-             NoSuchAlgorithmException | SignatureException |
-             NoSuchProviderException | InvalidKeyException | SAXException e) {
-      throw new RuntimeException(e);
+    } catch (Exception e) {
+      ControllerUtil.showModal(new OperationResult(false, e.getMessage(), e));
     }
   }
 }

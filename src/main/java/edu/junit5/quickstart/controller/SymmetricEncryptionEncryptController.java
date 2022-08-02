@@ -1,5 +1,6 @@
 package edu.junit5.quickstart.controller;
 
+import edu.junit5.quickstart.data.OperationResult;
 import edu.junit5.quickstart.data.Transformation;
 import edu.junit5.quickstart.io.FileHandler;
 import edu.junit5.quickstart.mode.Mode;
@@ -16,17 +17,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
 import java.io.File;
-import java.io.IOException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.util.ArrayList;
 
 /**
@@ -177,12 +168,8 @@ public class SymmetricEncryptionEncryptController {
               secretEncryptionData,
               secretValidationData
       );
-    } catch (IOException | NoSuchAlgorithmException | NoSuchProviderException |
-             InvalidAlgorithmParameterException | NoSuchPaddingException |
-             IllegalBlockSizeException | BadPaddingException |
-             InvalidKeyException | ParserConfigurationException |
-             TransformerException e) {
-      throw new RuntimeException(e);
+    } catch (Exception e) {
+      ControllerUtil.showModal(new OperationResult(false, e.getMessage(), e));
     }
   }
 }
