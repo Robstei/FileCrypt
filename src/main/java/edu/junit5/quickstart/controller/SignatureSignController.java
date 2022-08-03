@@ -8,9 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
-import javafx.stage.FileChooser;
-
-import java.io.File;
+import javafx.util.Pair;
 
 /**
  * The Signature sign controller.
@@ -39,19 +37,16 @@ public class SignatureSignController {
 
     signatureSignButton.disableProperty().bind(
             state.signatureSignAlgorithmProperty().isEmpty().or(
-                    state.signatureVerifyFilePathProperty().isEmpty()));
+                    state.signatureSignFilePathProperty().isEmpty()));
   }
 
   @FXML
   private void selectFileToSign() {
-    FileChooser fileChooser = new FileChooser();
-    fileChooser.setTitle("Select File to Decrypt");
-    File file = fileChooser.showOpenDialog(null);
-
-    if (file != null) {
-      state.setSignatureSignFilePath(
-              file.getPath());
-    }
+    ControllerUtil.setPropertyToFilePath(
+            state.signatureSignFilePathProperty(),
+            "Select File to Sign",
+            new Pair<>("File to sign",
+                       "*"));
   }
 
   @FXML
@@ -62,15 +57,29 @@ public class SignatureSignController {
       byte[] fileAsBytes = FileHandler.getFileAsByteArray(
               state.getSignatureSignFilePath());
       signatureModel.sign(fileAsBytes);
+
+      String signedFilePath = state.getSignatureSignFilePath() + ".signed";
       FileHandler.saveDataToXMLFile(
-              state.getSignatureSignFilePath() + ".signed",
+              signedFilePath,
               signatureModel.getPublicSignatureData());
+
+      String publicSignatureKeyPath = state.getSignatureSignFilePath() +
+              ".publicsignaturekey";
       FileHandler.saveDataToXMLFile(
-              state.getSignatureSignFilePath() + ".publicsigkey",
+              publicSignatureKeyPath,
               signatureModel.getPublicSignatureKeyData());
-      FileHandler.saveDataToXMLFile(
-              state.getSignatureSignFilePath() + ".secretsignaturekey",
-              signatureModel.getSecretSignatureKeyData());
+
+      String privateSignatureKeyPath =
+              state.getSignatureSignFilePath() + ".privatesignaturekey";
+      FileHandler.saveDataToXMLFile(privateSignatureKeyPath,
+                                    signatureModel.getSecretSignatureKeyData());
+
+      ControllerUtil.showModal(new OperationResult(true,
+                                                   "Created signed file at " + signedFilePath + ".\n" +
+                                                           "Created public " +
+                                                           "key file at: " + publicSignatureKeyPath + "\n" +
+                                                           "Created private " +
+                                                           "key file at " + privateSignatureKeyPath));
     } catch (Exception e) {
       ControllerUtil.showModal(new OperationResult(false, e.getMessage(), e));
     }

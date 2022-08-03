@@ -8,9 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.stage.FileChooser;
-
-import java.io.File;
+import javafx.util.Pair;
 
 /**
  * The type Key store save controller.
@@ -54,24 +52,20 @@ public class KeyStoreSaveController {
 
   @FXML
   private void selectKeyStore() {
-    FileChooser fileChooser = new FileChooser();
-    fileChooser.setTitle("Select Key Store");
-    File file = fileChooser.showOpenDialog(null);
-
-    if (file != null) {
-      state.setKeyStoreSaveKeyStoreFilePath(file.getPath());
-    }
+    ControllerUtil.setPropertyToFilePath(
+            state.keyStoreSaveKeyStoreFilePathProperty(),
+            "Select Key Store",
+            new Pair<>("key store (.keystore)",
+                       "*.keystore"));
   }
 
   @FXML
   private void selectKeyToSave() {
-    FileChooser fileChooser = new FileChooser();
-    fileChooser.setTitle("Select Key to Save");
-    File file = fileChooser.showOpenDialog(null);
-
-    if (file != null) {
-      state.setKeyStoreSaveKeyFilePath(file.getPath());
-    }
+    ControllerUtil.setPropertyToFilePath(
+            state.keyStoreSaveKeyFilePathProperty(),
+            "Select Key to Save",
+            new Pair<>("key file",
+                       "*"));
   }
 
   @FXML
@@ -82,6 +76,9 @@ public class KeyStoreSaveController {
                                         state.getKeyStoreSaveKeyFilePath(),
                                         state.getKeyStoreSaveKeyIdentifier(),
                                         state.getKeyStoreSaveKeyPassword().toCharArray());
+      ControllerUtil.showModal(new OperationResult(true,
+                                                   "successfully saved the " +
+                                                           "key from " + state.getKeyStoreSaveKeyFilePath() + " in key store"));
     } catch (Exception e) {
       ControllerUtil.showModal(new OperationResult(false, e.getMessage(), e));
     }

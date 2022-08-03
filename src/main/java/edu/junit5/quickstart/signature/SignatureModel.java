@@ -12,9 +12,6 @@ import java.security.*;
  */
 public class SignatureModel {
 
-  // nist recommends 3072 Bit for 112 bit security Strength
-  // https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r5.pdf
-  private final int DSA_KEY_SIZE_IN_BIT = 3072;
 
   private PublicSignatureData publicSignatureData;
   private PublicSignatureKeyData publicSignatureKeyData;
@@ -36,6 +33,11 @@ public class SignatureModel {
                     algorithm);
     KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(
             nameForParameterGeneration, "BC");
+
+    // nist recommends 3072 Bit for 112 bit security Strength
+    // https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r5.pdf
+    int DSA_KEY_SIZE_IN_BIT = 3072;
+
     keyPairGenerator.initialize(DSA_KEY_SIZE_IN_BIT);
     KeyPair keyPair = keyPairGenerator.generateKeyPair();
     publicSignatureKeyData = new PublicSignatureKeyData().fill(algorithm,
@@ -45,16 +47,19 @@ public class SignatureModel {
   }
 
   /**
-   * Sings the provided bytes and sets the result in the publicSignatureData.
+   * Sings the provided bytes with the provided secret signature data and
+   * sets the result in the publicSignatureData.
    *
-   * @param bytesToSign the bytes to sign
+   * @param bytesToSign            the bytes to sign
+   * @param secretSignatureKeyData the secret signature key data
    * @throws NoSuchAlgorithmException the no such algorithm exception
    * @throws NoSuchProviderException  the no such provider exception
    * @throws InvalidKeyException      the invalid key exception
    * @throws SignatureException       the signature exception
    */
-  public void sign(
-          byte[] bytesToSign) throws NoSuchAlgorithmException,
+  public void sign(byte[] bytesToSign,
+                   SecretSignatureKeyData secretSignatureKeyData)
+          throws NoSuchAlgorithmException,
           NoSuchProviderException, InvalidKeyException, SignatureException {
     Signature signature = Signature.getInstance(
             secretSignatureKeyData.getAlgorithm(), "BC");
@@ -65,6 +70,21 @@ public class SignatureModel {
     publicSignatureData = new PublicSignatureData().fill(
             secretSignatureKeyData.getAlgorithm(), bytesToSign,
             signatureAsBytes);
+  }
+
+  /**
+   * Sings the provided bytes with this instances secret signature data and
+   * sets the result in the publicSignatureData.
+   *
+   * @param bytesToSign the bytes to sign
+   * @throws NoSuchAlgorithmException the no such algorithm exception
+   * @throws NoSuchProviderException  the no such provider exception
+   * @throws InvalidKeyException      the invalid key exception
+   * @throws SignatureException       the signature exception
+   */
+  public void sign(byte[] bytesToSign) throws NoSuchAlgorithmException,
+          NoSuchProviderException, InvalidKeyException, SignatureException {
+    sign(bytesToSign, secretSignatureKeyData);
   }
 
   /**
@@ -81,7 +101,10 @@ public class SignatureModel {
    * @throws SignatureException       the signature exception
    */
   public boolean verify(PublicSignatureData publicSignatureData,
-                        PublicSignatureKeyData publicSignatureKeyData) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeyException, SignatureException {
+                        PublicSignatureKeyData publicSignatureKeyData) throws
+          NoSuchAlgorithmException, NoSuchProviderException,
+          InvalidKeyException, SignatureException {
+
     Signature signature = Signature.getInstance(
             publicSignatureData.getAlgorithm(), "BC");
     signature.initVerify(publicSignatureKeyData.getPublicKey());

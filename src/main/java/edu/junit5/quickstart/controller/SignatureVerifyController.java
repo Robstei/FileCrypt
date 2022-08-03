@@ -9,9 +9,7 @@ import edu.junit5.quickstart.state.State;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.stage.FileChooser;
-
-import java.io.File;
+import javafx.util.Pair;
 
 /**
  * The Signature verify controller.
@@ -42,25 +40,19 @@ public class SignatureVerifyController {
 
   @FXML
   private void selectFileToVerify() {
-    FileChooser fileChooser = new FileChooser();
-    fileChooser.setTitle("Select File to verify");
-    File file = fileChooser.showOpenDialog(null);
-
-    if (file != null) {
-      state.setSignatureVerifyFilePath(
-              file.getPath());
-    }
+    ControllerUtil.setPropertyToFilePath(
+            state.signatureVerifyFilePathProperty(),
+            "Select File to verify",
+            new Pair<>("File to verify (*.signed", "*.signed"));
   }
 
   @FXML
   private void selectKeyFileForSignatureValidation() {
-    FileChooser fileChooser = new FileChooser();
-    fileChooser.setTitle("Select Key File to verify with");
-    File file = fileChooser.showOpenDialog(null);
-    if (file != null) {
-      state.setSignatureVerifyKeyFilePath(
-              file.getPath());
-    }
+    ControllerUtil.setPropertyToFilePath(
+            state.signatureVerifyKeyFilePathProperty(),
+            "Select Key File to verify with",
+            new Pair<>("Key File to verify with (*.publicsignaturekey",
+                       "*.publicsignaturekey"));
   }
 
   @FXML
@@ -76,9 +68,20 @@ public class SignatureVerifyController {
       boolean verified = signatureModel.verify(publicSignatureData,
                                                publicSignatureKeyData);
       if (verified) {
+        String originalFileName = state.getSignatureVerifyFilePath().substring(
+                0, state.getSignatureVerifyFilePath().lastIndexOf(".signed"));
         FileHandler.saveByteArrayAsFile(publicSignatureData.getSignedBytes(),
-                                        state.getSignatureVerifyFilePath() +
-                                                ".verified");
+                                        originalFileName);
+        ControllerUtil.showModal(new OperationResult(true,
+                                                     "Signature is valid. " +
+                                                             "Created " +
+                                                             "original file " +
+                                                             "at " + originalFileName));
+      } else {
+        ControllerUtil.showModal(new OperationResult(false,
+                                                     "Verification of " +
+                                                             "signature " +
+                                                             "failed."));
       }
     } catch (Exception e) {
       ControllerUtil.showModal(new OperationResult(false, e.getMessage(), e));

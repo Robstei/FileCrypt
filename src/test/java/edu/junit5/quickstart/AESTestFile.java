@@ -10,6 +10,8 @@ import java.util.ArrayList;
 
 /**
  * The type Aes test file.
+ *
+ * @author Robin Steil
  */
 public class AESTestFile {
 

@@ -14,7 +14,7 @@ import java.security.NoSuchAlgorithmException;
  * This class handles all functionality in regards generating and verifying
  * validations (digests and MACs).
  */
-public class ValidationModal {
+public class ValidationModel {
 
   private PublicValidationData publicValidationData;
 
@@ -31,7 +31,7 @@ public class ValidationModal {
     result = digest.digest();
     publicValidationData = new PublicValidationData().fill(
             validationName, result);
-    secretValidationData = null;
+    secretValidationData = new SecretValidationData();
   }
 
   private void generateValidationWithMac(byte[] bytesToGenerateValidationFor,
@@ -83,13 +83,18 @@ public class ValidationModal {
   public void generateValidation(
           byte[] bytesToGenerateValidationFor, String validationName,
           Key key) throws NoSuchAlgorithmException, InvalidKeyException {
+
     Validations validations = new Validations();
-    if (validations.getValidationType(
-            validationName) == ValidationType.DIGEST) {
+
+    if (validations.getValidationType(validationName) ==
+            ValidationType.DIGEST) {
+
       generateValidationWithDigest(
               bytesToGenerateValidationFor, validationName);
-    } else if (validations.getValidationType(
-            validationName) == ValidationType.MAC) {
+
+    } else if (validations.getValidationType(validationName) ==
+            ValidationType.MAC) {
+
       generateValidationWithMac(
               bytesToGenerateValidationFor, validationName, key);
     }

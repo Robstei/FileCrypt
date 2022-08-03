@@ -1,6 +1,5 @@
 package edu.junit5.quickstart.symmetricEncryption;
 
-import edu.junit5.quickstart.data.OperationResult;
 import edu.junit5.quickstart.data.Transformation;
 
 import javax.crypto.*;
@@ -32,7 +31,7 @@ public class SymmetricEncryptionModel {
    *
    * @return the public encryption data
    */
-  public PublicPostEncryptionData getPublicEncryptionData() {
+  public PublicPostEncryptionData getPublicPostEncryptionData() {
     return publicPostEncryptionData;
   }
 
@@ -93,7 +92,7 @@ public class SymmetricEncryptionModel {
               KeyGenerator.getInstance(
                       publicPreEncryptionData.getAlgorithm(),
                       "BC");
-      keyGenerator.init(publicPreEncryptionData.getKeySize());
+      keyGenerator.init(publicPreEncryptionData.getKeyLength());
       key = keyGenerator.generateKey();
     }
 
@@ -131,7 +130,6 @@ public class SymmetricEncryptionModel {
    *
    * @param publicPostEncryptionData the public post encryption data
    * @param secretEncryptionData     the secret encryption data
-   * @return the operation result
    * @throws NoSuchAlgorithmException           the no such algorithm exception
    * @throws IOException                        the io exception
    * @throws NoSuchProviderException            the no such provider exception
@@ -142,7 +140,7 @@ public class SymmetricEncryptionModel {
    * @throws BadPaddingException                the bad padding exception
    * @throws InvalidKeyException                the invalid key exception
    */
-  public OperationResult manageSymmetricDecryption(
+  public void manageSymmetricDecryption(
           PublicPostEncryptionData publicPostEncryptionData,
           SecretEncryptionData secretEncryptionData) throws
           NoSuchAlgorithmException, IOException, NoSuchProviderException,
@@ -161,7 +159,6 @@ public class SymmetricEncryptionModel {
             publicPostEncryptionData.getTransformation(),
             secretEncryptionData.getKey(),
             algorithmParameters);
-    return new OperationResult();
   }
 
   /**
@@ -200,7 +197,7 @@ public class SymmetricEncryptionModel {
    * @param transformation      the transformation
    * @param key                 the key
    * @param algorithmParameters the algorithm parameters
-   * @return the byte [ ]
+   * @return the decrypted bytes
    * @throws NoSuchAlgorithmException           the no such algorithm exception
    * @throws NoSuchPaddingException             the no such padding exception
    * @throws InvalidKeyException                the invalid key exception

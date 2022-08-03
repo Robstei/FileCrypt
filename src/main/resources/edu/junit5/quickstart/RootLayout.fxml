@@ -32,65 +32,34 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" prefHeight="600.0" prefWidth="900.0"
-      xmlns="http://javafx.com/javafx/18"
-      fx:controller="edu.junit5.quickstart.controller.RootController">
-    <MenuBar VBox.vgrow="NEVER">
-        <Menu mnemonicParsing="false" text="File">
-            <MenuItem mnemonicParsing="false" text="New"/>
-            <MenuItem mnemonicParsing="false" text="Open…"/>
-            <Menu mnemonicParsing="false" text="Open Recent"/>
-            <SeparatorMenuItem mnemonicParsing="false"/>
-            <MenuItem mnemonicParsing="false" text="Close"/>
-            <MenuItem mnemonicParsing="false" text="Save"/>
-            <MenuItem mnemonicParsing="false" text="Save As…"/>
-            <MenuItem mnemonicParsing="false" text="Revert"/>
-            <SeparatorMenuItem mnemonicParsing="false"/>
-            <MenuItem mnemonicParsing="false" text="Preferences…"/>
-            <SeparatorMenuItem mnemonicParsing="false"/>
-            <MenuItem mnemonicParsing="false" text="Quit"/>
-        </Menu>
-        <Menu mnemonicParsing="false" text="Edit">
-            <MenuItem mnemonicParsing="false" text="Undo"/>
-            <MenuItem mnemonicParsing="false" text="Redo"/>
-            <SeparatorMenuItem mnemonicParsing="false"/>
-            <MenuItem mnemonicParsing="false" text="Cut"/>
-            <MenuItem mnemonicParsing="false" text="Copy"/>
-            <MenuItem mnemonicParsing="false" text="Paste"/>
-            <MenuItem mnemonicParsing="false" text="Delete"/>
-            <SeparatorMenuItem mnemonicParsing="false"/>
-            <MenuItem mnemonicParsing="false" text="Select All"/>
-            <MenuItem mnemonicParsing="false" text="Unselect All"/>
-        </Menu>
-        <Menu mnemonicParsing="false" text="Help">
-            <MenuItem mnemonicParsing="false"
-                      text="About MyHelloApp"/>
-        </Menu>
-    </MenuBar>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.junit5.quickstart.controller.RootController">
     <HBox prefHeight="544.0" prefWidth="900.0">
         <VBox minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0">
-            <Button mnemonicParsing="false"
-                    onAction="#changeMainWindow" prefHeight="100.0"
-                    prefWidth="215.0" text="Symmetric Encryption"
-                    textAlignment="CENTER"
-                    userData="symmetric_encryption"/>
-            <Button mnemonicParsing="false"
-                    onAction="#changeMainWindow" prefHeight="100.0"
-                    prefWidth="215.0" text="Password"
-                    textAlignment="CENTER" userData="password"/>
-            <Button mnemonicParsing="false"
-                    onAction="#changeMainWindow" prefHeight="100.0"
-                    prefWidth="215.0" text="Signatures"
-                    textAlignment="CENTER" userData="signature"/>
-            <Button mnemonicParsing="false"
-                    onAction="#changeMainWindow" prefHeight="100.0"
-                    prefWidth="215.0" text="Keystore"
-                    textAlignment="CENTER" userData="keystore"/>
+         <Label text="FileCrypt">
+            <font>
+               <Font size="30.0" />
+            </font>
+            <VBox.margin>
+               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </VBox.margin>
+         </Label>
+            <Button mnemonicParsing="false" onAction="#changeMainWindow" prefHeight="100.0" prefWidth="215.0" text="Symmetric Encryption" textAlignment="CENTER" userData="symmetric_encryption" />
+            <Button mnemonicParsing="false" onAction="#changeMainWindow" prefHeight="100.0" prefWidth="215.0" text="Password" textAlignment="CENTER" userData="password" />
+            <Button mnemonicParsing="false" onAction="#changeMainWindow" prefHeight="100.0" prefWidth="215.0" text="Signatures" textAlignment="CENTER" userData="signature" />
+            <Button mnemonicParsing="false" onAction="#changeMainWindow" prefHeight="100.0" prefWidth="215.0" text="Keystore" textAlignment="CENTER" userData="keystore" />
         </VBox>
         <VBox fx:id="main_window" prefHeight="200.0" prefWidth="100.0">
-            <fx:include source="SymmetricEncryption.fxml"/>
+            <fx:include source="SymmetricEncryption.fxml" />
+         <HBox.margin>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </HBox.margin>
         </VBox>
     </HBox>
 </VBox>

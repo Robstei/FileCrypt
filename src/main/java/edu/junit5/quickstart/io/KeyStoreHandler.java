@@ -87,7 +87,7 @@ public class KeyStoreHandler {
                       new PublicSignatureKeyData(), pathToKey);
     }
 
-    KeyStore keyStore = KeyStore.getInstance("BCFKS", "BC");
+    KeyStore keyStore = KeyStore.getInstance("BKS", "BC");
 
     if (providedPathToKeyStore == null) {
       keyStore.load(null, null);
@@ -114,7 +114,7 @@ public class KeyStoreHandler {
     String pathToKeyStore;
     pathToKeyStore = Objects.requireNonNullElse(providedPathToKeyStore,
                                                 new File(
-                                                        pathToKey).getParent() + "/keystore.bks");
+                                                        pathToKey).getParent() + "/keystore.keystore");
     try (FileOutputStream fileOutputStream = new FileOutputStream(
             pathToKeyStore)) {
       keyStore.store(fileOutputStream, passwordForKeyStore);
@@ -148,7 +148,7 @@ public class KeyStoreHandler {
           UnrecoverableKeyException, ParserConfigurationException,
           TransformerException {
 
-    KeyStore keystore = KeyStore.getInstance("BCFKS", "BC");
+    KeyStore keystore = KeyStore.getInstance("BKS", "BC");
     try (FileInputStream fis = new FileInputStream(
             pathToKeyStore)) {
       keystore.load(fis, passwordForKeyStore);

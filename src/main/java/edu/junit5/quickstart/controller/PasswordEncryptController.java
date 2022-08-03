@@ -10,13 +10,12 @@ import edu.junit5.quickstart.symmetricEncryption.PublicPostEncryptionData;
 import edu.junit5.quickstart.symmetricEncryption.PublicPreEncryptionData;
 import edu.junit5.quickstart.symmetricEncryption.SymmetricEncryptionModel;
 import edu.junit5.quickstart.validation.PublicValidationData;
-import edu.junit5.quickstart.validation.ValidationModal;
+import edu.junit5.quickstart.validation.ValidationModel;
 import javafx.beans.binding.BooleanBinding;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.stage.FileChooser;
+import javafx.util.Pair;
 
-import java.io.File;
 import java.security.Key;
 
 /**
@@ -118,13 +117,10 @@ public class PasswordEncryptController {
 
   @FXML
   private void selectFileToEncrypt() {
-    FileChooser fileChooser = new FileChooser();
-    fileChooser.setTitle("Select File to Encrypt With Password");
-    File file = fileChooser.showOpenDialog(null);
-
-    if (file != null) {
-      state.setPasswordEncryptionPath(file.getPath());
-    }
+    ControllerUtil.setPropertyToFilePath(
+            state.passwordEncryptionPathProperty(),
+            "Select File to Encrypt with Password",
+            new Pair<>("file to encrpyt", "*"));
   }
 
   @FXML
@@ -161,20 +157,27 @@ public class PasswordEncryptController {
 
       byte[] encryptedBytes = symmetricEncryptionModel.getResult();
       PublicPostEncryptionData publicPostEncryptionData =
-              symmetricEncryptionModel.getPublicEncryptionData();
+              symmetricEncryptionModel.getPublicPostEncryptionData();
 
-      ValidationModal validationModal = new ValidationModal();
-      validationModal.generateValidation(
+      ValidationModel validationModel = new ValidationModel();
+      validationModel.generateValidation(
               encryptedBytes, state.getPasswordEncryptionValidation(), key);
 
       PublicValidationData publicValidationData =
-              validationModal.getPublicValidationData();
-      FileHandler.saveDataToXMLFile(
-              state.getPasswordEncryptionPath() + ".encrypted",
-              publicPostEncryptionData,
-              publicValidationData,
-              publicPasswordData
+              validationModel.getPublicValidationData();
+
+      String encryptedFilePath = state.getPasswordEncryptionPath() +
+              ".encrypted";
+      FileHandler.saveDataToXMLFile(encryptedFilePath,
+                                    publicPostEncryptionData,
+                                    publicValidationData,
+                                    publicPasswordData
       );
+
+      ControllerUtil.showModal(
+              new OperationResult(true,
+                                  "Saved password encrypted file at " +
+                                          encryptedFilePath));
     } catch (Exception e) {
       ControllerUtil.showModal(new OperationResult(false, e.getMessage()));
     }

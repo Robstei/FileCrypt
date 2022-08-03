@@ -19,11 +19,6 @@ import java.security.spec.InvalidKeySpecException;
  */
 public class PasswordModel {
 
-  // recommendation is to have the salt at least at the size of the used
-  // HMAC according to "Java Cryptography: Tools and Techniques"
-  private final int SALT_LENGTH_IN_BYTES = 256;
-  //NIST recommends at least 10.000 iterations. see https://pages.nist.gov/800-63-3/sp800-63b.html
-  private final int ITERATION_COUNT = 10000;
 
   private PublicPasswordData publicPasswordData;
 
@@ -44,7 +39,12 @@ public class PasswordModel {
           NoSuchProviderException, InvalidKeySpecException {
     SecureRandom secureRandom = SecureRandom.getInstance("DEFAULT",
                                                          "BC");
+
+    // recommendation is to have the salt at least at the size of the used
+    // HMAC according to "Java Cryptography: Tools and Techniques"
+    int SALT_LENGTH_IN_BYTES = 256;
     byte[] salt = secureRandom.generateSeed(SALT_LENGTH_IN_BYTES);
+
     PublicPasswordData publicPasswordData = new PublicPasswordData().fill(
             algorithm,
             salt,
@@ -77,6 +77,10 @@ public class PasswordModel {
                                 1,
                                 publicPasswordData.getKeyLength()));
     } else {
+
+
+      //NIST recommends at least 10.000 iterations. see https://pages.nist.gov/800-63-3/sp800-63b.html
+      int ITERATION_COUNT = 10000;
 
       if (publicPasswordData.getKeyLength() > 0) {
         key = secretKeyFactory.generateSecret(

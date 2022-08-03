@@ -1,6 +1,8 @@
 package edu.junit5.quickstart.controller;
 
+import edu.junit5.quickstart.data.FailedValidationOperationResult;
 import edu.junit5.quickstart.data.OperationResult;
+import edu.junit5.quickstart.data.SuccessfulDecryptionOperationResult;
 import edu.junit5.quickstart.io.FileHandler;
 import edu.junit5.quickstart.state.State;
 import edu.junit5.quickstart.symmetricEncryption.PublicPostEncryptionData;
@@ -8,13 +10,11 @@ import edu.junit5.quickstart.symmetricEncryption.SecretEncryptionData;
 import edu.junit5.quickstart.symmetricEncryption.SymmetricEncryptionModel;
 import edu.junit5.quickstart.validation.PublicValidationData;
 import edu.junit5.quickstart.validation.SecretValidationData;
-import edu.junit5.quickstart.validation.ValidationModal;
+import edu.junit5.quickstart.validation.ValidationModel;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.stage.FileChooser;
-
-import java.io.File;
+import javafx.util.Pair;
 
 /**
  * The Symmetric encryption decrypt controller.
@@ -47,39 +47,18 @@ public class SymmetricEncryptionDecryptController {
 
   @FXML
   private void selectFileToDecrypt() {
-    FileChooser fileChooser = new FileChooser();
-    fileChooser.setTitle("Select File to Decrypt");
-    File file = fileChooser.showOpenDialog(null);
-
-    if (file != null) {
-      state.setSymmetricEncryptionDecryptFilePath(
-              file.getPath());
-    }
+    ControllerUtil.setPropertyToFilePath(
+            state.symmetricEncryptionDecryptFilePathProperty(),
+            "Select File to Decrpyt",
+            new Pair<>("encrypted File (.encrypted)", "*.encrypted"));
   }
 
   @FXML
   private void selectKeyFile() {
-    FileChooser fileChooser = new FileChooser();
-    fileChooser.setTitle("Select Key to Decrypt");
-    File file = fileChooser.showOpenDialog(null);
-
-    if (file != null) {
-      state.setSymmetricEncryptionKeyFilePath(
-              file.getPath());
-    }
-  }
-
-  private boolean isFormFilledOut() {
-    boolean formFilledOut = true;
-
-    if (decryptFilePathLabel.getText() == null) {
-      formFilledOut = false;
-    }
-
-    if (keyFilePathLabel.getText() == null) {
-      formFilledOut = false;
-    }
-    return formFilledOut;
+    ControllerUtil.setPropertyToFilePath(
+            state.symmetricEncryptionKeyFilePathProperty(),
+            "Select Key to Decrypt",
+            new Pair<>("keyfile (.encryptionkey)", "*.encryptionkey"));
   }
 
   @FXML
@@ -94,23 +73,37 @@ public class SymmetricEncryptionDecryptController {
       SecretEncryptionData secretEncryptionData =
               FileHandler.fillDataContainer(new SecretEncryptionData(),
                                             state.getSymmetricEncryptionKeyFilePath());
-      SecretValidationData secretValidationData =
-              FileHandler.fillDataContainer(new SecretValidationData(),
-                                            state.getSymmetricEncryptionKeyFilePath());
 
-      SymmetricEncryptionModel symmetricEncryptionModel =
-              new SymmetricEncryptionModel();
-      ValidationModal validationModal = new ValidationModal();
-      boolean valid = validationModal.validate(
+      SecretValidationData secretValidationData =
+              FileHandler.doesXMLFileContainKeys(
+                      new SecretValidationData().getMapKeys(),
+                      state.getSymmetricEncryptionKeyFilePath()) ?
+                      FileHandler.fillDataContainer(
+                              new SecretValidationData(),
+                              state.getSymmetricEncryptionKeyFilePath()) :
+                      new SecretValidationData();
+
+      ValidationModel validationModel = new ValidationModel();
+      boolean valid = validationModel.validate(
               publicPostEncryptionData.getEncryptedBytes(),
               publicValidationData,
               secretValidationData);
+
       if (!valid) {
+        ControllerUtil.showModal(
+                new FailedValidationOperationResult(
+                        publicValidationData.getName()));
         return;
       }
+
+      SymmetricEncryptionModel symmetricEncryptionModel =
+              new SymmetricEncryptionModel();
+
       symmetricEncryptionModel.manageSymmetricDecryption(
               publicPostEncryptionData,
               secretEncryptionData);
+
+
       String originalFileName =
               state.getSymmetricEncryptionDecryptFilePath()
                       .substring(0,
@@ -119,6 +112,8 @@ public class SymmetricEncryptionDecryptController {
 
       FileHandler.saveByteArrayAsFile(symmetricEncryptionModel.getResult(),
                                       originalFileName);
+      ControllerUtil.showModal(
+              new SuccessfulDecryptionOperationResult(originalFileName));
     } catch (Exception e) {
       ControllerUtil.showModal(new OperationResult(false, e.getMessage(), e));
     }

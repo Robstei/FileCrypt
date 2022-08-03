@@ -13,7 +13,10 @@ import java.util.stream.Collectors;
 public abstract class Mode {
 
   final private ArrayList<Padding> possiblePaddings;
+
   private final String bouncyCastleName;
+  private final String uiName;
+
   private final boolean needsAlgorithmParameter;
   private final boolean useThisNameForParameterGeneration;
 
@@ -21,18 +24,19 @@ public abstract class Mode {
    * Instantiates a new Mode.
    *
    * @param bouncyCastleName                  the bouncy castle name
-   * @param UIName                            the ui name
+   * @param uiName                            the ui name
    * @param possiblePaddings                  the possible paddings
    * @param needsAlgorithmParameter           the needs algorithm parameter
    * @param useThisNameForParameterGeneration the use this name for parameter
    *                                          generation
    */
   Mode(String bouncyCastleName,
-       String UIName,
+       String uiName,
        ArrayList<Padding> possiblePaddings,
        boolean needsAlgorithmParameter,
        boolean useThisNameForParameterGeneration) {
     this.bouncyCastleName = bouncyCastleName;
+    this.uiName = uiName;
     this.needsAlgorithmParameter = needsAlgorithmParameter;
     this.possiblePaddings = possiblePaddings;
     this.useThisNameForParameterGeneration =
@@ -92,5 +96,14 @@ public abstract class Mode {
     return possiblePaddings.stream().map(
             Padding::getBouncyCastleName).collect(
             Collectors.toCollection(ArrayList::new));
+  }
+
+  /**
+   * Gets ui name.
+   *
+   * @return the uiName
+   */
+  public String getUiName() {
+    return uiName;
   }
 }

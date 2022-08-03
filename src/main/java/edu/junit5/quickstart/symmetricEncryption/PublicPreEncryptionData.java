@@ -14,22 +14,22 @@ public class PublicPreEncryptionData {
   private final String mode;
   private final String padding;
 
-  private final int keySize;
+  private final int keyLength;
 
   /**
    * Instantiates a new Public pre encryption data.
    *
    * @param bytesToEncrypt the bytes to encrypt
    * @param transformation the transformation
-   * @param keySize        the key size
+   * @param keyLength      the key size
    */
   public PublicPreEncryptionData(byte[] bytesToEncrypt,
-                                 Transformation transformation, int keySize) {
+                                 Transformation transformation, int keyLength) {
     this.bytesToEncrypt = bytesToEncrypt;
     this.algorithm = transformation.getAlgorithmName();
     this.mode = transformation.getModeName();
     this.padding = transformation.getPaddingName();
-    this.keySize = keySize;
+    this.keyLength = keyLength;
   }
 
   /**
@@ -73,8 +73,8 @@ public class PublicPreEncryptionData {
    *
    * @return the key size
    */
-  public int getKeySize() {
-    return keySize;
+  public int getKeyLength() {
+    return keyLength;
   }
 
   /**

@@ -22,6 +22,8 @@ import java.util.stream.Stream;
 
 /**
  * The type Symmetric encryption test.
+ *
+ * @author Robin Steil
  */
 public class SymmetricEncryptionTest {
   /**

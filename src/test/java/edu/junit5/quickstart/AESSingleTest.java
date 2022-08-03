@@ -5,14 +5,16 @@ import org.bouncycastle.util.encoders.Hex;
 
 /**
  * The type Aes single test.
+ *
+ * @author Robin Steil
  */
 public class AESSingleTest {
   private final Transformation transformation;
   private final String cipherText;
   private final int encryptOrDecrypt;
+  private final String key;
+  private final String iv;
   private String plainText;
-  private String key;
-  private String iv;
 
 
   /**
@@ -49,24 +51,6 @@ public class AESSingleTest {
   }
 
   /**
-   * Gets key.
-   *
-   * @return the key
-   */
-  public String getKey() {
-    return key;
-  }
-
-  /**
-   * Sets key.
-   *
-   * @param key the key
-   */
-  public void setKey(String key) {
-    this.key = key;
-  }
-
-  /**
    * Get key as bytes byte [ ].
    *
    * @return the byte [ ]
@@ -82,15 +66,6 @@ public class AESSingleTest {
    */
   public String getIv() {
     return iv;
-  }
-
-  /**
-   * Sets iv.
-   *
-   * @param iv the iv
-   */
-  public void setIv(String iv) {
-    this.iv = iv;
   }
 
   /**

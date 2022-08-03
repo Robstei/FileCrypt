@@ -12,12 +12,11 @@ import edu.junit5.quickstart.symmetricEncryption.SecretEncryptionData;
 import edu.junit5.quickstart.symmetricEncryption.SymmetricEncryptionModel;
 import edu.junit5.quickstart.validation.PublicValidationData;
 import edu.junit5.quickstart.validation.SecretValidationData;
-import edu.junit5.quickstart.validation.ValidationModal;
+import edu.junit5.quickstart.validation.ValidationModel;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.stage.FileChooser;
+import javafx.util.Pair;
 
-import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -48,7 +47,6 @@ public class SymmetricEncryptionEncryptController {
   @FXML
   private void initialize() {
 
-
     ControllerUtil.bindToggleGroupToProperty(encryption_algorithm,
                                              state.symmetricEncryptionAlgorithmProperty());
     state.symmetricEncryptionModeProperty().addListener(
@@ -77,10 +75,10 @@ public class SymmetricEncryptionEncryptController {
                                              state.symmetricEncryptionValidationProperty());
     encryptFilePathLabel.textProperty().bind(
             state.symmetricEncryptionEncryptFilePathProperty());
-    encryption_mode.selectedToggleProperty().addListener((observableValue,
-                                                          oldValue,
-                                                          newValue) -> updateValidPaddings(
-            (String) newValue.getUserData()));
+    encryption_mode.selectedToggleProperty()
+            .addListener(
+                    (observableValue, oldValue, newValue) -> updateValidPaddings(
+                            (String) newValue.getUserData()));
 
     String mode =
             state.getSymmetricEncryptionMode();
@@ -97,6 +95,7 @@ public class SymmetricEncryptionEncryptController {
   }
 
   private void updateValidPaddings(String mode) {
+
     Modes modes = new Modes();
     ArrayList<String> validPaddingNames =
             modes.getModeByName(mode).getValidPaddingNames();
@@ -115,14 +114,11 @@ public class SymmetricEncryptionEncryptController {
 
   @FXML
   private void selectFileToEncrypt() {
-    FileChooser fileChooser = new FileChooser();
-    fileChooser.setTitle("Select File to Encrypt");
-    File file = fileChooser.showOpenDialog(null);
 
-    if (file != null) {
-      state.setSymmetricEncryptionEncryptFilePath(
-              file.getPath());
-    }
+    ControllerUtil.setPropertyToFilePath(
+            state.symmetricEncryptionEncryptFilePathProperty(),
+            "Select File to Encrypt",
+            new Pair<>("File to encrypt", "*"));
   }
 
   @FXML
@@ -146,28 +142,39 @@ public class SymmetricEncryptionEncryptController {
 
       byte[] encryptedBytes = symmetricEncryptionModel.getResult();
       PublicPostEncryptionData publicPostEncryptionData =
-              symmetricEncryptionModel.getPublicEncryptionData();
+              symmetricEncryptionModel.getPublicPostEncryptionData();
       SecretEncryptionData secretEncryptionData =
               symmetricEncryptionModel.getSecretEncryptionData();
 
-      ValidationModal validationModal = new ValidationModal();
-      validationModal.generateValidation(encryptedBytes,
+      ValidationModel validationModel = new ValidationModel();
+      validationModel.generateValidation(encryptedBytes,
                                          state.getSymmetricEncryptionValidation());
       PublicValidationData publicValidationData =
-              validationModal.getPublicValidationData();
+              validationModel.getPublicValidationData();
       SecretValidationData secretValidationData =
-              validationModal.getSecretValidationData();
+              validationModel.getSecretValidationData();
 
+      String encryptedFilePath =
+              state.getSymmetricEncryptionEncryptFilePath() + ".encrypted";
       FileHandler.saveDataToXMLFile(
-              state.getSymmetricEncryptionEncryptFilePath() + ".encrypted",
+              encryptedFilePath,
               publicPostEncryptionData,
               publicValidationData
       );
-      FileHandler.saveDataToXMLFile(
-              state.getSymmetricEncryptionEncryptFilePath() + ".encryptionkey",
-              secretEncryptionData,
-              secretValidationData
+
+      String encryptionKeyPath =
+              state.getSymmetricEncryptionEncryptFilePath() + ".encryptionkey";
+      FileHandler.saveDataToXMLFile(encryptionKeyPath,
+                                    secretEncryptionData,
+                                    secretValidationData
       );
+
+      ControllerUtil.showModal(
+              new OperationResult(true,
+                                  "Saved encrypted file at " +
+                                          encryptedFilePath +
+                                          " and keyfile at " +
+                                          encryptionKeyPath));
     } catch (Exception e) {
       ControllerUtil.showModal(new OperationResult(false, e.getMessage(), e));
     }

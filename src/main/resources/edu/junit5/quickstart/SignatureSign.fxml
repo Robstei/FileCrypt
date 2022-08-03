@@ -22,7 +22,7 @@
         </rowConstraints>
         <Label text="Algorithm"/>
         <RadioButton mnemonicParsing="false" text="SHA256withDSA"
-                     userData="AES" GridPane.rowIndex="1">
+                     userData="SHA256withDSA" GridPane.rowIndex="1">
             <toggleGroup>
                 <ToggleGroup fx:id="signature_algorithm"/>
             </toggleGroup>

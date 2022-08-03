@@ -7,10 +7,12 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -117,9 +119,6 @@ public class ControllerUtil {
     VBox root = new VBox();
     Alert.AlertType alertType = operationResult.isSuccess() ?
             Alert.AlertType.INFORMATION : Alert.AlertType.ERROR;
-    //Label successLabel = new Label(result);
-    //Label messageLabel = new Label(operationResult.getMessage());
-    //root.getChildren().addAll(successLabel, messageLabel);
     Alert alert = new Alert(alertType);
     DialogPane dialogPane = alert.getDialogPane();
     Label operationResultMessage = new Label(operationResult.getMessage());
@@ -147,5 +146,28 @@ public class ControllerUtil {
     dialogPane.setContent(root);
     alert.showAndWait();
     stage.setWidth(600);
+  }
+
+  /**
+   * Sets the StringProperties value to the path of the chosen file.
+   *
+   * @param property      the StringProperty
+   * @param title         the title of the FileChooser
+   * @param extensionPair The Text and Regex to determine which files to show
+   */
+  public static void setPropertyToFilePath(StringProperty property,
+                                           String title,
+                                           Pair<String, String> extensionPair) {
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle(title);
+    FileChooser.ExtensionFilter extensionFilter =
+            new FileChooser.ExtensionFilter(
+                    extensionPair.getKey(), extensionPair.getValue());
+    fileChooser.getExtensionFilters().add(extensionFilter);
+    File file = fileChooser.showOpenDialog(null);
+
+    if (file != null) {
+      property.setValue(file.getPath());
+    }
   }
 }

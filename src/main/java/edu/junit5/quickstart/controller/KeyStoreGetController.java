@@ -8,9 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.stage.FileChooser;
-
-import java.io.File;
+import javafx.util.Pair;
 
 /**
  * The type Key store get controller.
@@ -55,14 +53,11 @@ public class KeyStoreGetController {
 
   @FXML
   private void selectKeyStore() {
-    FileChooser fileChooser = new FileChooser();
-    fileChooser.setTitle("Select Keystore");
-    File file = fileChooser.showOpenDialog(null);
-
-    if (file != null) {
-      state.setKeyStoreGetKeyStoreFilePath(
-              file.getPath());
-    }
+    ControllerUtil.setPropertyToFilePath(
+            state.keyStoreGetKeyStoreFilePathProperty(),
+            "Select Keystore",
+            new Pair<>("key store (.keystore)",
+                       "*.keystore"));
   }
 
   @FXML
@@ -75,6 +70,9 @@ public class KeyStoreGetController {
               state.getKeyStoreGetKeyIdentifier(),
               state.getKeyStoreGetKeyPassword()
                       .toCharArray());
+      ControllerUtil.showModal(new OperationResult(true,
+                                                   "Successfully got key with" +
+                                                           " identifier " + state.getKeyStoreGetKeyIdentifier() + " from key store"));
     } catch (Exception e) {
       ControllerUtil.showModal(new OperationResult(false, e.getMessage(), e));
     }

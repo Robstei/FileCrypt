@@ -14,6 +14,7 @@ import java.security.Security;
 /**
  * The type Test.
  */
+@SuppressWarnings("ALL")
 public class Test {
 
   /**

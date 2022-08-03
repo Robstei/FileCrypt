@@ -1,6 +1,7 @@
 package edu.junit5.quickstart.controller;
 
 import edu.junit5.quickstart.data.OperationResult;
+import edu.junit5.quickstart.data.SuccessfulDecryptionOperationResult;
 import edu.junit5.quickstart.io.FileHandler;
 import edu.junit5.quickstart.password.PasswordModel;
 import edu.junit5.quickstart.password.PublicPasswordData;
@@ -10,14 +11,13 @@ import edu.junit5.quickstart.symmetricEncryption.SecretEncryptionData;
 import edu.junit5.quickstart.symmetricEncryption.SymmetricEncryptionModel;
 import edu.junit5.quickstart.validation.PublicValidationData;
 import edu.junit5.quickstart.validation.SecretValidationData;
-import edu.junit5.quickstart.validation.ValidationModal;
+import edu.junit5.quickstart.validation.ValidationModel;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
-import javafx.stage.FileChooser;
+import javafx.util.Pair;
 
-import java.io.File;
 import java.security.Key;
 
 /**
@@ -50,13 +50,10 @@ public class PasswordDecryptController {
 
   @FXML
   private void selectFileToDecrypt() {
-    FileChooser fileChooser = new FileChooser();
-    fileChooser.setTitle("Select File to Decrypt With Password");
-    File file = fileChooser.showOpenDialog(null);
-
-    if (file != null) {
-      state.setPasswordDecryptionPath(file.getPath());
-    }
+    ControllerUtil.setPropertyToFilePath(
+            state.passwordDecryptionPathProperty(),
+            "Select File to Decrypt with Password",
+            new Pair<>("encrypted File (.encrypted)", "*.encrypted"));
   }
 
   @FXML
@@ -75,11 +72,11 @@ public class PasswordDecryptController {
       PasswordModel passwordModel = new PasswordModel();
       Key key = passwordModel.generateKey(password,
                                           publicPasswordData);
-      ValidationModal validationModal = new ValidationModal();
+      ValidationModel validationModel = new ValidationModel();
       SecretValidationData secretValidationData =
               new SecretValidationData().fill(
                       key);
-      boolean valid = validationModal.validate(
+      boolean valid = validationModel.validate(
               publicPostEncryptionData.getEncryptedBytes(),
               publicValidationData,
               secretValidationData);
@@ -101,9 +98,16 @@ public class PasswordDecryptController {
               publicPostEncryptionData,
               secretEncryptionData);
 
+      String originalFileName =
+              state.getPasswordDecryptionPath()
+                      .substring(0,
+                                 state.getPasswordDecryptionPath()
+                                         .lastIndexOf(".encrypted"));
+
       FileHandler.saveByteArrayAsFile(symmetricEncryptionModel.getResult(),
-                                      state.getPasswordDecryptionPath() +
-                                              ".decrypted");
+                                      originalFileName);
+      ControllerUtil.showModal(
+              new SuccessfulDecryptionOperationResult(originalFileName));
     } catch (Exception e) {
       ControllerUtil.showModal(new OperationResult(false, e.getMessage(), e));
     }

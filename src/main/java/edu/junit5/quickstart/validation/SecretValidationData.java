@@ -20,6 +20,8 @@ public class SecretValidationData implements CryptoData<SecretValidationData> {
   private static final String[] XMLKeys = {ALGORITHM, KEY_AS_BYTES};
   private Key key;
 
+  private boolean filled;
+
   /**
    * Sets member with the given parameter
    *
@@ -28,6 +30,7 @@ public class SecretValidationData implements CryptoData<SecretValidationData> {
    */
   public SecretValidationData fill(Key key) {
     this.key = key;
+    this.filled = true;
     return this;
   }
 
@@ -41,6 +44,9 @@ public class SecretValidationData implements CryptoData<SecretValidationData> {
 
   @Override
   public Map<String, String> getValuesAsMap() {
+    if (!filled) {
+      return new HashMap<>();
+    }
     Map<String, String> map = new HashMap<>();
     map.put(ALGORITHM, key.getAlgorithm());
     map.put(KEY_AS_BYTES, Hex.toHexString(key.getEncoded()));
@@ -60,4 +66,6 @@ public class SecretValidationData implements CryptoData<SecretValidationData> {
   public String[] getMapKeys() {
     return XMLKeys;
   }
+
+
 }
