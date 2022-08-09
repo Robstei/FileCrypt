@@ -9,6 +9,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
@@ -33,7 +34,7 @@ public class ValidationModelTest {
   @ParameterizedTest
   @ValueSource(strings = {"AESCMAC", "HMACSHA256"})
   public void validateMACS(
-          String name) throws NoSuchAlgorithmException, InvalidKeyException,
+          String name) throws GeneralSecurityException,
           ParserConfigurationException, TransformerException, IOException,
           SAXException {
     ValidationModel validationModel = new ValidationModel();
@@ -74,7 +75,7 @@ public class ValidationModelTest {
   @ParameterizedTest
   @ValueSource(strings = {"SHA-256"})
   public void validateDigests(
-          String name) throws NoSuchAlgorithmException, InvalidKeyException,
+          String name) throws GeneralSecurityException,
           ParserConfigurationException, TransformerException, IOException,
           SAXException {
     ValidationModel validationModel = new ValidationModel();

@@ -2,9 +2,13 @@ package edu.junit5.quickstart.symmetricEncryption;
 
 import edu.junit5.quickstart.data.Transformation;
 
-import javax.crypto.*;
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
 import java.io.IOException;
-import java.security.*;
+import java.security.AlgorithmParameterGenerator;
+import java.security.AlgorithmParameters;
+import java.security.GeneralSecurityException;
+import java.security.Key;
 
 /**
  * The class handles all the functionality in regard to symmetric encryption
@@ -49,18 +53,12 @@ public class SymmetricEncryptionModel {
    * a key.
    *
    * @param publicPreEncryptionData the public pre encryption data
-   * @throws NoSuchAlgorithmException           the no such algorithm exception
-   * @throws IOException                        the io exception
-   * @throws NoSuchProviderException            the no such provider exception
-   * @throws InvalidAlgorithmParameterException the invalid algorithm
-   *                                            parameter exception
-   * @throws NoSuchPaddingException             the no such padding exception
-   * @throws IllegalBlockSizeException          the illegal block size exception
-   * @throws BadPaddingException                the bad padding exception
-   * @throws InvalidKeyException                the invalid key exception
+   * @throws GeneralSecurityException the general security exception
+   * @throws IOException              the io exception
    */
   public void manageSymmetricEncryption(
-          PublicPreEncryptionData publicPreEncryptionData) throws NoSuchAlgorithmException, IOException, NoSuchProviderException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
+          PublicPreEncryptionData publicPreEncryptionData) throws
+          GeneralSecurityException, IOException {
     manageSymmetricEncryption(publicPreEncryptionData, null);
   }
 
@@ -69,22 +67,12 @@ public class SymmetricEncryptionModel {
    *
    * @param publicPreEncryptionData the public pre encryption data
    * @param providedKey             the provided key
-   * @throws NoSuchAlgorithmException           the no such algorithm exception
-   * @throws IOException                        the io exception
-   * @throws NoSuchProviderException            the no such provider exception
-   * @throws InvalidAlgorithmParameterException the invalid algorithm
-   *                                            parameter exception
-   * @throws NoSuchPaddingException             the no such padding exception
-   * @throws IllegalBlockSizeException          the illegal block size exception
-   * @throws BadPaddingException                the bad padding exception
-   * @throws InvalidKeyException                the invalid key exception
+   * @throws GeneralSecurityException the general security exception
+   * @throws IOException              the io exception
    */
   public void manageSymmetricEncryption(
           PublicPreEncryptionData publicPreEncryptionData,
-          Key providedKey) throws NoSuchAlgorithmException, IOException,
-          NoSuchProviderException, InvalidAlgorithmParameterException,
-          NoSuchPaddingException, IllegalBlockSizeException,
-          BadPaddingException, InvalidKeyException {
+          Key providedKey) throws GeneralSecurityException, IOException {
     Key key = providedKey;
     //generate key if key is null
     if (key == null) {
@@ -130,22 +118,13 @@ public class SymmetricEncryptionModel {
    *
    * @param publicPostEncryptionData the public post encryption data
    * @param secretEncryptionData     the secret encryption data
-   * @throws NoSuchAlgorithmException           the no such algorithm exception
-   * @throws IOException                        the io exception
-   * @throws NoSuchProviderException            the no such provider exception
-   * @throws InvalidAlgorithmParameterException the invalid algorithm
-   *                                            parameter exception
-   * @throws NoSuchPaddingException             the no such padding exception
-   * @throws IllegalBlockSizeException          the illegal block size exception
-   * @throws BadPaddingException                the bad padding exception
-   * @throws InvalidKeyException                the invalid key exception
+   * @throws GeneralSecurityException the general security exception
+   * @throws IOException              the io exception
    */
   public void manageSymmetricDecryption(
           PublicPostEncryptionData publicPostEncryptionData,
-          SecretEncryptionData secretEncryptionData) throws
-          NoSuchAlgorithmException, IOException, NoSuchProviderException,
-          InvalidAlgorithmParameterException, NoSuchPaddingException,
-          IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
+          SecretEncryptionData secretEncryptionData)
+          throws GeneralSecurityException, IOException {
 
     String nameForParameterGeneration =
             publicPostEncryptionData.getTransformation().getNameForParameterGeneration();
@@ -169,21 +148,12 @@ public class SymmetricEncryptionModel {
    * @param key                 the key
    * @param algorithmParameters the algorithm parameters
    * @return the byte [ ]
-   * @throws NoSuchAlgorithmException           the no such algorithm exception
-   * @throws NoSuchPaddingException             the no such padding exception
-   * @throws IllegalBlockSizeException          the illegal block size exception
-   * @throws BadPaddingException                the bad padding exception
-   * @throws InvalidKeyException                the invalid key exception
-   * @throws InvalidAlgorithmParameterException the invalid algorithm
-   *                                            parameter exception
-   * @throws NoSuchProviderException            the no such provider exception
+   * @throws GeneralSecurityException the general security exception
    */
   public byte[] encryptSymmetric(byte[] input, Transformation transformation,
                                  Key key,
-                                 AlgorithmParameters algorithmParameters) throws
-          NoSuchAlgorithmException, NoSuchPaddingException,
-          IllegalBlockSizeException, BadPaddingException, InvalidKeyException
-          , InvalidAlgorithmParameterException, NoSuchProviderException {
+                                 AlgorithmParameters algorithmParameters)
+          throws GeneralSecurityException {
     Cipher cipher = Cipher.getInstance(transformation.toString(),
                                        "BC");
     cipher.init(Cipher.ENCRYPT_MODE, key, algorithmParameters);
@@ -198,22 +168,11 @@ public class SymmetricEncryptionModel {
    * @param key                 the key
    * @param algorithmParameters the algorithm parameters
    * @return the decrypted bytes
-   * @throws NoSuchAlgorithmException           the no such algorithm exception
-   * @throws NoSuchPaddingException             the no such padding exception
-   * @throws InvalidKeyException                the invalid key exception
-   * @throws InvalidAlgorithmParameterException the invalid algorithm
-   *                                            parameter exception
-   * @throws IllegalBlockSizeException          the illegal block size exception
-   * @throws BadPaddingException                the bad padding exception
-   * @throws NoSuchProviderException            the no such provider exception
+   * @throws GeneralSecurityException the general security exception
    */
   public byte[] decryptSymmetric(byte[] encryptedBytes,
                                  Transformation transformation, Key key,
-                                 AlgorithmParameters algorithmParameters) throws
-          NoSuchAlgorithmException, NoSuchPaddingException,
-          InvalidKeyException, InvalidAlgorithmParameterException,
-          IllegalBlockSizeException, BadPaddingException,
-          NoSuchProviderException {
+                                 AlgorithmParameters algorithmParameters) throws GeneralSecurityException {
     Cipher cipher = Cipher.getInstance(transformation.toString(),
                                        "BC");
     cipher.init(Cipher.DECRYPT_MODE, key, algorithmParameters);

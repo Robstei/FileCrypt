@@ -9,13 +9,11 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.IOException;
-import java.security.*;
+import java.security.GeneralSecurityException;
+import java.security.Security;
 
 /**
  * Tests for core functionality of the EncryptionModel.
@@ -35,25 +33,16 @@ public class SymmetricEncryptionModelTest {
   /**
    * Symmetric encryption modal test.
    *
-   * @throws IOException                        the io exception
-   * @throws InvalidAlgorithmParameterException the invalid algorithm
-   *                                            parameter exception
-   * @throws NoSuchPaddingException             the no such padding exception
-   * @throws IllegalBlockSizeException          the illegal block size exception
-   * @throws NoSuchAlgorithmException           the no such algorithm exception
-   * @throws BadPaddingException                the bad padding exception
-   * @throws NoSuchProviderException            the no such provider exception
-   * @throws InvalidKeyException                the invalid key exception
-   * @throws ParserConfigurationException       the parser configuration
-   *                                            exception
-   * @throws TransformerException               the transformer exception
-   * @throws SAXException                       the sax exception
+   * @throws IOException                  the io exception
+   * @throws GeneralSecurityException     the general security exception
+   * @throws ParserConfigurationException the parser configuration
+   *                                      exception
+   * @throws TransformerException         the transformer exception
+   * @throws SAXException                 the sax exception
    */
   @Test
   public void symmetricEncryptionModalTest() throws IOException,
-          InvalidAlgorithmParameterException, NoSuchPaddingException,
-          IllegalBlockSizeException, NoSuchAlgorithmException,
-          BadPaddingException, NoSuchProviderException, InvalidKeyException,
+          GeneralSecurityException,
           ParserConfigurationException, TransformerException, SAXException {
 
     State state = State.getInstance();

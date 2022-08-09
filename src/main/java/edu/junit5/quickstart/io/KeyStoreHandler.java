@@ -1,7 +1,5 @@
 package edu.junit5.quickstart.io;
 
-import edu.junit5.quickstart.signature.PublicSignatureKeyData;
-import edu.junit5.quickstart.signature.SecretSignatureKeyData;
 import edu.junit5.quickstart.symmetricEncryption.SecretEncryptionData;
 import edu.junit5.quickstart.validation.SecretValidationData;
 import org.xml.sax.SAXException;
@@ -12,8 +10,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.security.*;
-import java.security.cert.CertificateException;
+import java.security.GeneralSecurityException;
+import java.security.Key;
+import java.security.KeyStore;
 import java.util.Objects;
 
 /**
@@ -39,11 +38,8 @@ public class KeyStoreHandler {
    * @param pathToKey              the path to key
    * @param identifierForKey       the identifier for key
    * @param passwordForKey         the password for key
-   * @throws KeyStoreException            the key store exception
-   * @throws NoSuchProviderException      the no such provider exception
+   * @throws GeneralSecurityException     the general security exception
    * @throws IOException                  the io exception
-   * @throws CertificateException         the certificate exception
-   * @throws NoSuchAlgorithmException     the no such algorithm exception
    * @throws ParserConfigurationException the parser configuration exception
    * @throws SAXException                 the sax exception
    */
@@ -52,14 +48,11 @@ public class KeyStoreHandler {
                                        String pathToKey,
                                        String identifierForKey,
                                        char[] passwordForKey) throws
-          KeyStoreException, NoSuchProviderException, IOException,
-          CertificateException, NoSuchAlgorithmException,
+          GeneralSecurityException, IOException,
           ParserConfigurationException, SAXException {
 
     Key secretEncryptionKey = null;
     Key secretValidationKey = null;
-    Key privateSignatureKey = null;
-    Key publicSignatureKey = null;
 
 
     if (FileHandler.doesXMLFileContainKeys(
@@ -73,18 +66,6 @@ public class KeyStoreHandler {
       SecretValidationData secretValidationData = FileHandler.fillDataContainer(
               new SecretValidationData(), pathToKey);
       secretValidationKey = secretValidationData.getKey();
-    }
-    if (FileHandler.doesXMLFileContainKeys(
-            new SecretSignatureKeyData().getMapKeys(), pathToKey)) {
-      SecretSignatureKeyData secretSignatureKeyData =
-              FileHandler.fillDataContainer(
-                      new SecretSignatureKeyData(), pathToKey);
-    }
-    if (FileHandler.doesXMLFileContainKeys(
-            new PublicSignatureKeyData().getMapKeys(), pathToKey)) {
-      PublicSignatureKeyData publicSignatureKeyData =
-              FileHandler.fillDataContainer(
-                      new PublicSignatureKeyData(), pathToKey);
     }
 
     KeyStore keyStore = KeyStore.getInstance("BKS", "BC");
@@ -130,23 +111,18 @@ public class KeyStoreHandler {
    * @param passwordForKeyStore the password for key store
    * @param identifier          the identifier
    * @param passwordForKey      the password for key
-   * @throws KeyStoreException            the key store exception
-   * @throws NoSuchProviderException      the no such provider exception
    * @throws IOException                  the io exception
-   * @throws CertificateException         the certificate exception
-   * @throws NoSuchAlgorithmException     the no such algorithm exception
-   * @throws UnrecoverableKeyException    the unrecoverable key exception
    * @throws ParserConfigurationException the parser configuration exception
    * @throws TransformerException         the transformer exception
+   * @throws GeneralSecurityException     the general security exception
    */
   public static void createKeyFileFromKeyStore(String pathToKeyStore,
                                                char[] passwordForKeyStore,
                                                String identifier,
                                                char[] passwordForKey)
-          throws KeyStoreException, NoSuchProviderException, IOException,
-          CertificateException, NoSuchAlgorithmException,
-          UnrecoverableKeyException, ParserConfigurationException,
-          TransformerException {
+          throws IOException,
+          ParserConfigurationException, TransformerException,
+          GeneralSecurityException {
 
     KeyStore keystore = KeyStore.getInstance("BKS", "BC");
     try (FileInputStream fis = new FileInputStream(

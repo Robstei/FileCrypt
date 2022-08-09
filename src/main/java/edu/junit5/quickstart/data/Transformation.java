@@ -99,7 +99,7 @@ public class Transformation {
         return null;
       }
 
-      if (mode.isUseThisNameForParametersGeneration()) {
+      if (mode.useThisNameForParametersGeneration()) {
         return mode.getBouncyCastleName();
       }
     }

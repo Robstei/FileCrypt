@@ -26,8 +26,7 @@ public class SignatureModel {
    * @throws NoSuchProviderException  the no such provider exception
    */
   public void generateKeys(
-          String algorithm) throws NoSuchAlgorithmException,
-          NoSuchProviderException {
+          String algorithm) throws GeneralSecurityException {
     String nameForParameterGeneration =
             new Algorithms().getNameForParameterGeneration(
                     algorithm);
@@ -59,8 +58,7 @@ public class SignatureModel {
    */
   public void sign(byte[] bytesToSign,
                    SecretSignatureKeyData secretSignatureKeyData)
-          throws NoSuchAlgorithmException,
-          NoSuchProviderException, InvalidKeyException, SignatureException {
+          throws GeneralSecurityException {
     Signature signature = Signature.getInstance(
             secretSignatureKeyData.getAlgorithm(), "BC");
 
@@ -82,8 +80,7 @@ public class SignatureModel {
    * @throws InvalidKeyException      the invalid key exception
    * @throws SignatureException       the signature exception
    */
-  public void sign(byte[] bytesToSign) throws NoSuchAlgorithmException,
-          NoSuchProviderException, InvalidKeyException, SignatureException {
+  public void sign(byte[] bytesToSign) throws GeneralSecurityException {
     sign(bytesToSign, secretSignatureKeyData);
   }
 
@@ -101,9 +98,8 @@ public class SignatureModel {
    * @throws SignatureException       the signature exception
    */
   public boolean verify(PublicSignatureData publicSignatureData,
-                        PublicSignatureKeyData publicSignatureKeyData) throws
-          NoSuchAlgorithmException, NoSuchProviderException,
-          InvalidKeyException, SignatureException {
+                        PublicSignatureKeyData publicSignatureKeyData)
+          throws GeneralSecurityException {
 
     Signature signature = Signature.getInstance(
             publicSignatureData.getAlgorithm(), "BC");

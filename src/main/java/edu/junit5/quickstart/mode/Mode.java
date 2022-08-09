@@ -83,7 +83,7 @@ public abstract class Mode {
    * @return true if the name of the mode needs to be used for the generation
    * of the parameter, false otherwise
    */
-  public boolean isUseThisNameForParametersGeneration() {
+  public boolean useThisNameForParametersGeneration() {
     return useThisNameForParameterGeneration;
   }
 

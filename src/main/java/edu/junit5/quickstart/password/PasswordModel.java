@@ -5,10 +5,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
-import java.security.Key;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.SecureRandom;
+import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 
 
@@ -35,15 +32,14 @@ public class PasswordModel {
    * @throws InvalidKeySpecException  the invalid key spec exception
    */
   public Key generateKey(char[] password, String algorithm,
-                         int keyLength) throws NoSuchAlgorithmException,
-          NoSuchProviderException, InvalidKeySpecException {
+                         int keyLength) throws GeneralSecurityException {
     SecureRandom secureRandom = SecureRandom.getInstance("DEFAULT",
                                                          "BC");
 
     // recommendation is to have the salt at least at the size of the used
     // HMAC according to "Java Cryptography: Tools and Techniques"
-    int SALT_LENGTH_IN_BYTES = 256;
-    byte[] salt = secureRandom.generateSeed(SALT_LENGTH_IN_BYTES);
+    int SALT_LENGTH_IN_BIT = 256;
+    byte[] salt = secureRandom.generateSeed(SALT_LENGTH_IN_BIT / 8);
 
     PublicPasswordData publicPasswordData = new PublicPasswordData().fill(
             algorithm,
@@ -62,7 +58,8 @@ public class PasswordModel {
    * @throws InvalidKeySpecException  the invalid key spec exception
    */
   public Key generateKey(char[] password,
-                         PublicPasswordData publicPasswordData) throws NoSuchAlgorithmException, InvalidKeySpecException {
+                         PublicPasswordData publicPasswordData)
+          throws GeneralSecurityException {
     Key key;
     SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance(
             publicPasswordData.getAlgorithm(),

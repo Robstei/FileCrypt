@@ -125,7 +125,8 @@ public class FileHandler {
    */
   public static void saveDataToXMLFile(String path,
                                        CryptoData<?
-                                               extends CryptoData<?>>... cryptoDataArray) throws ParserConfigurationException, TransformerException {
+                                               extends CryptoData<?>>... cryptoDataArray)
+          throws ParserConfigurationException, TransformerException {
     Document document =
             DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
     Element root = document.createElement("cryptoData");

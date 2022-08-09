@@ -10,7 +10,8 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.IOException;
-import java.security.*;
+import java.security.GeneralSecurityException;
+import java.security.Security;
 
 /**
  * Tests for core functionality of the SignatureModel.
@@ -30,18 +31,14 @@ public class SignatureModalTest {
   /**
    * Does signature match.
    *
-   * @throws NoSuchAlgorithmException     the no such algorithm exception
-   * @throws NoSuchProviderException      the no such provider exception
-   * @throws SignatureException           the signature exception
-   * @throws InvalidKeyException          the invalid key exception
+   * @throws GeneralSecurityException     the general security exception
    * @throws IOException                  the io exception
    * @throws ParserConfigurationException the parser configuration exception
    * @throws TransformerException         the transformer exception
    * @throws SAXException                 the sax exception
    */
   @Test
-  public void doesSignatureMatch() throws NoSuchAlgorithmException,
-          NoSuchProviderException, SignatureException, InvalidKeyException,
+  public void doesSignatureMatch() throws GeneralSecurityException,
           IOException, ParserConfigurationException, TransformerException,
           SAXException {
     byte[] bytesToSign = FileHandler.getFileAsByteArray(
@@ -71,6 +68,4 @@ public class SignatureModalTest {
             signatureModel.verify(publicSignatureData, publicSIgnatureKeyData)
     );
   }
-
-
 }

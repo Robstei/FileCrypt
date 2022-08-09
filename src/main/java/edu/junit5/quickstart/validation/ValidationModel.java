@@ -5,10 +5,7 @@ import org.bouncycastle.util.Arrays;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.Mac;
-import java.security.InvalidKeyException;
-import java.security.Key;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.security.*;
 
 /**
  * This class handles all functionality in regards generating and verifying
@@ -61,13 +58,11 @@ public class ValidationModel {
    *
    * @param bytesToGenerateValidationFor the bytes to generate validation for
    * @param validationName               the validation name
-   * @throws NoSuchAlgorithmException the no such algorithm exception
-   * @throws InvalidKeyException      the invalid key exception
+   * @throws GeneralSecurityException the general security exception
    */
   public void generateValidation(
           byte[] bytesToGenerateValidationFor,
-          String validationName) throws NoSuchAlgorithmException,
-          InvalidKeyException {
+          String validationName) throws GeneralSecurityException {
     generateValidation(bytesToGenerateValidationFor, validationName, null);
   }
 
@@ -77,12 +72,11 @@ public class ValidationModel {
    * @param bytesToGenerateValidationFor the bytes to generate validation for
    * @param validationName               the validation name
    * @param key                          the key
-   * @throws NoSuchAlgorithmException the no such algorithm exception
-   * @throws InvalidKeyException      the invalid key exception
+   * @throws GeneralSecurityException the general security exception
    */
   public void generateValidation(
           byte[] bytesToGenerateValidationFor, String validationName,
-          Key key) throws NoSuchAlgorithmException, InvalidKeyException {
+          Key key) throws GeneralSecurityException {
 
     Validations validations = new Validations();
 
@@ -101,7 +95,8 @@ public class ValidationModel {
   }
 
   private boolean validateWithDigest(byte[] bytesToValidate,
-                                     PublicValidationData publicValidationData) throws NoSuchAlgorithmException {
+                                     PublicValidationData publicValidationData)
+          throws NoSuchAlgorithmException {
     byte[] bytesToValidateAfterComputation;
     MessageDigest messageDigest = MessageDigest.getInstance(
             publicValidationData.getName());
@@ -129,12 +124,12 @@ public class ValidationModel {
    * @param publicValidationData the public validation data
    * @param secretValidationData the secret validation data
    * @return the boolean
-   * @throws NoSuchAlgorithmException the no such algorithm exception
-   * @throws InvalidKeyException      the invalid key exception
+   * @throws GeneralSecurityException the general security exception
    */
   public boolean validate(byte[] bytesToValidate,
                           PublicValidationData publicValidationData,
-                          SecretValidationData secretValidationData) throws NoSuchAlgorithmException, InvalidKeyException {
+                          SecretValidationData secretValidationData)
+          throws GeneralSecurityException {
     boolean valid = false;
     Validations validations = new Validations();
     if (validations.getValidationType(

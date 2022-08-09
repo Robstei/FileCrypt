@@ -1,13 +1,8 @@
 package edu.junit5.quickstart;
 
-import org.bouncycastle.jcajce.spec.ScryptKeySpec;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.util.encoders.Hex;
 
 import javax.crypto.Cipher;
-import javax.crypto.SecretKeyFactory;
-import java.security.AlgorithmParameters;
-import java.security.Key;
 import java.security.Provider;
 import java.security.Security;
 
@@ -37,23 +32,27 @@ public class Test {
       }
     }
 
-    ScryptKeySpec scryptKeySpec = new ScryptKeySpec(" ".toCharArray(),
-                                                    Hex.decode(
-                                                            "01020304050607080910111213141516"),
-                                                    1048576, 8, 1, 256);
-
-    Key key = SecretKeyFactory.getInstance(
-            "SCRYPT").generateSecret(scryptKeySpec);
+    Cipher cipher = Cipher.getInstance("AES/CTS/PKCS7Padding");
+    Cipher cipher2 = Cipher.getInstance("AES/CBC/CTSPadding");
 
 
-    Cipher cipher = Cipher.getInstance("AES/ECB/NoPadding");
-
-    AlgorithmParameters algorithmParameters = null;
-    cipher.init(Cipher.ENCRYPT_MODE, key, algorithmParameters);
-    byte[] output = cipher.doFinal(Hex.decode(
-            "0102030405060708091011121314151601020304050607080910111213141516"
-    ));
-    System.out.println(" ");
+//    ScryptKeySpec scryptKeySpec = new ScryptKeySpec(" ".toCharArray(),
+//                                                    Hex.decode(
+//                                                            "01020304050607080910111213141516"),
+//                                                    1048576, 8, 1, 256);
+//
+//    Key key = SecretKeyFactory.getInstance(
+//            "SCRYPT").generateSecret(scryptKeySpec);
+//
+//
+//    Cipher cipher = Cipher.getInstance("AES/ECB/NoPadding");
+//
+//    AlgorithmParameters algorithmParameters = null;
+//    cipher.init(Cipher.ENCRYPT_MODE, key, algorithmParameters);
+//    byte[] output = cipher.doFinal(Hex.decode(
+//            "0102030405060708091011121314151601020304050607080910111213141516"
+//    ));
+//    System.out.println(" ");
 
 //    KeyStore keyStore = KeyStore.getInstance("BCFKS", "BC");
 //    try (FileInputStream fileInputStream = new FileInputStream(
